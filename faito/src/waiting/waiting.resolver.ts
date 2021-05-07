@@ -21,7 +21,7 @@ export class WaitingResolver {
       `
       START TRANSACTION;
 
-      insert into userwaiting ("userId", "queueId", value)
+      insert into waiting ("userId", "queueId", value)
       values(${userId},${queueId},${realValue});
 
       update queue
