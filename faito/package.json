@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w",
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "w": "tsc -w",
+    "dev": "nodemon dist/index.js",
+    "con": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
     "genenv": "gen-env-types .env -o src/env.d.ts -e ."
   },
   "keywords": [],
