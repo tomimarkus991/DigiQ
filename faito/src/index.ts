@@ -41,8 +41,6 @@ const main = async () => {
     return error;
   }
 
-  // const pubsub = new PubSub();
-
   const app = express();
 
   const RedisStore = connectRedis(session);
