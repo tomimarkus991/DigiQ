@@ -10,8 +10,12 @@ import Redis from 'ioredis';
 import connectRedis from 'connect-redis';
 import { ConnectionOptions, createConnection } from 'typeorm';
 import { buildSchema } from 'type-graphql';
-import { Hello } from './hello/entities/hello.entity';
-import { HelloResolver } from './hello/hello.resolver';
+import { Queue } from './queue/entities/queue.entity';
+import { User } from './user/entities/user.entity';
+import { Waiting } from './waiting/entities/waiting.entity';
+import { UserResolver } from './user/user.resolver';
+import { QueueResolver } from './queue/queue.resolver';
+import { WaitingResolver } from './waiting/waiting.resolver';
 
 const main = async () => {
   const config: ConnectionOptions = {
@@ -20,7 +24,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
-    entities: [Hello],
+    entities: [Queue, User, Waiting],
   };
   try {
     await createConnection({ ...config });
@@ -68,7 +72,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver],
+      resolvers: [QueueResolver, UserResolver, WaitingResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({
