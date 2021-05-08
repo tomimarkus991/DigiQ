@@ -1,7 +1,18 @@
 import { MyContext } from '../types';
-import { Arg, Ctx, Mutation, Resolver } from 'type-graphql';
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  PubSub,
+  PubSubEngine,
+  Resolver,
+  Root,
+  Subscription,
+} from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { JoinQueueInput } from './dto/join-queue.input';
+import { Queue } from '../queue/entities/queue.entity';
+import { JOIN_QUEUE } from '../constants';
 
 @Resolver()
 export class WaitingResolver {
@@ -10,6 +21,7 @@ export class WaitingResolver {
   // @UseMiddleware(isAuth, isRegularUser)
   async joinQueue(
     @Arg('joinQueueInput') joinQueueInput: JoinQueueInput,
+    @PubSub() pubSub: PubSubEngine,
     @Ctx() { req }: MyContext,
   ): Promise<any> {
     const { queueId, value } = joinQueueInput;
@@ -33,6 +45,16 @@ export class WaitingResolver {
       COMMIT;
       `,
     );
+    const updatedQueue = await Queue.findOneOrFail(queueId);
+
+    pubSub.publish(JOIN_QUEUE, updatedQueue);
+
     return true;
+  }
+  @Subscription(() => Queue, { topics: JOIN_QUEUE })
+  joinQueueSub(@Root() queue: Queue) {
+    console.log(queue);
+
+    return queue;
   }
 }

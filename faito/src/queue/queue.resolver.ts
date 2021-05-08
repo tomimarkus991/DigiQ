@@ -1,7 +1,19 @@
 import { MyContext } from '../types';
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql';
+import {
+  Arg,
+  Ctx,
+  Int,
+  Mutation,
+  PubSub,
+  PubSubEngine,
+  Query,
+  Resolver,
+  Root,
+  Subscription,
+} from 'type-graphql';
 import { Queue } from './entities/queue.entity';
 import { CreateQueueInput } from './dto/create-queue.input';
+import { CREATE_QUEUE } from '../constants';
 
 // @InputType()
 // export class CategoryInput {
@@ -32,6 +44,7 @@ export class QueueResolver {
   // @UseMiddleware(isAuth, isCreator)
   async createQueue(
     @Arg('createQueueInput') createQueueInput: CreateQueueInput,
+    @PubSub() pubSub: PubSubEngine,
     @Ctx() { req }: MyContext,
   ): Promise<Queue> {
     const { name, category } = createQueueInput;
@@ -40,6 +53,15 @@ export class QueueResolver {
       category,
       creatorId: req.session.userId,
     }).save()) as any;
+
+    pubSub.publish(CREATE_QUEUE, queue);
+
+    return queue;
+  }
+
+  @Subscription(() => Queue, { topics: CREATE_QUEUE })
+  createQueueSub(@Root() queue: Queue) {
+    console.log(queue);
 
     return queue;
   }
