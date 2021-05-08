@@ -1,6 +1,6 @@
-import { COOKIE_NAME, __prod__ } from './constants';
 import 'reflect-metadata';
 import 'dotenv-safe/config';
+import { COOKIE_NAME, __prod__ } from './constants';
 import path from 'path';
 import * as http from 'http';
 import express from 'express';
@@ -85,6 +85,7 @@ const main = async () => {
 
   const httpServer = http.createServer(app);
 
+  apolloServer.installSubscriptionHandlers(httpServer);
   httpServer.listen(parseInt(process.env.PORT), () =>
     console.log(`Server is running on ${process.env.PORT} `),
   );
