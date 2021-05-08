@@ -29,7 +29,7 @@ export class WaitingResolver {
     const realValue = isWaiting ? 1 : -1;
     let userId = req.session.userId;
 
-    const asi = await getConnection().query(
+    await getConnection().query(
       `
       START TRANSACTION;
 
