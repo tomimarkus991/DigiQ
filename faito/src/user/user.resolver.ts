@@ -1,8 +1,19 @@
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql';
+import {
+  Arg,
+  Ctx,
+  Int,
+  Mutation,
+  PubSub,
+  PubSubEngine,
+  Query,
+  Resolver,
+  Root,
+  Subscription,
+} from 'type-graphql';
 import { MyContext } from '../types';
 import argon2 from 'argon2';
 import { getConnection } from 'typeorm';
-import { COOKIE_NAME } from '../constants';
+import { COOKIE_NAME, REGISTER_USER } from '../constants';
 import { User } from './entities/user.entity';
 import { LoginUserInput } from './dto/login-user.input';
 import { UserResponse } from './dto/user.response';
@@ -32,6 +43,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg('registerUserInput') registerUserInput: RegisterUserInput,
+    @PubSub() pubSub: PubSubEngine,
     @Ctx() { req }: MyContext,
   ): Promise<UserResponse> {
     // check if there are errors
@@ -60,6 +72,7 @@ export class UserResolver {
         .returning('*')
         .execute();
       user = result.raw[0];
+      await pubSub.publish(REGISTER_USER, user);
     } catch (error) {
       if (error.code === '23505') {
         if (error.detail.includes('username')) {
@@ -140,5 +153,10 @@ export class UserResolver {
         resolve(true);
       }),
     );
+  }
+
+  @Subscription(() => User, { topics: REGISTER_USER })
+  registerUserSub(@Root() user: User) {
+    return user;
   }
 }
