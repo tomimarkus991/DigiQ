@@ -1,5 +1,5 @@
 import { User } from '../../user/entities/user.entity';
-import { Field, ObjectType } from 'type-graphql';
+import { Authorized, Field, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Waiting } from '../../waiting/entities/waiting.entity';
+import { Joined } from '../../joined/entities/joined.entity';
 
 @Entity()
 @ObjectType()
@@ -41,11 +42,19 @@ export class Queue extends BaseEntity {
   })
   creator: User;
 
+  @Authorized(['CREATOR'])
   @Field(() => [Waiting])
   @OneToMany(() => Waiting, waiting => waiting.queue, {
     lazy: true,
   })
   onQueue: Waiting[];
+
+  @Authorized()
+  @Field(() => [Joined])
+  @OneToMany(() => Joined, userJoined => userJoined.queue, {
+    lazy: true,
+  })
+  joined: Joined[];
 
   @Field()
   @Column({ type: 'int' })

@@ -1,6 +1,7 @@
 import { MyContext } from '../types';
 import {
   Arg,
+  Authorized,
   Ctx,
   Int,
   Mutation,
@@ -10,6 +11,7 @@ import {
   Resolver,
   Root,
   Subscription,
+  UseMiddleware,
 } from 'type-graphql';
 import { Queue } from './entities/queue.entity';
 import { CreateQueueInput } from './dto/create-queue.input';
@@ -23,15 +25,15 @@ import { CREATE_QUEUE } from '../constants';
 
 @Resolver()
 export class QueueResolver {
+  @Authorized()
   @Query(() => Queue)
-  // @UseMiddleware(isAuth)
   async queue(@Arg('id', () => Int) id: number) {
     const data = await Queue.findOne(id);
     return data;
   }
 
+  @Authorized()
   @Query(() => [Queue])
-  // @UseMiddleware(isAuth)
   // @Arg("category", () => String) category: string
   async queues() {
     // const data = await Queue.find({ where: { category } });
@@ -40,8 +42,8 @@ export class QueueResolver {
   }
 
   // Create Queue
+  @Authorized(['CREATOR'])
   @Mutation(() => Queue)
-  // @UseMiddleware(isAuth, isCreator)
   async createQueue(
     @Arg('createQueueInput') createQueueInput: CreateQueueInput,
     @PubSub() pubSub: PubSubEngine,

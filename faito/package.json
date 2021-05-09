@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "tsc",
     "w": "tsc -w",
     "dev": "nodemon dist/index.js",
