@@ -8,17 +8,19 @@ import {
   Resolver,
   Root,
   Subscription,
+  UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { JoinQueueInput } from './dto/join-queue.input';
 import { Queue } from '../queue/entities/queue.entity';
 import { JOIN_QUEUE } from '../constants';
+import { isRegularUser } from '../middleware/isRegularUser';
 
 @Resolver()
 export class WaitingResolver {
   // Join Queue
+  @UseMiddleware(isRegularUser)
   @Mutation(() => Boolean)
-  // @UseMiddleware(isAuth, isRegularUser)
   async joinQueue(
     @Arg('joinQueueInput') joinQueueInput: JoinQueueInput,
     @PubSub() pubSub: PubSubEngine,
@@ -35,6 +37,9 @@ export class WaitingResolver {
 
       insert into waiting ("userId", "queueId", value)
       values(${userId},${queueId},${realValue});
+
+      insert into joined ("userId", "queueId")
+      values(${userId},${queueId});
 
       update queue
       set waiting = waiting + ${realValue},
@@ -53,8 +58,6 @@ export class WaitingResolver {
   }
   @Subscription(() => Queue, { topics: JOIN_QUEUE })
   joinQueueSub(@Root() queue: Queue) {
-    console.log(queue);
-
     return queue;
   }
 }
