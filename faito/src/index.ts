@@ -16,6 +16,7 @@ import { Waiting } from './waiting/entities/waiting.entity';
 import { UserResolver } from './user/user.resolver';
 import { QueueResolver } from './queue/queue.resolver';
 import { WaitingResolver } from './waiting/waiting.resolver';
+import { Joined } from './joined/entities/joined.entity';
 
 const main = async () => {
   const config: ConnectionOptions = {
@@ -24,17 +25,14 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
-    entities: [Queue, User, Waiting],
+    entities: [Queue, User, Waiting, Joined],
   };
   try {
     await createConnection({ ...config });
     // let conn = await createConnection({ ...config });
-    // Userwaiting.delete({}).then(() =>
-    //   Queue.delete({}).then(() => console.log('deleted')),
-    // );
+    // Waiting.delete({}).then(() => Queue.delete({}).then(() => console.log('deleted')));
 
     // User.delete({});
-    // CreatorUser.delete({});
     // await conn.runMigrations();
   } catch (error) {
     console.log('Error while connecting to the database', error);
@@ -71,6 +69,39 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [QueueResolver, UserResolver, WaitingResolver],
+      authChecker: async ({ context: { req } }, roles) => {
+        const userId = req.session.userId;
+        if (!userId) {
+          return false;
+        } else {
+          const user = await User.findOneOrFail(userId);
+          const userRoles = user.isCreator ? ['CREATOR'] : [];
+
+          // check if roles is empty (no permissions required. user only needs to be logged in)
+          if (!roles[0]) {
+            // if user is then return true
+            if (userId) {
+              return true;
+            }
+          }
+          // check if roles exist(not empty array)
+          if (roles[0]) {
+            // get arrays as strings
+            let sortedUserRoles = userRoles.sort().join(',');
+            let sortedRoles = roles.sort().join(',');
+
+            // if they exist check if USERROLES array equals ROLES array
+            if (sortedUserRoles === sortedRoles) {
+              // if they are the same. user has rights and return true
+              return true;
+            } else {
+              return false;
+            }
+          }
+
+          return false; // or false if access is denied
+        }
+      },
       validate: false,
     }),
     context: ({ req, res }) => ({
