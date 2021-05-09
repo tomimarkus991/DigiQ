@@ -1,0 +1,13 @@
+query Me {
+  me {
+    id
+    username
+    isCreator
+    joinedQueues {
+      queue {
+        id
+        name
+      }
+    }
+  }
+}

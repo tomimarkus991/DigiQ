@@ -1,0 +1,15 @@
+query Queues {
+  queues {
+    id
+    name
+    category
+    estimatedServingtime
+    creatorId
+    creator {
+      username
+    }
+    waiting
+    shortestWaitingTime
+    longestWaitingTime
+  }
+}

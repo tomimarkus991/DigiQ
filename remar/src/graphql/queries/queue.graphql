@@ -1,0 +1,12 @@
+query GetQueue($id: Int!) {
+  queue(id: $id) {
+    name
+    estimatedServingtime
+    shortestWaitingTime
+    longestWaitingTime
+    waiting
+    creator {
+      username
+    }
+  }
+}
