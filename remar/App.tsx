@@ -1,10 +1,7 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Routes } from './src/Navigators/Routes';
 
-export default function App() {
-  return (
-    <View>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
-  );
-}
+const App: React.FC = () => {
+  return <Routes />;
+};
+export default App;
