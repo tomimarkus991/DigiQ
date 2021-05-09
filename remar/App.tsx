@@ -8,6 +8,12 @@ import {
   Roboto_700Bold,
   useFonts,
 } from '@expo-google-fonts/roboto';
+import {
+  ApolloClient,
+  ApolloProvider,
+  createHttpLink,
+  InMemoryCache,
+} from '@apollo/client';
 
 const App: React.FC = () => {
   let [fontsLoaded] = useFonts({
@@ -21,6 +27,19 @@ const App: React.FC = () => {
     return <AppLoading />;
   }
 
-  return <Routes />;
+  const httpLink = createHttpLink({
+    uri: 'http://192.168.0.16:5000/graphql',
+  });
+  // const networkInterface = createNetworkInterface({ uri: `http://10.0.2.2:8080/graphql` });
+  const client = new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache(),
+  });
+
+  return (
+    <ApolloProvider client={client}>
+      <Routes />
+    </ApolloProvider>
+  );
 };
 export default App;
