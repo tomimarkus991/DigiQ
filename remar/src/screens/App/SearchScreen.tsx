@@ -32,12 +32,14 @@ export const SearchScreen: React.FC<SearchScreenProps> = ({}) => {
       <Text>{item.title}</Text>
     </View>
   );
-  // fontFamily: 'Roboto_500Medium',
+
   return (
     <SafeAreaView style={{ ...styles.container }}>
       <PageHeader title="Search" />
       <TextInput style={{ ...styles.searchInput }} placeholder="Search" />
-      <Text style={{ fontSize: 16, marginBottom: 3 }}>Popular Categories</Text>
+      <Text style={{ fontFamily: 'Roboto_500Medium', fontSize: 16, marginBottom: 3 }}>
+        Popular Categories
+      </Text>
       <FlatList
         data={DATA}
         renderItem={renderItem}

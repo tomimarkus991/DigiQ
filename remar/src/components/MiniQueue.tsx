@@ -66,7 +66,7 @@ export const MiniQueue: React.FC<MiniQueueProps> = ({ data, navigation }) => {
               style={{
                 fontSize: 17,
                 color: '#1A202C',
-                // fontFamily: 'Roboto_700Bold',
+                fontFamily: 'Roboto_700Bold',
               }}
             >
               {name}
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   text: {
     // fontSize: 14,
-    // fontFamily: 'Roboto_700Bold',
+    fontFamily: 'Roboto_700Bold',
     color: '#1A202C',
   },
 });

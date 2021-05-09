@@ -9,7 +9,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ title }) => {
   return (
     <Text
       style={{
-        // fontFamily: 'Roboto_500Medium',
+        fontFamily: 'Roboto_500Medium',
         fontSize: 24,
         marginBottom: 2,
       }}
