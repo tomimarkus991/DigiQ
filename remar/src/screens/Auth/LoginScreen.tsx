@@ -148,6 +148,7 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
                     marginVertical: 60,
                     padding: 10,
                     borderRadius: 10,
+                    width: 80,
                   }}
                 >
                   <Text
@@ -157,7 +158,7 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
                       textAlign: 'center',
                     }}
                   >
-                    CREATE
+                    Create
                   </Text>
                 </View>
               </TouchableOpacity>
