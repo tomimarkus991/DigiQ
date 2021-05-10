@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StatusBar, Text } from 'react-native';
 import { SectionList as CustomSectionList } from '../../components/custom/SectionList';
+import { Fonts } from '../../global';
 import { HomeStackNavProps } from '../../types/HomeParamList';
 
 interface HomeScreenProps {}
@@ -15,7 +16,7 @@ export const HomeScreen = ({ navigation }: HomeStackNavProps<'Feed'>) => {
     >
       <Text
         style={{
-          fontFamily: 'Roboto_500Medium',
+          fontFamily: Fonts.Roboto_500Medium,
           fontSize: 24,
           marginBottom: 2,
           marginLeft: 20,
