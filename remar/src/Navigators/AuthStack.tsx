@@ -1,8 +1,8 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
-import { LoginScreen } from "../screens/Auth/LoginScreen";
-import { RegisterScreen } from "../screens/Auth/RegisterScreen";
-import { AuthParamList } from "../types/AuthParamList";
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import { LoginScreen } from '../screens/Auth/LoginScreen';
+import { RegisterScreen } from '../screens/Auth/RegisterScreen';
+import { AuthParamList } from '../types/AuthParamList';
 
 interface AuthStackProps {}
 const Stack = createStackNavigator<AuthParamList>();
@@ -12,12 +12,12 @@ export const AuthStack: React.FC<AuthStackProps> = ({}) => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ headerTitle: "Sign in" }}
+        options={{ header: () => null }}
       />
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
-        options={{ headerTitle: "Sign up" }}
+        options={{ header: () => null }}
       />
     </Stack.Navigator>
   );
