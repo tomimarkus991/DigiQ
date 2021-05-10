@@ -1,16 +1,8 @@
 import { Formik } from 'formik';
 import React from 'react';
-import { Center } from '../../components/Center';
 import { AuthNavProps } from '../../types/AuthParamList';
-import { Button as CustomButton } from '../../components/custom/Button';
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Colors, Fonts } from '../../global';
 
 export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
   // const [login] = useLoginMutation();
@@ -43,22 +35,42 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
         }}
       >
         {({ handleChange, handleSubmit, values }) => (
-          <View style={{ display: 'flex', width: '85%' }}>
-            {/* inputs */}
-            <View>
+          <View
+            style={{
+              display: 'flex',
+              width: '85%',
+              height: '90 %',
+            }}
+          >
+            <View style={{ flex: 5, justifyContent: 'center' }}>
+              <Text
+                style={{
+                  fontFamily: Fonts.Roboto_700Bold,
+                  fontSize: 48,
+                  textAlign: 'center',
+                  color: Colors.Text_Header,
+                }}
+              >
+                Digi Q
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 5,
+              }}
+            >
               <TextInput
                 placeholder="Username or Email"
                 value={values.usernameOrEmail}
                 onChangeText={handleChange('usernameOrEmail')}
                 style={styles.input}
-                placeholderTextColor="#37373b"
+                placeholderTextColor={Colors.Text_Placeholder}
               />
-              {/* make this line component */}
               <View
                 style={{
                   marginTop: 8,
-                  marginBottom: 12,
-                  borderBottomColor: '#b6b6b8',
+                  marginBottom: 20,
+                  borderBottomColor: Colors.Line,
                   borderBottomWidth: 1,
                 }}
               />
@@ -68,57 +80,62 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
                 onChangeText={handleChange('password')}
                 secureTextEntry={true}
                 style={styles.input}
-                placeholderTextColor="#37373b"
+                placeholderTextColor={Colors.Text_Placeholder}
               />
               <View
                 style={{
                   marginTop: 8,
-                  marginBottom: 20,
-                  borderBottomColor: '#b6b6b8',
+                  marginBottom: 30,
+                  borderBottomColor: Colors.Line,
                   borderBottomWidth: 1,
                 }}
               />
+              <View
+                style={{
+                  alignItems: 'center',
+                }}
+              >
+                <TouchableOpacity onPress={() => handleSubmit()}>
+                  <View
+                    style={{
+                      backgroundColor: Colors.Button_Blue,
+                      marginTop: 10,
+                      marginVertical: 60,
+                      padding: 10,
+                      borderRadius: 10,
+                      width: 100,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: Colors.Text_Regular,
+                        fontSize: 18,
+                        textAlign: 'center',
+                      }}
+                    >
+                      Login
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-            {/* inputs */}
-
-            {/* login */}
-            <View>
-              <TouchableOpacity onPress={() => handleSubmit()}>
-                <View
-                  style={{
-                    backgroundColor: '#445AE3',
-                    marginTop: 10,
-                    marginVertical: 60,
-                    padding: 10,
-                    borderRadius: 10,
-                    width: '30%',
-                  }}
-                >
-                  <Text style={{ color: '#E2E8F0', fontSize: 18, textAlign: 'center' }}>
-                    Login
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            {/* login */}
-
-            {/* dont have account */}
             <View
               style={{
-                display: 'flex',
+                flex: 1,
                 flexDirection: 'row',
-                alignItems: 'center',
                 width: '85%',
-                justifyContent: 'flex-end',
-                alignContent: 'flex-end',
+                alignItems: 'baseline',
+                justifyContent: 'center',
+                alignSelf: 'center',
               }}
             >
               <Text
                 style={{
-                  color: '#78787d',
+                  color: Colors.Text_Gray,
                   fontSize: 18,
                   textAlign: 'center',
-                  fontFamily: 'Roboto_500Medium',
+                  fontFamily: Fonts.Roboto_500Medium,
+                  marginRight: 6,
                 }}
               >
                 Don't have an account?&nbsp;
@@ -126,17 +143,16 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
               <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                 <View
                   style={{
-                    backgroundColor: '#EB69FE',
+                    backgroundColor: Colors.Button_Purple,
                     marginTop: 10,
                     marginVertical: 60,
                     padding: 10,
                     borderRadius: 10,
-                    // width: '30%',
                   }}
                 >
                   <Text
                     style={{
-                      color: '#E2E8F0',
+                      color: Colors.Text_Regular,
                       fontSize: 18,
                       textAlign: 'center',
                     }}
@@ -146,7 +162,6 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
                 </View>
               </TouchableOpacity>
             </View>
-            {/* dont have account */}
           </View>
         )}
       </Formik>
@@ -157,8 +172,8 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
 const styles = StyleSheet.create({
   input: {
     fontSize: 18,
-    color: '#DBDADF',
-    fontFamily: 'Roboto_700Bold',
+    color: Colors.Text_Input,
+    fontFamily: Fonts.Roboto_700Bold,
     // color: '#445AE3',
   },
 });
