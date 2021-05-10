@@ -20,12 +20,12 @@ import { isRegularUser } from '../middleware/isRegularUser';
 export class WaitingResolver {
   // Join Queue
   @UseMiddleware(isRegularUser)
-  @Mutation(() => Boolean)
+  @Mutation(() => Queue)
   async joinQueue(
     @Arg('joinQueueInput') joinQueueInput: JoinQueueInput,
     @PubSub() pubSub: PubSubEngine,
     @Ctx() { req }: MyContext,
-  ): Promise<any> {
+  ): Promise<Queue> {
     const { queueId, value } = joinQueueInput;
     const isWaiting = value !== -1;
     const realValue = isWaiting ? 1 : -1;
@@ -54,7 +54,7 @@ export class WaitingResolver {
 
     pubSub.publish(JOIN_QUEUE, updatedQueue);
 
-    return true;
+    return updatedQueue;
   }
   @Subscription(() => Queue, { topics: JOIN_QUEUE })
   joinQueueSub(@Root() queue: Queue) {

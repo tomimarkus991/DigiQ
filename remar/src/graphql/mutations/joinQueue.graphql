@@ -1,7 +1,7 @@
-mutation joinQueue($joinQueueInput: joinQueueInput!) {
+mutation joinQueue($joinQueueInput: JoinQueueInput!) {
   joinQueue(joinQueueInput: $joinQueueInput) {
     name
-    peopleInQueue
+    waiting
     shortestWaitingTime
     longestWaitingTime
   }
