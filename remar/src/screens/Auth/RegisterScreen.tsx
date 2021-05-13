@@ -6,7 +6,7 @@ import { MeDocument, MeQuery, useRegisterMutation } from '../../generated/graphq
 import { toErrorMap } from '../../utils/toErrorMap';
 import { AuthFooter } from '../../components/authScreens/AuthFooter';
 import { AuthHeader } from '../../components/authScreens/AuthHeader';
-import { InputField } from '../../components/InputField';
+import { InputField } from '../../components/authScreens/InputField';
 import { FormButton } from '../../components/authScreens/FormButton';
 
 export const RegisterScreen = ({ navigation }: AuthNavProps<'Register'>) => {

@@ -16,9 +16,10 @@ export const HomeStack: React.FC<HomeStackProps> = ({}) => {
       <Stack.Screen
         name="Line"
         component={LineScreen}
-        options={({ route }) => ({
-          headerTitle: route.params.queueName,
-        })}
+        options={{
+          headerTitle: '',
+          headerTransparent: true,
+        }}
       />
       <Stack.Screen
         name="JoinedLine"

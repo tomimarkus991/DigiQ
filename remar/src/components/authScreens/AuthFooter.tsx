@@ -26,7 +26,7 @@ export const AuthFooter: React.FC<AuthFooterProps> = ({ text, whereTo, buttonTit
           fontSize: 18,
           textAlign: 'center',
           fontFamily: Fonts.Roboto_500Medium,
-          marginRight: 6,
+          marginRight: 10,
         }}
       >
         {text}

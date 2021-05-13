@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 export type HomeParamList = {
   Feed: undefined;
-  Line: { queueName: string; data: any };
+  Line: { id: number };
   JoinedLine: { currentQueueName: string; data: any };
 };
 

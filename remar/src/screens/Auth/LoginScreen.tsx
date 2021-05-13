@@ -5,10 +5,10 @@ import { StyleSheet, View } from 'react-native';
 import { Colors, Fonts } from '../../global';
 import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
 import { toErrorMap } from '../../utils/toErrorMap';
-import { InputField } from '../../components/InputField';
 import { FormButton } from '../../components/authScreens/FormButton';
 import { AuthHeader } from '../../components/authScreens/AuthHeader';
 import { AuthFooter } from '../../components/authScreens/AuthFooter';
+import { InputField } from '../../components/authScreens/InputField';
 
 export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
   const [login] = useLoginMutation();

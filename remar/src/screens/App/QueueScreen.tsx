@@ -10,12 +10,12 @@ import {
 
 import { HomeStackNavProps } from '../../types/HomeParamList';
 
-export const LineScreen = ({ navigation, route }: HomeStackNavProps<'Line'>) => {
-  const { id } = route.params.data;
+export const LineScreen = ({ route }: HomeStackNavProps<'Line'>) => {
+  const id = route.params.id;
   const [joinQueue] = useJoinQueueMutation();
   const { data } = useGetQueueQuery({ variables: { id } });
-  const { loading, data: newData, error } = useJoinQueueSubSubscription();
-  console.log('neww', newData?.joinQueueSub);
+  const { data: newData } = useJoinQueueSubSubscription();
+
   // const leaveTheLine = () => {
   //   navigation.navigate("Feed");
   //   console.log("leaveTheLine");
@@ -38,6 +38,7 @@ export const LineScreen = ({ navigation, route }: HomeStackNavProps<'Line'>) => 
     <View style={styles.main}>
       {newData?.joinQueueSub ? (
         <View>
+          <Text>{newData?.joinQueueSub.name}</Text>
           <Text>Inimesi järjekorras: {newData?.joinQueueSub.waiting}</Text>
           <Text>
             Minimaalne ootamisaeg on: {newData?.joinQueueSub.shortestWaitingTime} min
@@ -48,6 +49,7 @@ export const LineScreen = ({ navigation, route }: HomeStackNavProps<'Line'>) => 
         </View>
       ) : (
         <View>
+          <Text>{data?.queue.name}</Text>
           <Text>Inimesi järjekorras: {data?.queue.waiting}</Text>
           <Text>Minimaalne ootamisaeg on: {data?.queue.shortestWaitingTime} min</Text>
           <Text>Maximaalne ootamisaeg on: {data?.queue.longestWaitingTime} min</Text>

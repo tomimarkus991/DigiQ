@@ -11,13 +11,10 @@ interface MiniQueueProps {
 }
 
 export const MiniQueue: React.FC<MiniQueueProps> = ({ data, navigation }) => {
-  const { name, shortestWaitingTime, longestWaitingTime } = data;
+  const { name, shortestWaitingTime, longestWaitingTime, id } = data;
 
   const seeTheLine = () => {
-    navigation.navigate('Line', {
-      queueName: name,
-      data,
-    });
+    navigation.navigate('Line', { id });
   };
   return (
     <View

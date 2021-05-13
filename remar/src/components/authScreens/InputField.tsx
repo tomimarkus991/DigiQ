@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import React, { ChangeEvent, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { Colors, Fonts } from '../global';
+import { Colors, Fonts } from '../../global';
 
 type InputFieldProps = {
   name: string;
@@ -29,6 +29,7 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
             onChangeText={handleChange}
             style={styles.input}
             secureTextEntry={true}
+            autoCompleteType="off"
           />
           <View
             style={{
@@ -49,6 +50,7 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
             value={value}
             onChangeText={handleChange}
             style={styles.input}
+            autoCompleteType="off"
           />
           <View
             style={{
