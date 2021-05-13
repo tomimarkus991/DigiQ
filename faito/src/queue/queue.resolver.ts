@@ -11,7 +11,6 @@ import {
   Resolver,
   Root,
   Subscription,
-  UseMiddleware,
 } from 'type-graphql';
 import { Queue } from './entities/queue.entity';
 import { CreateQueueInput } from './dto/create-queue.input';

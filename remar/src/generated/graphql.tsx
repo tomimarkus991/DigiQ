@@ -48,6 +48,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  makeUserCreator: Scalars['Boolean'];
   createQueue: Queue;
   joinQueue: Queue;
 };
@@ -111,7 +112,6 @@ export type RegisterUserInput = {
   username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
-  isCreator: Scalars['Boolean'];
 };
 
 export type Subscription = {
@@ -204,6 +204,14 @@ export type LogoutMutation = (
   & Pick<Mutation, 'logout'>
 );
 
+export type MakeUserCreatorMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MakeUserCreatorMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'makeUserCreator'>
+);
+
 export type RegisterMutationVariables = Exact<{
   registerUserInput: RegisterUserInput;
 }>;
@@ -221,6 +229,17 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & RegularUserFragment
+  )> }
+);
+
+export type MeAdvancedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeAdvancedQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
@@ -265,6 +284,17 @@ export type QueuesQuery = (
       & Pick<User, 'username'>
     ) }
   )> }
+);
+
+export type JoinQueueSubSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type JoinQueueSubSubscription = (
+  { __typename?: 'Subscription' }
+  & { joinQueueSub: (
+    { __typename?: 'Queue' }
+    & Pick<Queue, 'name' | 'waiting' | 'shortestWaitingTime' | 'longestWaitingTime'>
+  ) }
 );
 
 export const RegularErrorFragmentDoc = gql`
@@ -389,6 +419,36 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const MakeUserCreatorDocument = gql`
+    mutation MakeUserCreator {
+  makeUserCreator
+}
+    `;
+export type MakeUserCreatorMutationFn = Apollo.MutationFunction<MakeUserCreatorMutation, MakeUserCreatorMutationVariables>;
+
+/**
+ * __useMakeUserCreatorMutation__
+ *
+ * To run a mutation, you first call `useMakeUserCreatorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMakeUserCreatorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [makeUserCreatorMutation, { data, loading, error }] = useMakeUserCreatorMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMakeUserCreatorMutation(baseOptions?: Apollo.MutationHookOptions<MakeUserCreatorMutation, MakeUserCreatorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MakeUserCreatorMutation, MakeUserCreatorMutationVariables>(MakeUserCreatorDocument, options);
+      }
+export type MakeUserCreatorMutationHookResult = ReturnType<typeof useMakeUserCreatorMutation>;
+export type MakeUserCreatorMutationResult = Apollo.MutationResult<MakeUserCreatorMutation>;
+export type MakeUserCreatorMutationOptions = Apollo.BaseMutationOptions<MakeUserCreatorMutation, MakeUserCreatorMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($registerUserInput: RegisterUserInput!) {
   register(registerUserInput: $registerUserInput) {
@@ -425,18 +485,10 @@ export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutatio
 export const MeDocument = gql`
     query Me {
   me {
-    id
-    username
-    isCreator
-    joinedQueues {
-      queue {
-        id
-        name
-      }
-    }
+    ...RegularUser
   }
 }
-    `;
+    ${RegularUserFragmentDoc}`;
 
 /**
  * __useMeQuery__
@@ -464,6 +516,48 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MeAdvancedDocument = gql`
+    query MeAdvanced {
+  me {
+    id
+    username
+    isCreator
+    joinedQueues {
+      queue {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useMeAdvancedQuery__
+ *
+ * To run a query within a React component, call `useMeAdvancedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeAdvancedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeAdvancedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeAdvancedQuery(baseOptions?: Apollo.QueryHookOptions<MeAdvancedQuery, MeAdvancedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeAdvancedQuery, MeAdvancedQueryVariables>(MeAdvancedDocument, options);
+      }
+export function useMeAdvancedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeAdvancedQuery, MeAdvancedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeAdvancedQuery, MeAdvancedQueryVariables>(MeAdvancedDocument, options);
+        }
+export type MeAdvancedQueryHookResult = ReturnType<typeof useMeAdvancedQuery>;
+export type MeAdvancedLazyQueryHookResult = ReturnType<typeof useMeAdvancedLazyQuery>;
+export type MeAdvancedQueryResult = Apollo.QueryResult<MeAdvancedQuery, MeAdvancedQueryVariables>;
 export const GetQueueDocument = gql`
     query GetQueue($id: Int!) {
   queue(id: $id) {
@@ -550,3 +644,35 @@ export function useQueuesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Que
 export type QueuesQueryHookResult = ReturnType<typeof useQueuesQuery>;
 export type QueuesLazyQueryHookResult = ReturnType<typeof useQueuesLazyQuery>;
 export type QueuesQueryResult = Apollo.QueryResult<QueuesQuery, QueuesQueryVariables>;
+export const JoinQueueSubDocument = gql`
+    subscription JoinQueueSub {
+  joinQueueSub {
+    name
+    waiting
+    shortestWaitingTime
+    longestWaitingTime
+  }
+}
+    `;
+
+/**
+ * __useJoinQueueSubSubscription__
+ *
+ * To run a query within a React component, call `useJoinQueueSubSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useJoinQueueSubSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useJoinQueueSubSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useJoinQueueSubSubscription(baseOptions?: Apollo.SubscriptionHookOptions<JoinQueueSubSubscription, JoinQueueSubSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<JoinQueueSubSubscription, JoinQueueSubSubscriptionVariables>(JoinQueueSubDocument, options);
+      }
+export type JoinQueueSubSubscriptionHookResult = ReturnType<typeof useJoinQueueSubSubscription>;
+export type JoinQueueSubSubscriptionResult = Apollo.SubscriptionResult<JoinQueueSubSubscription>;

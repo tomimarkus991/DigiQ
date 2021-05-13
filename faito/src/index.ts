@@ -17,6 +17,8 @@ import { UserResolver } from './user/user.resolver';
 import { QueueResolver } from './queue/queue.resolver';
 import { WaitingResolver } from './waiting/waiting.resolver';
 import { Joined } from './joined/entities/joined.entity';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { execute, subscribe } from 'graphql';
 
 const main = async () => {
   const config: ConnectionOptions = {
@@ -30,7 +32,9 @@ const main = async () => {
   try {
     await createConnection({ ...config });
     // let conn = await createConnection({ ...config });
-    // Waiting.delete({}).then(() => Queue.delete({}).then(() => console.log('deleted')));
+    // Waiting.delete({}).then(() =>
+    //   Joined.delete({}).then(() => Queue.delete({}).then(() => console.log('deleted'))),
+    // );
 
     // User.delete({});
     // await conn.runMigrations();
@@ -108,6 +112,9 @@ const main = async () => {
       req,
       res,
     }),
+    subscriptions: {
+      path: '/subscriptions',
+    },
   });
   apolloServer.applyMiddleware({
     app,
@@ -117,9 +124,9 @@ const main = async () => {
   const httpServer = http.createServer(app);
 
   apolloServer.installSubscriptionHandlers(httpServer);
-  httpServer.listen(parseInt(process.env.PORT), () =>
-    console.log(`Server is running on ${process.env.PORT} `),
-  );
+  httpServer.listen(parseInt(process.env.PORT), () => {
+    console.log(`Server is running on ${process.env.PORT} `);
+  });
 };
 
 main().catch(err => console.error(err));

@@ -10,7 +10,4 @@ export class RegisterUserInput {
 
   @Field()
   password: string;
-
-  @Field()
-  isCreator: boolean;
 }

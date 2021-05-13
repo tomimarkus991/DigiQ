@@ -49,7 +49,7 @@ export class UserResolver {
     // check if there are errors
     const errors = validateRegister(registerUserInput);
 
-    const { username, email, password, isCreator } = registerUserInput;
+    const { username, email, password } = registerUserInput;
 
     if (errors) {
       return { errors };
@@ -67,7 +67,6 @@ export class UserResolver {
           username,
           email,
           password: hashedPassword,
-          isCreator,
         })
         .returning('*')
         .execute();
@@ -153,6 +152,20 @@ export class UserResolver {
         resolve(true);
       }),
     );
+  }
+
+  @Mutation(() => Boolean)
+  async makeUserCreator(@Ctx() { req }: MyContext) {
+    let currentUser = await User.findOneOrFail(req.session.userId);
+    console.log(currentUser.isCreator);
+
+    await getConnection()
+      .createQueryBuilder()
+      .update(User)
+      .set({ isCreator: !currentUser.isCreator })
+      .where('id = :id', { id: req.session.userId })
+      .execute();
+    return currentUser.isCreator;
   }
 
   @Subscription(() => User, { topics: REGISTER_USER })

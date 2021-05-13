@@ -1,12 +1,22 @@
 import React from 'react';
-import { SafeAreaView, StatusBar, Text } from 'react-native';
+import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 import { SectionList as CustomSectionList } from '../../components/custom/SectionList';
+import { useQueuesQuery } from '../../generated/graphql';
 import { Fonts } from '../../global';
 import { HomeStackNavProps } from '../../types/HomeParamList';
 
 interface HomeScreenProps {}
 
 export const HomeScreen = ({ navigation }: HomeStackNavProps<'Feed'>) => {
+  const { data, error } = useQueuesQuery();
+  if (error) {
+    return (
+      <View>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView
       style={{
@@ -24,7 +34,7 @@ export const HomeScreen = ({ navigation }: HomeStackNavProps<'Feed'>) => {
       >
         Home
       </Text>
-      {/* <CustomSectionList data={data?.queues} navigation={navigation} /> */}
+      <CustomSectionList data={data?.queues} navigation={navigation} />
     </SafeAreaView>
   );
 };

@@ -1,0 +1,13 @@
+query MeAdvanced {
+  me {
+    id
+    username
+    isCreator
+    joinedQueues {
+      queue {
+        id
+        name
+      }
+    }
+  }
+}

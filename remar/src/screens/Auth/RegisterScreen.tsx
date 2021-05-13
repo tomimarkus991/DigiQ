@@ -1,11 +1,16 @@
 import { Formik } from 'formik';
 import React from 'react';
 import { AuthNavProps } from '../../types/AuthParamList';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { Colors, Fonts } from '../../global';
+import { View } from 'react-native';
+import { MeDocument, MeQuery, useRegisterMutation } from '../../generated/graphql';
+import { toErrorMap } from '../../utils/toErrorMap';
+import { AuthFooter } from '../../components/authScreens/AuthFooter';
+import { AuthHeader } from '../../components/authScreens/AuthHeader';
+import { InputField } from '../../components/InputField';
+import { FormButton } from '../../components/authScreens/FormButton';
 
 export const RegisterScreen = ({ navigation }: AuthNavProps<'Register'>) => {
-  // const [register] = useRegisterMutation();
+  const [register] = useRegisterMutation();
   return (
     <View
       style={{
@@ -17,21 +22,21 @@ export const RegisterScreen = ({ navigation }: AuthNavProps<'Register'>) => {
       <Formik
         initialValues={{ username: '', email: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
-          // const response = await register({
-          //   variables: { input: values },
-          //   update: (cache, { data }) => {
-          //     cache.writeQuery<MeQuery>({
-          //       query: MeDocument,
-          //       data: {
-          //         __typename: 'Query',
-          //         me: data?.register.user,
-          //       },
-          //     });
-          //   },
-          // });
-          // if (response.data?.register.errors) {
-          //   setErrors(toErrorMap(response.data.register.errors));
-          // }
+          const response = await register({
+            variables: { registerUserInput: values },
+            update: (cache, { data }) => {
+              cache.writeQuery<MeQuery>({
+                query: MeDocument,
+                data: {
+                  __typename: 'Query',
+                  me: data?.register.user,
+                },
+              });
+            },
+          });
+          if (response.data?.register.errors) {
+            setErrors(toErrorMap(response.data.register.errors));
+          }
         }}
       >
         {({ handleChange, handleSubmit, values }) => (
@@ -39,156 +44,46 @@ export const RegisterScreen = ({ navigation }: AuthNavProps<'Register'>) => {
             style={{
               display: 'flex',
               width: '85%',
-              height: '90 %',
+              height: '90%',
             }}
           >
-            <View style={{ flex: 5, justifyContent: 'center' }}>
-              <Text
-                style={{
-                  fontFamily: Fonts.Roboto_700Bold,
-                  fontSize: 48,
-                  textAlign: 'center',
-                  color: Colors.Text_Header,
-                }}
-              >
-                Digi Q
-              </Text>
-            </View>
+            <AuthHeader />
             <View
               style={{
                 flex: 5,
               }}
             >
-              <TextInput
-                placeholder="Username or Email"
+              <InputField
+                mb={20}
+                name="username"
+                placeholder="Username"
                 value={values.username}
-                onChangeText={handleChange('username')}
-                style={styles.input}
-                placeholderTextColor={Colors.Text_Placeholder}
+                handleChange={handleChange('username')}
               />
-              <View
-                style={{
-                  marginTop: 8,
-                  marginBottom: 20,
-                  borderBottomColor: Colors.Line,
-                  borderBottomWidth: 1,
-                }}
-              />
-              <TextInput
+              <InputField
+                mb={20}
+                name="email"
                 placeholder="Email"
                 value={values.email}
-                onChangeText={handleChange('email')}
-                style={styles.input}
-                placeholderTextColor={Colors.Text_Placeholder}
+                handleChange={handleChange('email')}
               />
-              <View
-                style={{
-                  marginTop: 8,
-                  marginBottom: 20,
-                  borderBottomColor: Colors.Line,
-                  borderBottomWidth: 1,
-                }}
-              />
-              <TextInput
+              <InputField
+                mb={30}
+                name="password"
                 placeholder="Password"
                 value={values.password}
-                onChangeText={handleChange('password')}
-                secureTextEntry={true}
-                style={styles.input}
-                placeholderTextColor={Colors.Text_Placeholder}
+                handleChange={handleChange('password')}
               />
-              <View
-                style={{
-                  marginTop: 8,
-                  marginBottom: 30,
-                  borderBottomColor: Colors.Line,
-                  borderBottomWidth: 1,
-                }}
-              />
-              <View
-                style={{
-                  alignItems: 'center',
-                }}
-              >
-                <TouchableOpacity onPress={() => handleSubmit()}>
-                  <View
-                    style={{
-                      backgroundColor: Colors.Button_Blue,
-                      marginTop: 10,
-                      marginVertical: 60,
-                      padding: 10,
-                      borderRadius: 10,
-                      width: 100,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: Colors.Text_Regular,
-                        fontSize: 18,
-                        textAlign: 'center',
-                      }}
-                    >
-                      Create
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+              <FormButton title="Register" handleSubmit={handleSubmit} />
             </View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                width: '85%',
-                alignItems: 'baseline',
-                justifyContent: 'center',
-                alignSelf: 'center',
-              }}
-            >
-              <Text
-                style={{
-                  color: Colors.Text_Gray,
-                  fontSize: 18,
-                  textAlign: 'center',
-                  fontFamily: Fonts.Roboto_500Medium,
-                  marginRight: 6,
-                }}
-              >
-                Already have an account?&nbsp;
-              </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <View
-                  style={{
-                    backgroundColor: Colors.Button_Purple,
-                    marginTop: 10,
-                    marginVertical: 60,
-                    padding: 10,
-                    borderRadius: 10,
-                    width: 80,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: Colors.Text_Regular,
-                      fontSize: 18,
-                      textAlign: 'center',
-                    }}
-                  >
-                    Login
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            <AuthFooter
+              text="Already have an account?&nbsp;"
+              whereTo={() => navigation.navigate('Login')}
+              buttonTitle="Login"
+            />
           </View>
         )}
       </Formik>
     </View>
   );
 };
-const styles = StyleSheet.create({
-  input: {
-    fontSize: 18,
-    color: Colors.Text_Input,
-    fontFamily: Fonts.Roboto_700Bold,
-    // color: '#445AE3',
-  },
-});

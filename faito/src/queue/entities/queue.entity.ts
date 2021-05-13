@@ -66,7 +66,8 @@ export class Queue extends BaseEntity {
 
   @Field()
   @Column()
-  longestWaitingTime: number = this.shortestWaitingTime + this.estimatedServingtime;
+  longestWaitingTime: number =
+    this.estimatedServingtime * this.waiting + this.estimatedServingtime;
 
   @Field(() => String)
   @CreateDateColumn()

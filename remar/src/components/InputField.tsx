@@ -1,38 +1,73 @@
 import { useField } from 'formik';
-import React, { useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import React, { ChangeEvent, useState } from 'react';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Colors, Fonts } from '../global';
 
 type InputFieldProps = {
   name: string;
-  label: string;
   placeholder: string;
+  mb: number;
+  value: string;
+  handleChange: (e: string | ChangeEvent<any>) => void;
 };
 
 export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
-  const { label, placeholder, name } = props;
-  const [field, { error }] = useField(props);
+  const { name, placeholder, mb, value, handleChange } = props;
+  const [_, { error }] = useField(props);
 
   return (
     <View>
-      {/* <label htmlFor={field.name}>{label}</label> */}
-      {name === 'password' ? (
-        <TextInput
-          {...field}
-          {...props}
-          nativeID={field.name}
-          placeholder={placeholder}
-          textContentType="password"
-        />
-      ) : (
-        <TextInput
-          {...field}
-          {...props}
-          nativeID={field.name}
-          placeholder={placeholder}
-        />
-      )}
-
       {error ? <Text>{error}</Text> : null}
+      {name === 'password' ? (
+        <View>
+          <TextInput
+            placeholder={placeholder}
+            placeholderTextColor={Colors.Text_Placeholder}
+            autoCapitalize="none"
+            nativeID={name}
+            value={value}
+            onChangeText={handleChange}
+            style={styles.input}
+            secureTextEntry={true}
+          />
+          <View
+            style={{
+              marginTop: 8,
+              marginBottom: mb,
+              borderBottomColor: Colors.Line,
+              borderBottomWidth: 1,
+            }}
+          />
+        </View>
+      ) : (
+        <View>
+          <TextInput
+            placeholder={placeholder}
+            placeholderTextColor={Colors.Text_Placeholder}
+            autoCapitalize="none"
+            nativeID={name}
+            value={value}
+            onChangeText={handleChange}
+            style={styles.input}
+          />
+          <View
+            style={{
+              marginTop: 8,
+              marginBottom: mb,
+              borderBottomColor: Colors.Line,
+              borderBottomWidth: 1,
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  input: {
+    fontSize: 18,
+    color: Colors.Text_Input,
+    fontFamily: Fonts.Roboto_700Bold,
+  },
+});
