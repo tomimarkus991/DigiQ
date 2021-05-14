@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-interface JoinedLineScreenProps {}
+interface JoinedQueueScreenProps {}
 
-export const JoinedLineScreen: React.FC<JoinedLineScreenProps> = ({}) => {
+export const JoinedQueueScreen: React.FC<JoinedQueueScreenProps> = ({}) => {
   return (
     <View>
       <Text>Joined the line</Text>

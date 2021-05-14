@@ -3,7 +3,7 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { Queue } from '../../generated/graphql';
 import { HomeParamList } from '../../types/HomeParamList';
-import { MiniQueue } from '../MiniQueue';
+import { SmallQueue } from '../homeScreen/SmallQueue';
 
 interface SectionListProps {
   data: Queue[];
@@ -12,7 +12,7 @@ interface SectionListProps {
 
 export const SectionList: React.FC<SectionListProps> = ({ data, navigation }) => {
   let renderItem = (data: any) => {
-    return <MiniQueue data={data.item} navigation={navigation} />;
+    return <SmallQueue data={data.item} navigation={navigation} />;
   };
 
   return (

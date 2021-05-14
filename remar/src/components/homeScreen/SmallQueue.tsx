@@ -2,19 +2,19 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Fonts } from '../global';
-import { HomeParamList } from '../types/HomeParamList';
+import { Fonts } from '../../global';
+import { HomeParamList } from '../../types/HomeParamList';
 
-interface MiniQueueProps {
+interface SmallQueueProps {
   data: any;
   navigation: StackNavigationProp<HomeParamList, 'Feed'>;
 }
 
-export const MiniQueue: React.FC<MiniQueueProps> = ({ data, navigation }) => {
+export const SmallQueue: React.FC<SmallQueueProps> = ({ data, navigation }) => {
   const { name, shortestWaitingTime, longestWaitingTime, id } = data;
 
-  const seeTheLine = () => {
-    navigation.navigate('Line', { id });
+  const seeTheQueue = () => {
+    navigation.navigate('Queue', { id });
   };
   return (
     <View
@@ -27,7 +27,7 @@ export const MiniQueue: React.FC<MiniQueueProps> = ({ data, navigation }) => {
         maxWidth: 170,
       }}
     >
-      <TouchableOpacity onPress={() => seeTheLine()}>
+      <TouchableOpacity onPress={() => seeTheQueue()}>
         <View style={{ position: 'relative' }}>
           <Image
             style={{ width: 170, height: 150, borderRadius: 15 }}

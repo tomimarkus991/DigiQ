@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { Fonts } from '../global';
+import { Fonts } from '../../global';
 
 interface PageHeaderProps {
   title: string;

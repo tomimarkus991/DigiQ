@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/client';
 import React, { useEffect } from 'react';
 import { Text } from 'react-native';
-import { Center } from '../../components/Center';
+import { Center } from '../../components/overall/Center';
 import { Button as CustomButton } from '../../components/custom/Button';
 import {
   useLogoutMutation,

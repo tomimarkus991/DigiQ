@@ -1,8 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { HomeScreen } from '../screens/App/HomeScreen';
-import { JoinedLineScreen } from '../screens/App/JoinedQueueScreen';
-import { LineScreen } from '../screens/App/QueueScreen';
+import { JoinedQueueScreen } from '../screens/App/JoinedQueueScreen';
+import { QueueDetailScreen } from '../screens/App/QueueDetailScreen';
 import { HomeParamList } from '../types/HomeParamList';
 
 interface HomeStackProps {}
@@ -14,16 +14,16 @@ export const HomeStack: React.FC<HomeStackProps> = ({}) => {
     <Stack.Navigator initialRouteName="Feed">
       <Stack.Screen name="Feed" component={HomeScreen} options={{ header: () => null }} />
       <Stack.Screen
-        name="Line"
-        component={LineScreen}
+        name="Queue"
+        component={QueueDetailScreen}
         options={{
           headerTitle: '',
           headerTransparent: true,
         }}
       />
       <Stack.Screen
-        name="JoinedLine"
-        component={JoinedLineScreen}
+        name="JoinedQueue"
+        component={JoinedQueueScreen}
         options={({ route }) => ({
           headerTitle: route.params.currentQueueName,
         })}

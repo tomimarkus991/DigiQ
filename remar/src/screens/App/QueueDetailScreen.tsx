@@ -10,7 +10,7 @@ import {
 
 import { HomeStackNavProps } from '../../types/HomeParamList';
 
-export const LineScreen = ({ route }: HomeStackNavProps<'Line'>) => {
+export const QueueDetailScreen = ({ route }: HomeStackNavProps<'Queue'>) => {
   const id = route.params.id;
   const [joinQueue] = useJoinQueueMutation();
   const { data } = useGetQueueQuery({ variables: { id } });
@@ -20,7 +20,7 @@ export const LineScreen = ({ route }: HomeStackNavProps<'Line'>) => {
   //   navigation.navigate("Feed");
   //   console.log("leaveTheLine");
   // };
-  const joinTheLine = async () => {
+  const joinTheQueue = async () => {
     const response = await joinQueue({
       variables: { joinQueueInput: { queueId: id, value: 1 } },
     });
@@ -56,7 +56,7 @@ export const LineScreen = ({ route }: HomeStackNavProps<'Line'>) => {
         </View>
       )}
 
-      <CustomButton title="Ühine järjekorraga" onPress={() => joinTheLine()} />
+      <CustomButton title="Ühine järjekorraga" onPress={() => joinTheQueue()} />
       {/* <CustomButton title="Olen kohal" onPress={() => imHere()} /> */}
     </View>
   );

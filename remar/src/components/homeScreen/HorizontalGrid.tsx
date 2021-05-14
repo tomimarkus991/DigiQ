@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { Fonts } from '../global';
+import { Fonts } from '../../global';
 
 interface HorizontalGridProps {
   category: string;

@@ -8,7 +8,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { PageHeader } from '../../components/PageHeader';
+import { PageHeader } from '../../components/overall/PageHeader';
 import { Fonts } from '../../global';
 
 interface SearchScreenProps {}

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Colors } from '../global';
+import { Colors } from '../../global';
 
 interface ScanButtonProps {
   title: string;
