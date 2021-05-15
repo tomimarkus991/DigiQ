@@ -1,6 +1,9 @@
-import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
-import { Colors } from '../../global';
+import { AntDesign } from '@expo/vector-icons';
+import React, { DragEvent } from 'react';
+import { Animated, Text, View } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { SwipeRight } from '../../assets/SwipeRight';
+import { Colors, Fonts } from '../../global';
 
 interface FormButtonProps {
   title: string;
@@ -8,34 +11,41 @@ interface FormButtonProps {
 }
 
 export const FormButton: React.FC<FormButtonProps> = ({ title, handleSubmit }) => {
+  const leftActions = () => {
+    return (
+      <>
+        <Text>&nbsp;</Text>
+      </>
+    );
+  };
   return (
     <View
       style={{
-        alignItems: 'center',
+        backgroundColor: '#3330CB',
+        height: 65,
+        justifyContent: 'center',
+        borderRadius: 30,
       }}
     >
-      <TouchableOpacity onPress={() => handleSubmit()}>
-        <View
-          style={{
-            backgroundColor: Colors.Button_Blue,
-            marginTop: 10,
-            marginVertical: 60,
-            padding: 10,
-            borderRadius: 10,
-            width: 100,
-          }}
-        >
-          <Text
-            style={{
-              color: Colors.Text_Regular,
-              fontSize: 18,
-              textAlign: 'center',
-            }}
-          >
-            {title}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <Text
+        style={{
+          position: 'absolute',
+          alignSelf: 'center',
+          fontSize: 30,
+          fontFamily: Fonts.Roboto_700Bold,
+          color: '#fff',
+        }}
+      >
+        {title}
+      </Text>
+      <Swipeable
+        containerStyle={{ marginLeft: 5 }}
+        activeOffsetX={20}
+        renderLeftActions={leftActions}
+        onEnded={() => handleSubmit()}
+      >
+        <SwipeRight />
+      </Swipeable>
     </View>
   );
 };

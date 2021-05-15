@@ -5,8 +5,11 @@ export const Colors = {
   Text_Placeholder: '#68686b',
   Text_Header: '#47474a',
   Text_Input: '#525254',
-  Text_Regular: '#E2E8F0',
+  Text_Regular: '#58585b',
+  Text_Error: '#de0707',
   Text_Gray: '#78787d',
+  Text_Light_Gray: '#E2E8F0',
+  Text_White: '#FFF',
 };
 export const Fonts = {
   Roboto_300Light: 'Roboto_300Light',

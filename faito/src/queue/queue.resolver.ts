@@ -27,7 +27,7 @@ export class QueueResolver {
   @Authorized()
   @Query(() => Queue)
   async queue(@Arg('id', () => Int) id: number) {
-    const data = await Queue.findOne(id);
+    const data = await Queue.findOneOrFail(id);
     return data;
   }
 

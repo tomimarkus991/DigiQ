@@ -1,7 +1,7 @@
 import { Formik } from 'formik';
 import React from 'react';
 import { AuthNavProps } from '../../types/AuthParamList';
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { MeDocument, MeQuery, useRegisterMutation } from '../../generated/graphql';
 import { toErrorMap } from '../../utils/toErrorMap';
 import { AuthFooter } from '../../components/authScreens/AuthFooter';
@@ -11,14 +11,9 @@ import { FormButton } from '../../components/authScreens/FormButton';
 
 export const RegisterScreen = ({ navigation }: AuthNavProps<'Register'>) => {
   const [register] = useRegisterMutation();
+  const windowHeight = useWindowDimensions().height;
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <View style={{ flex: 1, paddingHorizontal: 30, minHeight: windowHeight }}>
       <Formik
         initialValues={{ username: '', email: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
@@ -40,17 +35,11 @@ export const RegisterScreen = ({ navigation }: AuthNavProps<'Register'>) => {
         }}
       >
         {({ handleChange, handleSubmit, values }) => (
-          <View
-            style={{
-              display: 'flex',
-              width: '85%',
-              height: '90%',
-            }}
-          >
+          <View style={{ flex: 1 }}>
             <AuthHeader />
             <View
               style={{
-                flex: 5,
+                flex: 6,
               }}
             >
               <InputField
@@ -75,12 +64,12 @@ export const RegisterScreen = ({ navigation }: AuthNavProps<'Register'>) => {
                 handleChange={handleChange('password')}
               />
               <FormButton title="Register" handleSubmit={handleSubmit} />
+              <AuthFooter
+                text="Already have an account?&nbsp;"
+                whereTo={() => navigation.navigate('Login')}
+                buttonTitle="Login"
+              />
             </View>
-            <AuthFooter
-              text="Already have an account?&nbsp;"
-              whereTo={() => navigation.navigate('Login')}
-              buttonTitle="Login"
-            />
           </View>
         )}
       </Formik>

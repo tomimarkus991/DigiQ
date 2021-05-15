@@ -6,7 +6,7 @@ interface AuthHeaderProps {}
 
 export const AuthHeader: React.FC<AuthHeaderProps> = ({}) => {
   return (
-    <View style={{ flex: 5, justifyContent: 'center' }}>
+    <View style={{ flex: 3, justifyContent: 'center' }}>
       <Text
         style={{
           fontFamily: Fonts.Roboto_700Bold,

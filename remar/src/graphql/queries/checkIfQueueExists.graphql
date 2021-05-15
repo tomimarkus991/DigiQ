@@ -1,0 +1,6 @@
+query CheckIfQueueExists($id: Int!) {
+  queue(id: $id) {
+    id
+    name
+  }
+}

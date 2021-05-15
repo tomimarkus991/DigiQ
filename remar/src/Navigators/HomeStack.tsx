@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { HomeScreen } from '../screens/App/HomeScreen';
-import { JoinedQueueScreen } from '../screens/App/JoinedQueueScreen';
+import { MyQueueScreen } from '../screens/App/MyQueueScreen';
 import { QueueDetailScreen } from '../screens/App/QueueDetailScreen';
 import { HomeParamList } from '../types/HomeParamList';
 
@@ -23,7 +23,7 @@ export const HomeStack: React.FC<HomeStackProps> = ({}) => {
       />
       <Stack.Screen
         name="JoinedQueue"
-        component={JoinedQueueScreen}
+        component={MyQueueScreen}
         options={({ route }) => ({
           headerTitle: route.params.currentQueueName,
         })}

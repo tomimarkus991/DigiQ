@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, KeyboardAvoidingView } from 'react-native';
 import { Colors, Fonts } from '../../global';
 
 interface AuthFooterProps {
@@ -12,12 +12,11 @@ export const AuthFooter: React.FC<AuthFooterProps> = ({ text, whereTo, buttonTit
   return (
     <View
       style={{
-        flex: 1,
         flexDirection: 'row',
-        width: '85%',
         alignItems: 'baseline',
-        justifyContent: 'center',
         alignSelf: 'center',
+        position: 'absolute',
+        bottom: 0,
       }}
     >
       <Text
@@ -44,7 +43,7 @@ export const AuthFooter: React.FC<AuthFooterProps> = ({ text, whereTo, buttonTit
         >
           <Text
             style={{
-              color: Colors.Text_Regular,
+              color: Colors.Text_White,
               fontSize: 18,
               textAlign: 'center',
             }}

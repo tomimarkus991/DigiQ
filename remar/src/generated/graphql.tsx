@@ -225,6 +225,19 @@ export type RegisterMutation = (
   ) }
 );
 
+export type CheckIfQueueExistsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CheckIfQueueExistsQuery = (
+  { __typename?: 'Query' }
+  & { queue: (
+    { __typename?: 'Queue' }
+    & Pick<Queue, 'id' | 'name'>
+  ) }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -482,6 +495,42 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CheckIfQueueExistsDocument = gql`
+    query CheckIfQueueExists($id: Int!) {
+  queue(id: $id) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useCheckIfQueueExistsQuery__
+ *
+ * To run a query within a React component, call `useCheckIfQueueExistsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckIfQueueExistsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckIfQueueExistsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCheckIfQueueExistsQuery(baseOptions: Apollo.QueryHookOptions<CheckIfQueueExistsQuery, CheckIfQueueExistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckIfQueueExistsQuery, CheckIfQueueExistsQueryVariables>(CheckIfQueueExistsDocument, options);
+      }
+export function useCheckIfQueueExistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckIfQueueExistsQuery, CheckIfQueueExistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckIfQueueExistsQuery, CheckIfQueueExistsQueryVariables>(CheckIfQueueExistsDocument, options);
+        }
+export type CheckIfQueueExistsQueryHookResult = ReturnType<typeof useCheckIfQueueExistsQuery>;
+export type CheckIfQueueExistsLazyQueryHookResult = ReturnType<typeof useCheckIfQueueExistsLazyQuery>;
+export type CheckIfQueueExistsQueryResult = Apollo.QueryResult<CheckIfQueueExistsQuery, CheckIfQueueExistsQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {

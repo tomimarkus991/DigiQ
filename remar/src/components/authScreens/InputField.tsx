@@ -17,7 +17,17 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
 
   return (
     <View>
-      {error ? <Text>{error}</Text> : null}
+      {error ? (
+        <Text
+          style={{
+            fontFamily: Fonts.Roboto_500Medium,
+            color: Colors.Text_Error,
+            fontSize: 14,
+          }}
+        >
+          {error}
+        </Text>
+      ) : null}
       {name === 'password' ? (
         <View>
           <TextInput
@@ -25,10 +35,10 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
             placeholderTextColor={Colors.Text_Placeholder}
             autoCapitalize="none"
             nativeID={name}
+            secureTextEntry={true}
             value={value}
             onChangeText={handleChange}
             style={styles.input}
-            secureTextEntry={true}
             autoCompleteType="off"
           />
           <View

@@ -1,7 +1,16 @@
 import { Formik } from 'formik';
 import React from 'react';
 import { AuthNavProps } from '../../types/AuthParamList';
-import { StyleSheet, View } from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { Colors, Fonts } from '../../global';
 import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
 import { toErrorMap } from '../../utils/toErrorMap';
@@ -9,17 +18,13 @@ import { FormButton } from '../../components/authScreens/FormButton';
 import { AuthHeader } from '../../components/authScreens/AuthHeader';
 import { AuthFooter } from '../../components/authScreens/AuthFooter';
 import { InputField } from '../../components/authScreens/InputField';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
   const [login] = useLoginMutation();
+  const windowHeight = useWindowDimensions().height;
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <View style={{ flex: 1, paddingHorizontal: 30, minHeight: windowHeight }}>
       <Formik
         initialValues={{ usernameOrEmail: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
@@ -41,13 +46,7 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
         }}
       >
         {({ handleChange, handleSubmit, values }) => (
-          <View
-            style={{
-              display: 'flex',
-              width: '85%',
-              height: '90%',
-            }}
-          >
+          <View style={{ flex: 1 }}>
             <AuthHeader />
             <View
               style={{
@@ -69,12 +68,12 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
                 handleChange={handleChange('password')}
               />
               <FormButton title="Login" handleSubmit={handleSubmit} />
+              <AuthFooter
+                text="Don't have an account?&nbsp;"
+                whereTo={() => navigation.navigate('Register')}
+                buttonTitle="Create"
+              />
             </View>
-            <AuthFooter
-              text="Don't have an account?&nbsp;"
-              whereTo={() => navigation.navigate('Register')}
-              buttonTitle="Create"
-            />
           </View>
         )}
       </Formik>
