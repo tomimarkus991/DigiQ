@@ -1,11 +1,11 @@
 import { AntDesign } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { ScanScreen } from '../screens/App/ScanScreen';
-import { SearchScreen } from '../screens/App/SearchScreen';
-import { UserScreen } from '../screens/App/UserScreen';
+import { ScanScreen } from '../screens/App/Scan/ScanScreen';
+import { SearchScreen } from '../screens/App/Search/SearchScreen';
 import { AppParamList } from '../types/AppParamList';
 import { HomeStack } from './HomeStack';
+import { UserStack } from './UserStack';
 
 interface AppTabsProps {}
 
@@ -36,7 +36,7 @@ export const AppTabs: React.FC<AppTabsProps> = ({}) => {
       <Tabs.Screen name="Home" component={HomeStack}></Tabs.Screen>
       <Tabs.Screen name="Search" component={SearchScreen}></Tabs.Screen>
       <Tabs.Screen name="Scan" component={ScanScreen}></Tabs.Screen>
-      <Tabs.Screen name="User" component={UserScreen}></Tabs.Screen>
+      <Tabs.Screen name="User" component={UserStack}></Tabs.Screen>
     </Tabs.Navigator>
   );
 };

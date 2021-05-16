@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { Fonts } from '../../global';
+import { MyFonts } from '../../global';
 
 interface HorizontalGridProps {
   category: string;
@@ -19,7 +19,7 @@ export const HorizontalGrid: React.FC<HorizontalGridProps> = ({ category, childr
           fontSize: 24,
           marginLeft: 20,
           marginBottom: 2,
-          fontFamily: Fonts.Roboto_400Regular,
+          fontFamily: MyFonts.Roboto_400Regular,
         }}
       >
         {category}

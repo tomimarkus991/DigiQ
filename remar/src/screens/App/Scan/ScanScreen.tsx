@@ -1,13 +1,11 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { HomeParamList } from '../../types/HomeParamList';
+import { HomeParamList } from '../../../types/HomeParamList';
 import { Camera } from 'expo-camera';
-
 import { useIsFocused } from '@react-navigation/core';
-
-import { QrScannerSvg } from '../../assets/QrScannerSvg';
-import { useCheckIfQueueExistsLazyQuery } from '../../generated/graphql';
+import { QrScannerSvg } from '../../../assets/QrScannerSvg';
+import { useCheckIfQueueExistsLazyQuery } from '../../../generated/graphql';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 interface ScanScreenProps {
   navigation: StackNavigationProp<HomeParamList, 'Feed'>;
@@ -17,7 +15,7 @@ export const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [checkQueue] = useCheckIfQueueExistsLazyQuery({
     fetchPolicy: 'no-cache',
-    onCompleted: data => navigation.navigate('Queue', { id: data.queue.id }),
+    onCompleted: data => navigation.navigate('QueueDetail', { id: data.queue.id }),
     onError: () => navigation.navigate('Feed'),
   });
   const isFocused = useIsFocused();

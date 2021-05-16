@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { Colors, Fonts } from '../../global';
+import { MyColors, MyFonts } from '../../global';
 
 interface AuthHeaderProps {}
 
@@ -9,10 +9,10 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({}) => {
     <View style={{ flex: 3, justifyContent: 'center' }}>
       <Text
         style={{
-          fontFamily: Fonts.Roboto_700Bold,
+          fontFamily: MyFonts.Roboto_700Bold,
           fontSize: 48,
           textAlign: 'center',
-          color: Colors.Text_Header,
+          color: MyColors.Text_Header,
         }}
       >
         Digi Q

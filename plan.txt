@@ -1,0 +1,22 @@
+täna:
+
+QueueDetail page
+
+User page
+
+user page should have "my queues list"
+after adding that make it if you join the queue it will bring you there My Queues(this queue)
+
+Search page
+
+MiniQueue pictures
+
+Subscriptions
+
+change password
+
+bans
+
+make scan screen like expo go scan screen
+
+<Swipable> kui swiped siis logib sisse

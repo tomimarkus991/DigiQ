@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Colors } from '../../global';
+import { MyColors } from '../../global';
 
 interface ScanButtonProps {
   title: string;
@@ -23,7 +23,7 @@ export const ScanButton: React.FC<ScanButtonProps> = ({ title, handlePress }) =>
       <TouchableOpacity onPress={handlePress}>
         <View
           style={{
-            backgroundColor: Colors.Button_Blue,
+            backgroundColor: MyColors.Button_Blue,
             marginTop: 10,
             marginVertical: 60,
             padding: 10,
@@ -33,7 +33,7 @@ export const ScanButton: React.FC<ScanButtonProps> = ({ title, handlePress }) =>
         >
           <Text
             style={{
-              color: Colors.Text_Regular,
+              color: MyColors.Text_Regular,
               fontSize: 18,
               textAlign: 'center',
             }}

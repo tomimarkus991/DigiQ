@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, KeyboardAvoidingView } from 'react-native';
-import { Colors, Fonts } from '../../global';
+import { MyColors, MyFonts } from '../../global';
 
 interface AuthFooterProps {
   text: string;
@@ -21,10 +21,10 @@ export const AuthFooter: React.FC<AuthFooterProps> = ({ text, whereTo, buttonTit
     >
       <Text
         style={{
-          color: Colors.Text_Gray,
+          color: MyColors.Text_Gray,
           fontSize: 18,
           textAlign: 'center',
-          fontFamily: Fonts.Roboto_500Medium,
+          fontFamily: MyFonts.Roboto_500Medium,
           marginRight: 10,
         }}
       >
@@ -33,7 +33,7 @@ export const AuthFooter: React.FC<AuthFooterProps> = ({ text, whereTo, buttonTit
       <TouchableOpacity onPress={whereTo}>
         <View
           style={{
-            backgroundColor: Colors.Button_Purple,
+            backgroundColor: MyColors.Button_Purple,
             marginTop: 10,
             marginVertical: 60,
             padding: 10,
@@ -43,7 +43,7 @@ export const AuthFooter: React.FC<AuthFooterProps> = ({ text, whereTo, buttonTit
         >
           <Text
             style={{
-              color: Colors.Text_White,
+              color: MyColors.Text_White,
               fontSize: 18,
               textAlign: 'center',
             }}

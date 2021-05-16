@@ -39,6 +39,12 @@ export class UserResolver {
     return User.findOne(id);
   }
 
+  // Get one User
+  @Query(() => User, { nullable: true })
+  userByEmail(@Arg('email', () => String) email: string): Promise<User | undefined> {
+    return User.findOneOrFail({ where: { email } });
+  }
+
   // Register
   @Mutation(() => UserResponse)
   async register(
@@ -156,16 +162,13 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   async makeUserCreator(@Ctx() { req }: MyContext) {
-    let currentUser = await User.findOneOrFail(req.session.userId);
-    console.log(currentUser.isCreator);
-
     await getConnection()
       .createQueryBuilder()
       .update(User)
-      .set({ isCreator: !currentUser.isCreator })
+      .set({ isCreator: true })
       .where('id = :id', { id: req.session.userId })
       .execute();
-    return currentUser.isCreator;
+    return true;
   }
 
   @Subscription(() => User, { topics: REGISTER_USER })

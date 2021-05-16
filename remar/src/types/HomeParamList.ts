@@ -3,11 +3,11 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 export type HomeParamList = {
   Feed: undefined;
-  Queue: { id: number };
-  JoinedQueue: { currentQueueName: string; data: any };
+  QueueDetail: { id: number };
+  User: { screen: string; params: { id: number }; initial: boolean };
 };
 
-export type HomeStackNavProps<T extends keyof HomeParamList> = {
+export type HomeNavProps<T extends keyof HomeParamList> = {
   navigation: StackNavigationProp<HomeParamList, T>;
   route: RouteProp<HomeParamList, T>;
 };

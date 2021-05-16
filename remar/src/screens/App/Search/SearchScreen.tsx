@@ -8,8 +8,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { PageHeader } from '../../components/overall/PageHeader';
-import { Fonts } from '../../global';
+import { PageHeader } from '../../../components/overall/PageHeader';
+import { MyFonts } from '../../../global';
 
 interface SearchScreenProps {}
 
@@ -38,7 +38,9 @@ export const SearchScreen: React.FC<SearchScreenProps> = ({}) => {
     <SafeAreaView style={{ ...styles.container }}>
       <PageHeader title="Search" />
       <TextInput style={{ ...styles.searchInput }} placeholder="Search" />
-      <Text style={{ fontFamily: Fonts.Roboto_500Medium, fontSize: 16, marginBottom: 3 }}>
+      <Text
+        style={{ fontFamily: MyFonts.Roboto_500Medium, fontSize: 16, marginBottom: 3 }}
+      >
         Popular Categories
       </Text>
       <FlatList
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   searchInput: {
-    fontFamily: Fonts.Roboto_500Medium,
+    fontFamily: MyFonts.Roboto_500Medium,
     fontSize: 18,
     paddingHorizontal: 8,
     paddingVertical: 8,

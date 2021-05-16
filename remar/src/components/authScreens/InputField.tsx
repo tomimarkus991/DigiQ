@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import React, { ChangeEvent, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { Colors, Fonts } from '../../global';
+import { MyColors, MyFonts } from '../../global';
 
 type InputFieldProps = {
   name: string;
@@ -20,8 +20,8 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
       {error ? (
         <Text
           style={{
-            fontFamily: Fonts.Roboto_500Medium,
-            color: Colors.Text_Error,
+            fontFamily: MyFonts.Roboto_500Medium,
+            color: MyColors.Text_Error,
             fontSize: 14,
           }}
         >
@@ -32,7 +32,7 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
         <View>
           <TextInput
             placeholder={placeholder}
-            placeholderTextColor={Colors.Text_Placeholder}
+            placeholderTextColor={MyColors.Text_Placeholder}
             autoCapitalize="none"
             nativeID={name}
             secureTextEntry={true}
@@ -45,7 +45,7 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
             style={{
               marginTop: 8,
               marginBottom: mb,
-              borderBottomColor: Colors.Line,
+              borderBottomColor: MyColors.Line,
               borderBottomWidth: 1,
             }}
           />
@@ -54,7 +54,7 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
         <View>
           <TextInput
             placeholder={placeholder}
-            placeholderTextColor={Colors.Text_Placeholder}
+            placeholderTextColor={MyColors.Text_Placeholder}
             autoCapitalize="none"
             nativeID={name}
             value={value}
@@ -66,7 +66,7 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
             style={{
               marginTop: 8,
               marginBottom: mb,
-              borderBottomColor: Colors.Line,
+              borderBottomColor: MyColors.Line,
               borderBottomWidth: 1,
             }}
           />
@@ -79,7 +79,7 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
 const styles = StyleSheet.create({
   input: {
     fontSize: 18,
-    color: Colors.Text_Input,
-    fontFamily: Fonts.Roboto_700Bold,
+    color: MyColors.Text_Input,
+    fontFamily: MyFonts.Roboto_700Bold,
   },
 });

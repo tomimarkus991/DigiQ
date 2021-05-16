@@ -11,7 +11,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { Colors, Fonts } from '../../global';
+import { MyColors, MyFonts } from '../../global';
 import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
 import { toErrorMap } from '../../utils/toErrorMap';
 import { FormButton } from '../../components/authScreens/FormButton';
@@ -84,8 +84,8 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
 const styles = StyleSheet.create({
   input: {
     fontSize: 18,
-    color: Colors.Text_Input,
-    fontFamily: Fonts.Roboto_700Bold,
+    color: MyColors.Text_Input,
+    fontFamily: MyFonts.Roboto_700Bold,
     // color: '#445AE3',
   },
 });

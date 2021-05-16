@@ -1,16 +1,15 @@
-import { AntDesign } from '@expo/vector-icons';
-import React, { DragEvent } from 'react';
-import { Animated, Text, View } from 'react-native';
+import React from 'react';
+import { Text, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { SwipeRight } from '../../assets/SwipeRight';
-import { MyColors, MyFonts } from '../../global';
+import { MyFonts } from '../../global';
 
-interface FormButtonProps {
+interface SwipeButtonProps {
   title: string;
-  handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
+  handleSwipe: () => Promise<void>;
 }
 
-export const FormButton: React.FC<FormButtonProps> = ({ title, handleSubmit }) => {
+export const SwipeButton: React.FC<SwipeButtonProps> = ({ title, handleSwipe }) => {
   const leftActions = () => {
     return (
       <>
@@ -24,9 +23,9 @@ export const FormButton: React.FC<FormButtonProps> = ({ title, handleSubmit }) =
         backgroundColor: '#3330CB',
         height: 65,
         justifyContent: 'center',
-        alignSelf: 'center',
-        width: '90%',
         borderRadius: 30,
+        width: '70%',
+        alignSelf: 'center',
       }}
     >
       <Text
@@ -44,7 +43,7 @@ export const FormButton: React.FC<FormButtonProps> = ({ title, handleSubmit }) =
         containerStyle={{ marginLeft: 5 }}
         activeOffsetX={20}
         renderLeftActions={leftActions}
-        onEnded={() => handleSubmit()}
+        onEnded={() => handleSwipe()}
       >
         <SwipeRight />
       </Swipeable>

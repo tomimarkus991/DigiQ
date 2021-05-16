@@ -2,11 +2,13 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Fonts } from '../../global';
+import { Queue } from '../../generated/graphql';
+import { MyColors, MyFonts } from '../../global';
 import { HomeParamList } from '../../types/HomeParamList';
+import { WaitTime } from './WaitTime';
 
 interface SmallQueueProps {
-  data: any;
+  data: Queue;
   navigation: StackNavigationProp<HomeParamList, 'Feed'>;
 }
 
@@ -14,7 +16,7 @@ export const SmallQueue: React.FC<SmallQueueProps> = ({ data, navigation }) => {
   const { name, shortestWaitingTime, longestWaitingTime, id } = data;
 
   const seeTheQueue = () => {
-    navigation.navigate('Queue', { id });
+    navigation.navigate('QueueDetail', { id });
   };
   return (
     <View
@@ -36,38 +38,19 @@ export const SmallQueue: React.FC<SmallQueueProps> = ({ data, navigation }) => {
             }}
           />
 
-          <View style={{ ...styles.estimatedTime }}>
-            <Text
-              style={{
-                ...styles.text,
-              }}
-            >
-              {shortestWaitingTime}
-            </Text>
-            <Text
-              style={{
-                ...styles.text,
-              }}
-            >
-              &ndash;
-            </Text>
-            <Text
-              style={{
-                ...styles.text,
-              }}
-            >
-              {longestWaitingTime} min
-            </Text>
-          </View>
+          <WaitTime
+            shortestWaitingTime={shortestWaitingTime}
+            longestWaitingTime={longestWaitingTime}
+          />
           <View style={{ ...styles.name }}>
             <Text
               style={{
                 fontSize: 17,
-                color: '#1A202C',
-                fontFamily: Fonts.Roboto_700Bold,
+                color: MyColors.Text_Dark,
+                fontFamily: MyFonts.Roboto_700Bold,
               }}
             >
-              {name}
+              {name.substring(0, 1).toUpperCase() + name.substring(1, name.length)}
             </Text>
           </View>
         </View>
@@ -98,7 +81,7 @@ const styles = StyleSheet.create({
   },
   text: {
     // fontSize: 14,
-    fontFamily: Fonts.Roboto_700Bold,
+    fontFamily: MyFonts.Roboto_700Bold,
     color: '#1A202C',
   },
 });
