@@ -40,7 +40,7 @@ export class QueueResolver {
   ) {
     const userId = req.session.userId;
     const user = await User.findOneOrFail(userId);
-    const joinedQueues = await user.joinedQueues;
+    const joinedQueues = await user.onQueue;
 
     for (let i = 0; i < joinedQueues.length; i++) {
       const element = joinedQueues[i];

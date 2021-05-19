@@ -19,7 +19,7 @@ import { LoginUserInput } from './dto/login-user.input';
 import { UserResponse } from './dto/user.response';
 import { RegisterUserInput } from './dto/register-user.input';
 import { validateRegister } from './utils/validateRegister';
-import { Joined } from '../joined/entities/joined.entity';
+import { Waiting } from '../waiting/entities/waiting.entity';
 
 @Resolver(User)
 export class UserResolver {
@@ -41,13 +41,13 @@ export class UserResolver {
   }
 
   // Get users joined queues
-  @Query(() => [Joined], { nullable: true })
-  async getMyQueues(@Ctx() { req }: MyContext): Promise<Joined[] | undefined> {
+  @Query(() => [Waiting], { nullable: true })
+  async getMyQueues(@Ctx() { req }: MyContext): Promise<Waiting[] | undefined> {
     const userId = req.session.userId;
     const user = await User.findOneOrFail(userId);
-    const joinedQueues = await user.joinedQueues;
+    const onQueue = await user.onQueue;
 
-    return joinedQueues;
+    return onQueue;
   }
 
   // Get one User
@@ -175,7 +175,7 @@ export class UserResolver {
   async makeUserCreator(@Ctx() { req }: MyContext) {
     const id = req.session.userId;
     const user = await User.findOneOrFail(id);
-    const userQueues = await user.joinedQueues[0];
+    const userQueues = await user.onQueue[0];
 
     if (userQueues) {
       return false;

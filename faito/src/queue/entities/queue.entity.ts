@@ -11,7 +11,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Waiting } from '../../waiting/entities/waiting.entity';
-import { Joined } from '../../joined/entities/joined.entity';
 
 @Entity()
 @ObjectType()
@@ -28,10 +27,6 @@ export class Queue extends BaseEntity {
   @Column({ type: 'int' })
   estimatedServingtime: number = 4;
 
-  // @Field()
-  // @Column()
-  // category: string;
-
   @Field()
   @Column()
   creatorId: number;
@@ -42,19 +37,12 @@ export class Queue extends BaseEntity {
   })
   creator: User;
 
-  @Authorized(['CREATOR'])
+  @Authorized()
   @Field(() => [Waiting])
   @OneToMany(() => Waiting, waiting => waiting.queue, {
     lazy: true,
   })
   onQueue: Waiting[];
-
-  @Authorized()
-  @Field(() => [Joined])
-  @OneToMany(() => Joined, userJoined => userJoined.queue, {
-    lazy: true,
-  })
-  joinedQueues: Joined[];
 
   @Field()
   @Column({ type: 'int' })

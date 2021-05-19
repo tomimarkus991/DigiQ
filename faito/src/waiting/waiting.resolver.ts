@@ -44,9 +44,6 @@ export class WaitingResolver {
       insert into waiting ("userId", "queueId", value)
       values(${userId},${queueId},${realValue});
 
-      insert into joined ("userId", "queueId")
-      values(${userId},${queueId});
-
       update queue
       set waiting = waiting + ${realValue},
       "shortestWaitingTime" = "estimatedServingtime" * waiting,

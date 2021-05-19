@@ -16,7 +16,6 @@ import { Waiting } from './waiting/entities/waiting.entity';
 import { UserResolver } from './user/user.resolver';
 import { QueueResolver } from './queue/queue.resolver';
 import { WaitingResolver } from './waiting/waiting.resolver';
-import { Joined } from './joined/entities/joined.entity';
 
 const main = async () => {
   const config: ConnectionOptions = {
@@ -25,14 +24,12 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
-    entities: [Queue, User, Waiting, Joined],
+    entities: [Queue, User, Waiting],
   };
   try {
     await createConnection({ ...config });
     // let conn = await createConnection({ ...config });
-    // Waiting.delete({}).then(() =>
-    //   Joined.delete({}).then(() => Queue.delete({}).then(() => console.log('deleted'))),
-    // );
+    // Waiting.delete({}).then(() => Queue.delete({}).then(() => console.log('deleted')));
 
     // User.delete({});
     // await conn.runMigrations();

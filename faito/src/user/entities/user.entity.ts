@@ -10,7 +10,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Joined } from '../../joined/entities/joined.entity';
 
 @ObjectType()
 @Entity()
@@ -34,7 +33,7 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
-  @Authorized(['CREATOR'])
+  @Authorized()
   @Field(() => [Waiting])
   @OneToMany(() => Waiting, userOnQueue => userOnQueue.user, {
     lazy: true,
@@ -45,13 +44,6 @@ export class User extends BaseEntity {
   @Field(() => [Queue])
   @OneToMany(() => Queue, queue => queue.creator, { lazy: true })
   createdQueues: Queue[];
-
-  @Authorized()
-  @Field(() => [Joined])
-  @OneToMany(() => Joined, userJoined => userJoined.user, {
-    lazy: true,
-  })
-  joinedQueues: Joined[];
 
   @Authorized()
   @Field()
