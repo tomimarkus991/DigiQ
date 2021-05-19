@@ -1,11 +1,12 @@
-import { RouteProp } from "@react-navigation/core";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from '@react-navigation/core';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 export type AppParamList = {
-  Home: undefined;
-  Search: undefined;
-  Scan: undefined;
-  User: undefined;
+  HomeTab: undefined;
+  SearchTab: undefined;
+  MyQueuesTab: undefined;
+  ScanTab: undefined;
+  UserTab: undefined;
 };
 
 export type AppNavProps<T extends keyof AppParamList> = {

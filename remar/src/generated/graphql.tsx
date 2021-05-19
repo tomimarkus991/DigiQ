@@ -16,7 +16,6 @@ export type Scalars = {
 
 export type CreateQueueInput = {
   name: Scalars['String'];
-  category: Scalars['String'];
 };
 
 export type FieldError = {
@@ -77,7 +76,10 @@ export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
   user?: Maybe<User>;
+  getMyQueues?: Maybe<Array<Joined>>;
+  userByEmail?: Maybe<User>;
   queue: Queue;
+  hasUserJoinedThisQueue: Scalars['Boolean'];
   queues: Array<Queue>;
 };
 
@@ -87,8 +89,18 @@ export type QueryUserArgs = {
 };
 
 
+export type QueryUserByEmailArgs = {
+  email: Scalars['String'];
+};
+
+
 export type QueryQueueArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryHasUserJoinedThisQueueArgs = {
+  queueId: Scalars['Int'];
 };
 
 export type Queue = {
@@ -96,7 +108,6 @@ export type Queue = {
   id: Scalars['Float'];
   name: Scalars['String'];
   estimatedServingtime: Scalars['Float'];
-  category: Scalars['String'];
   creatorId: Scalars['Float'];
   creator: User;
   onQueue: Array<Waiting>;
@@ -119,6 +130,11 @@ export type Subscription = {
   registerUserSub: User;
   createQueueSub: Queue;
   joinQueueSub: Queue;
+};
+
+
+export type SubscriptionJoinQueueSubArgs = {
+  id: Scalars['Float'];
 };
 
 export type User = {
@@ -156,7 +172,7 @@ export type RegularErrorFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username'>
+  & Pick<User, 'id' | 'username' | 'isCreator'>
 );
 
 export type RegularUserResponseFragment = (
@@ -170,6 +186,19 @@ export type RegularUserResponseFragment = (
   )> }
 );
 
+export type CreateQueueMutationVariables = Exact<{
+  createQueueInput: CreateQueueInput;
+}>;
+
+
+export type CreateQueueMutation = (
+  { __typename?: 'Mutation' }
+  & { createQueue: (
+    { __typename?: 'Queue' }
+    & Pick<Queue, 'id' | 'name'>
+  ) }
+);
+
 export type JoinQueueMutationVariables = Exact<{
   joinQueueInput: JoinQueueInput;
 }>;
@@ -179,7 +208,7 @@ export type JoinQueueMutation = (
   { __typename?: 'Mutation' }
   & { joinQueue: (
     { __typename?: 'Queue' }
-    & Pick<Queue, 'name' | 'waiting' | 'shortestWaitingTime' | 'longestWaitingTime'>
+    & Pick<Queue, 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting'>
   ) }
 );
 
@@ -238,6 +267,30 @@ export type CheckIfQueueExistsQuery = (
   ) }
 );
 
+export type GetMyQueuesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyQueuesQuery = (
+  { __typename?: 'Query' }
+  & { getMyQueues?: Maybe<Array<(
+    { __typename?: 'Joined' }
+    & { queue: (
+      { __typename?: 'Queue' }
+      & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting'>
+    ) }
+  )>> }
+);
+
+export type HasUserJoinedThisQueueQueryVariables = Exact<{
+  queueId: Scalars['Int'];
+}>;
+
+
+export type HasUserJoinedThisQueueQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'hasUserJoinedThisQueue'>
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -261,7 +314,7 @@ export type MeAdvancedQuery = (
       { __typename?: 'Joined' }
       & { queue: (
         { __typename?: 'Queue' }
-        & Pick<Queue, 'id' | 'name'>
+        & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting'>
       ) }
     )> }
   )> }
@@ -291,7 +344,7 @@ export type QueuesQuery = (
   { __typename?: 'Query' }
   & { queues: Array<(
     { __typename?: 'Queue' }
-    & Pick<Queue, 'id' | 'name' | 'category' | 'estimatedServingtime' | 'creatorId' | 'waiting' | 'shortestWaitingTime' | 'longestWaitingTime'>
+    & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'creatorId' | 'waiting' | 'shortestWaitingTime' | 'longestWaitingTime'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'username'>
@@ -299,14 +352,31 @@ export type QueuesQuery = (
   )> }
 );
 
-export type JoinQueueSubSubscriptionVariables = Exact<{ [key: string]: never; }>;
+export type CreateQueueSubSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateQueueSubSubscription = (
+  { __typename?: 'Subscription' }
+  & { createQueueSub: (
+    { __typename?: 'Queue' }
+    & Pick<Queue, 'id' | 'name' | 'creatorId' | 'estimatedServingtime' | 'waiting' | 'shortestWaitingTime' | 'longestWaitingTime'>
+    & { creator: (
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    ) }
+  ) }
+);
+
+export type JoinQueueSubSubscriptionVariables = Exact<{
+  id: Scalars['Float'];
+}>;
 
 
 export type JoinQueueSubSubscription = (
   { __typename?: 'Subscription' }
   & { joinQueueSub: (
     { __typename?: 'Queue' }
-    & Pick<Queue, 'name' | 'waiting' | 'shortestWaitingTime' | 'longestWaitingTime'>
+    & Pick<Queue, 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting'>
   ) }
 );
 
@@ -320,6 +390,7 @@ export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
   username
+  isCreator
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
@@ -333,13 +404,48 @@ export const RegularUserResponseFragmentDoc = gql`
 }
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
+export const CreateQueueDocument = gql`
+    mutation CreateQueue($createQueueInput: CreateQueueInput!) {
+  createQueue(createQueueInput: $createQueueInput) {
+    id
+    name
+  }
+}
+    `;
+export type CreateQueueMutationFn = Apollo.MutationFunction<CreateQueueMutation, CreateQueueMutationVariables>;
+
+/**
+ * __useCreateQueueMutation__
+ *
+ * To run a mutation, you first call `useCreateQueueMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateQueueMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createQueueMutation, { data, loading, error }] = useCreateQueueMutation({
+ *   variables: {
+ *      createQueueInput: // value for 'createQueueInput'
+ *   },
+ * });
+ */
+export function useCreateQueueMutation(baseOptions?: Apollo.MutationHookOptions<CreateQueueMutation, CreateQueueMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateQueueMutation, CreateQueueMutationVariables>(CreateQueueDocument, options);
+      }
+export type CreateQueueMutationHookResult = ReturnType<typeof useCreateQueueMutation>;
+export type CreateQueueMutationResult = Apollo.MutationResult<CreateQueueMutation>;
+export type CreateQueueMutationOptions = Apollo.BaseMutationOptions<CreateQueueMutation, CreateQueueMutationVariables>;
 export const JoinQueueDocument = gql`
     mutation joinQueue($joinQueueInput: JoinQueueInput!) {
   joinQueue(joinQueueInput: $joinQueueInput) {
     name
-    waiting
+    estimatedServingtime
     shortestWaitingTime
     longestWaitingTime
+    waiting
   }
 }
     `;
@@ -531,6 +637,80 @@ export function useCheckIfQueueExistsLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type CheckIfQueueExistsQueryHookResult = ReturnType<typeof useCheckIfQueueExistsQuery>;
 export type CheckIfQueueExistsLazyQueryHookResult = ReturnType<typeof useCheckIfQueueExistsLazyQuery>;
 export type CheckIfQueueExistsQueryResult = Apollo.QueryResult<CheckIfQueueExistsQuery, CheckIfQueueExistsQueryVariables>;
+export const GetMyQueuesDocument = gql`
+    query GetMyQueues {
+  getMyQueues {
+    queue {
+      id
+      name
+      estimatedServingtime
+      shortestWaitingTime
+      longestWaitingTime
+      waiting
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetMyQueuesQuery__
+ *
+ * To run a query within a React component, call `useGetMyQueuesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyQueuesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyQueuesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyQueuesQuery(baseOptions?: Apollo.QueryHookOptions<GetMyQueuesQuery, GetMyQueuesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyQueuesQuery, GetMyQueuesQueryVariables>(GetMyQueuesDocument, options);
+      }
+export function useGetMyQueuesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyQueuesQuery, GetMyQueuesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyQueuesQuery, GetMyQueuesQueryVariables>(GetMyQueuesDocument, options);
+        }
+export type GetMyQueuesQueryHookResult = ReturnType<typeof useGetMyQueuesQuery>;
+export type GetMyQueuesLazyQueryHookResult = ReturnType<typeof useGetMyQueuesLazyQuery>;
+export type GetMyQueuesQueryResult = Apollo.QueryResult<GetMyQueuesQuery, GetMyQueuesQueryVariables>;
+export const HasUserJoinedThisQueueDocument = gql`
+    query HasUserJoinedThisQueue($queueId: Int!) {
+  hasUserJoinedThisQueue(queueId: $queueId)
+}
+    `;
+
+/**
+ * __useHasUserJoinedThisQueueQuery__
+ *
+ * To run a query within a React component, call `useHasUserJoinedThisQueueQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHasUserJoinedThisQueueQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHasUserJoinedThisQueueQuery({
+ *   variables: {
+ *      queueId: // value for 'queueId'
+ *   },
+ * });
+ */
+export function useHasUserJoinedThisQueueQuery(baseOptions: Apollo.QueryHookOptions<HasUserJoinedThisQueueQuery, HasUserJoinedThisQueueQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HasUserJoinedThisQueueQuery, HasUserJoinedThisQueueQueryVariables>(HasUserJoinedThisQueueDocument, options);
+      }
+export function useHasUserJoinedThisQueueLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HasUserJoinedThisQueueQuery, HasUserJoinedThisQueueQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HasUserJoinedThisQueueQuery, HasUserJoinedThisQueueQueryVariables>(HasUserJoinedThisQueueDocument, options);
+        }
+export type HasUserJoinedThisQueueQueryHookResult = ReturnType<typeof useHasUserJoinedThisQueueQuery>;
+export type HasUserJoinedThisQueueLazyQueryHookResult = ReturnType<typeof useHasUserJoinedThisQueueLazyQuery>;
+export type HasUserJoinedThisQueueQueryResult = Apollo.QueryResult<HasUserJoinedThisQueueQuery, HasUserJoinedThisQueueQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -575,6 +755,10 @@ export const MeAdvancedDocument = gql`
       queue {
         id
         name
+        estimatedServingtime
+        shortestWaitingTime
+        longestWaitingTime
+        waiting
       }
     }
   }
@@ -654,7 +838,6 @@ export const QueuesDocument = gql`
   queues {
     id
     name
-    category
     estimatedServingtime
     creatorId
     creator {
@@ -693,13 +876,52 @@ export function useQueuesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Que
 export type QueuesQueryHookResult = ReturnType<typeof useQueuesQuery>;
 export type QueuesLazyQueryHookResult = ReturnType<typeof useQueuesLazyQuery>;
 export type QueuesQueryResult = Apollo.QueryResult<QueuesQuery, QueuesQueryVariables>;
-export const JoinQueueSubDocument = gql`
-    subscription JoinQueueSub {
-  joinQueueSub {
+export const CreateQueueSubDocument = gql`
+    subscription CreateQueueSub {
+  createQueueSub {
+    id
     name
+    creatorId
+    creator {
+      username
+    }
+    estimatedServingtime
     waiting
     shortestWaitingTime
     longestWaitingTime
+  }
+}
+    `;
+
+/**
+ * __useCreateQueueSubSubscription__
+ *
+ * To run a query within a React component, call `useCreateQueueSubSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useCreateQueueSubSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreateQueueSubSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateQueueSubSubscription(baseOptions?: Apollo.SubscriptionHookOptions<CreateQueueSubSubscription, CreateQueueSubSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<CreateQueueSubSubscription, CreateQueueSubSubscriptionVariables>(CreateQueueSubDocument, options);
+      }
+export type CreateQueueSubSubscriptionHookResult = ReturnType<typeof useCreateQueueSubSubscription>;
+export type CreateQueueSubSubscriptionResult = Apollo.SubscriptionResult<CreateQueueSubSubscription>;
+export const JoinQueueSubDocument = gql`
+    subscription JoinQueueSub($id: Float!) {
+  joinQueueSub(id: $id) {
+    name
+    estimatedServingtime
+    shortestWaitingTime
+    longestWaitingTime
+    waiting
   }
 }
     `;
@@ -716,10 +938,11 @@ export const JoinQueueSubDocument = gql`
  * @example
  * const { data, loading, error } = useJoinQueueSubSubscription({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useJoinQueueSubSubscription(baseOptions?: Apollo.SubscriptionHookOptions<JoinQueueSubSubscription, JoinQueueSubSubscriptionVariables>) {
+export function useJoinQueueSubSubscription(baseOptions: Apollo.SubscriptionHookOptions<JoinQueueSubSubscription, JoinQueueSubSubscriptionVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useSubscription<JoinQueueSubSubscription, JoinQueueSubSubscriptionVariables>(JoinQueueSubDocument, options);
       }

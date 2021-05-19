@@ -7,6 +7,10 @@ query MeAdvanced {
       queue {
         id
         name
+        estimatedServingtime
+        shortestWaitingTime
+        longestWaitingTime
+        waiting
       }
     }
   }

@@ -1,8 +1,9 @@
-subscription JoinQueueSub {
-  joinQueueSub {
+subscription JoinQueueSub($id: Float!) {
+  joinQueueSub(id: $id) {
     name
-    waiting
+    estimatedServingtime
     shortestWaitingTime
     longestWaitingTime
+    waiting
   }
 }

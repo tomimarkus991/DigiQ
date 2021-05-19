@@ -19,6 +19,7 @@ import { LoginUserInput } from './dto/login-user.input';
 import { UserResponse } from './dto/user.response';
 import { RegisterUserInput } from './dto/register-user.input';
 import { validateRegister } from './utils/validateRegister';
+import { Joined } from '../joined/entities/joined.entity';
 
 @Resolver(User)
 export class UserResolver {
@@ -37,6 +38,16 @@ export class UserResolver {
   @Query(() => User, { nullable: true })
   user(@Arg('id', () => Int) id: number): Promise<User | undefined> {
     return User.findOne(id);
+  }
+
+  // Get users joined queues
+  @Query(() => [Joined], { nullable: true })
+  async getMyQueues(@Ctx() { req }: MyContext): Promise<Joined[] | undefined> {
+    const userId = req.session.userId;
+    const user = await User.findOneOrFail(userId);
+    const joinedQueues = await user.joinedQueues;
+
+    return joinedQueues;
   }
 
   // Get one User
@@ -162,11 +173,18 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   async makeUserCreator(@Ctx() { req }: MyContext) {
+    const id = req.session.userId;
+    const user = await User.findOneOrFail(id);
+    const userQueues = await user.joinedQueues[0];
+
+    if (userQueues) {
+      return false;
+    }
     await getConnection()
       .createQueryBuilder()
       .update(User)
       .set({ isCreator: true })
-      .where('id = :id', { id: req.session.userId })
+      .where('id = :id', { id })
       .execute();
     return true;
   }

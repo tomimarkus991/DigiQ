@@ -1,8 +1,9 @@
 mutation joinQueue($joinQueueInput: JoinQueueInput!) {
   joinQueue(joinQueueInput: $joinQueueInput) {
     name
-    waiting
+    estimatedServingtime
     shortestWaitingTime
     longestWaitingTime
+    waiting
   }
 }

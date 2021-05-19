@@ -29,11 +29,11 @@ export const validateRegister = (registerUserInput: RegisterUserInput) => {
     ];
   }
 
-  if (password.length <= 6) {
+  if (password.length <= 4) {
     return [
       {
         field: 'password',
-        message: 'Password length has to be greater than 6',
+        message: 'Password length has to be greater than 4',
       },
     ];
   }

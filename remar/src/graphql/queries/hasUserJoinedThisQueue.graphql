@@ -1,0 +1,3 @@
+query HasUserJoinedThisQueue($queueId: Int!) {
+  hasUserJoinedThisQueue(queueId: $queueId)
+}

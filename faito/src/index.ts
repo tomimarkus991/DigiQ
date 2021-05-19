@@ -17,8 +17,6 @@ import { UserResolver } from './user/user.resolver';
 import { QueueResolver } from './queue/queue.resolver';
 import { WaitingResolver } from './waiting/waiting.resolver';
 import { Joined } from './joined/entities/joined.entity';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { execute, subscribe } from 'graphql';
 
 const main = async () => {
   const config: ConnectionOptions = {

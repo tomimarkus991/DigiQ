@@ -8,9 +8,8 @@ import {
   useMeAdvancedQuery,
 } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
-import { UserNavProps } from '../../../types/UserParamList';
 
-export const UserScreen = ({ navigation }: UserNavProps<'UserScreen'>) => {
+export const UserScreen: React.FC = ({}) => {
   const apolloClient = useApolloClient();
   const [logout] = useLogoutMutation();
   const [makeUserCreator] = useMakeUserCreatorMutation();
@@ -31,12 +30,6 @@ export const UserScreen = ({ navigation }: UserNavProps<'UserScreen'>) => {
           Hello {data?.me?.username}
         </Text>
       </View>
-      <CustomButton
-        title="Check out my queues"
-        onPress={() => {
-          navigation.navigate('MyQueues');
-        }}
-      />
       <Text>am i creator {data?.me?.isCreator.toString()}</Text>
       <CustomButton
         title="Logout"

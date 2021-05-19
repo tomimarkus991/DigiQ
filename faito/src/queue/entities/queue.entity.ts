@@ -28,9 +28,9 @@ export class Queue extends BaseEntity {
   @Column({ type: 'int' })
   estimatedServingtime: number = 4;
 
-  @Field()
-  @Column()
-  category: string;
+  // @Field()
+  // @Column()
+  // category: string;
 
   @Field()
   @Column()
@@ -54,7 +54,7 @@ export class Queue extends BaseEntity {
   @OneToMany(() => Joined, userJoined => userJoined.queue, {
     lazy: true,
   })
-  joined: Joined[];
+  joinedQueues: Joined[];
 
   @Field()
   @Column({ type: 'int' })

@@ -5,6 +5,7 @@ import { ScanScreen } from '../screens/App/Scan/ScanScreen';
 import { SearchScreen } from '../screens/App/Search/SearchScreen';
 import { AppParamList } from '../types/AppParamList';
 import { HomeStack } from './HomeStack';
+import { MyQueuesStack } from './MyQueuesStack';
 import { UserStack } from './UserStack';
 
 interface AppTabsProps {}
@@ -18,25 +19,35 @@ export const AppTabs: React.FC<AppTabsProps> = ({}) => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: any = 'filter';
 
-          if (route.name === 'Home') {
+          if (route.name === 'HomeTab') {
             iconName = 'home';
-          } else if (route.name === 'Search') {
+          } else if (route.name === 'SearchTab') {
             iconName = 'search1';
-          } else if (route.name === 'Scan') {
+          } else if (route.name === 'MyQueuesTab') {
+            iconName = 'calendar';
+          } else if (route.name === 'ScanTab') {
             iconName = 'scan1';
-          } else if (route.name === 'User') {
-            iconName = 'user';
+          } else if (route.name === 'UserTab') {
+            iconName = 'setting';
           }
 
-          // You can return any component that you like here!
           return <AntDesign name={iconName} size={size} color={color} />;
         },
       })}
     >
-      <Tabs.Screen name="Home" component={HomeStack}></Tabs.Screen>
-      <Tabs.Screen name="Search" component={SearchScreen}></Tabs.Screen>
-      <Tabs.Screen name="Scan" component={ScanScreen}></Tabs.Screen>
-      <Tabs.Screen name="User" component={UserStack}></Tabs.Screen>
+      <Tabs.Screen name="HomeTab" component={HomeStack} options={{ title: 'Home' }} />
+      <Tabs.Screen
+        name="SearchTab"
+        component={SearchScreen}
+        options={{ title: 'Search' }}
+      />
+      <Tabs.Screen
+        name="MyQueuesTab"
+        component={MyQueuesStack}
+        options={{ title: 'My Queues' }}
+      />
+      <Tabs.Screen name="ScanTab" component={ScanScreen} options={{ title: 'Scan' }} />
+      <Tabs.Screen name="UserTab" component={UserStack} options={{ title: 'User' }} />
     </Tabs.Navigator>
   );
 };

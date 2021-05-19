@@ -4,7 +4,4 @@ import { Field, InputType } from 'type-graphql';
 export class CreateQueueInput {
   @Field()
   name: string;
-
-  @Field()
-  category: string;
 }

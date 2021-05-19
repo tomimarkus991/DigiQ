@@ -7,8 +7,8 @@
     "prebuild": "rimraf dist",
     "build": "tsc",
     "w": "tsc -w",
-    "dev": "nodemon dist/index.js",
-    "con": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "devv": "nodemon dist/index.js",
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
     "genenv": "gen-env-types .env -o src/env.d.ts -e ."
   },
   "keywords": [],

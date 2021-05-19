@@ -1,11 +1,6 @@
 täna:
 
-QueueDetail page
-
-User page
-
-user page should have "my queues list"
-after adding that make it if you join the queue it will bring you there My Queues(this queue)
+User page peaaegu
 
 Search page
 

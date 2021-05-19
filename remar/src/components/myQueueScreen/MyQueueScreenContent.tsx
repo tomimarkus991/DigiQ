@@ -1,14 +1,22 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { WaitTime } from '../../../components/homeScreen/WaitTime';
-import { useGetQueueQuery } from '../../../generated/graphql';
-import { MyColors, MyFonts } from '../../../global';
-import { MyQueuesNavProps } from '../../../types/MyQueuesParamList';
+import { MyColors, MyFonts } from '../../global';
+import { SwipeButton } from '../homeScreen/SwipeButton';
+import { WaitingOnTheQueue } from '../homeScreen/WaitingOnTheQueue';
+import { WaitTime } from '../homeScreen/WaitTime';
+import { WaitTimeBig } from '../homeScreen/WaitTimeBig';
 
-export const MyQueueScreen = ({ route }: MyQueuesNavProps<'MyQueue'>) => {
-  const id = route.params.id;
+interface MyQueueScreenContentProps {
+  data: any;
+  id: number;
+  navigate?: () => void;
+}
 
-  const { data, error } = useGetQueueQuery({ variables: { id } });
+export const MyQueueScreenContent: React.FC<MyQueueScreenContentProps> = ({
+  data,
+  id,
+  navigate,
+}) => {
   return (
     <View style={styles.main}>
       <View style={styles.main}>
@@ -18,16 +26,11 @@ export const MyQueueScreen = ({ route }: MyQueuesNavProps<'MyQueue'>) => {
             uri: 'https://via.placeholder.com/300/09f/432.png',
           }}
         />
-        <WaitTime
-          shortestWaitingTime={data?.queue.shortestWaitingTime as number}
-          longestWaitingTime={data?.queue.longestWaitingTime as number}
-          textProps={{ fontSize: 24 }}
-        />
       </View>
       <View style={styles.secondHalf}>
         <Text style={styles.headerText}>
-          {(data?.queue.name.substring(0, 1).toUpperCase() as string) +
-            data?.queue.name.substring(1, data?.queue.name.length)}
+          {(data?.name.substring(0, 1).toUpperCase() as string) +
+            data?.name.substring(1, data?.name.length)}
         </Text>
         <View
           style={{
@@ -36,11 +39,13 @@ export const MyQueueScreen = ({ route }: MyQueuesNavProps<'MyQueue'>) => {
         >
           <Text style={[styles.fatText, { marginBottom: 10 }]}>Inimesi järjekorras</Text>
           <View style={styles.circle}>
-            <Text style={styles.fatText}>{data?.queue.waiting}</Text>
+            <Text style={styles.fatText}>{data?.waiting}</Text>
           </View>
-        </View>
-        <View style={{ flex: 2 }}>
-          <Text style={styles.errorText}>{error?.message}</Text>
+          <WaitTimeBig
+            shortestWaitingTime={data?.shortestWaitingTime as number}
+            longestWaitingTime={data?.longestWaitingTime as number}
+            textProps={{ fontSize: 24 }}
+          />
         </View>
       </View>
     </View>

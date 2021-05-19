@@ -1,12 +1,12 @@
-query Queues {
-  queues {
+subscription CreateQueueSub {
+  createQueueSub {
     id
     name
-    estimatedServingtime
     creatorId
     creator {
       username
     }
+    estimatedServingtime
     waiting
     shortestWaitingTime
     longestWaitingTime

@@ -3,8 +3,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 export type UserParamList = {
   UserScreen: undefined;
-  MyQueues: undefined;
-  MyQueue: { id: any };
 };
 
 export type UserNavProps<T extends keyof UserParamList> = {

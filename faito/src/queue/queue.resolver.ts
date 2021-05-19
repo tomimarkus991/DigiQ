@@ -15,6 +15,7 @@ import {
 import { Queue } from './entities/queue.entity';
 import { CreateQueueInput } from './dto/create-queue.input';
 import { CREATE_QUEUE } from '../constants';
+import { User } from '../user/entities/user.entity';
 
 // @InputType()
 // export class CategoryInput {
@@ -29,6 +30,27 @@ export class QueueResolver {
   async queue(@Arg('id', () => Int) id: number) {
     const data = await Queue.findOneOrFail(id);
     return data;
+  }
+
+  @Authorized()
+  @Query(() => Boolean)
+  async hasUserJoinedThisQueue(
+    @Arg('queueId', () => Int) queueId: number,
+    @Ctx() { req }: MyContext,
+  ) {
+    const userId = req.session.userId;
+    const user = await User.findOneOrFail(userId);
+    const joinedQueues = await user.joinedQueues;
+
+    for (let i = 0; i < joinedQueues.length; i++) {
+      const element = joinedQueues[i];
+
+      if (element.queueId === queueId) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @Authorized()
@@ -48,10 +70,9 @@ export class QueueResolver {
     @PubSub() pubSub: PubSubEngine,
     @Ctx() { req }: MyContext,
   ): Promise<Queue> {
-    const { name, category } = createQueueInput;
+    const { name } = createQueueInput;
     let queue = (await Queue.create({
       name,
-      category,
       creatorId: req.session.userId,
     }).save()) as any;
 
@@ -62,8 +83,6 @@ export class QueueResolver {
 
   @Subscription(() => Queue, { topics: CREATE_QUEUE })
   createQueueSub(@Root() queue: Queue) {
-    console.log(queue);
-
     return queue;
   }
 }

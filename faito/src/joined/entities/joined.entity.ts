@@ -11,7 +11,7 @@ export class Joined extends BaseEntity {
   userId: number;
 
   @Field(() => User)
-  @ManyToOne(() => User, user => user.onQueue, {
+  @ManyToOne(() => User, user => user.joinedQueues, {
     lazy: true,
   })
   user: User;
@@ -21,7 +21,7 @@ export class Joined extends BaseEntity {
   queueId: number;
 
   @Field(() => Queue)
-  @ManyToOne(() => Queue, queue => queue.onQueue, {
+  @ManyToOne(() => Queue, queue => queue.joinedQueues, {
     lazy: true,
   })
   queue: Queue;

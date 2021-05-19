@@ -1,6 +1,7 @@
 import { MyContext } from '../types';
 import {
   Arg,
+  ArgsType,
   Ctx,
   Mutation,
   PubSub,
@@ -15,6 +16,11 @@ import { JoinQueueInput } from './dto/join-queue.input';
 import { Queue } from '../queue/entities/queue.entity';
 import { JOIN_QUEUE } from '../constants';
 import { isRegularUser } from '../middleware/isRegularUser';
+
+@ArgsType()
+export class JoinQueueArgs {
+  id: number;
+}
 
 @Resolver()
 export class WaitingResolver {
@@ -44,7 +50,7 @@ export class WaitingResolver {
       update queue
       set waiting = waiting + ${realValue},
       "shortestWaitingTime" = "estimatedServingtime" * waiting,
-      "longestWaitingTime" = "shortestWaitingTime" + "estimatedServingtime"
+      "longestWaitingTime" = "estimatedServingtime" * waiting + "estimatedServingtime"
       where id= ${queueId};
 
       COMMIT;
@@ -56,8 +62,13 @@ export class WaitingResolver {
 
     return updatedQueue;
   }
-  @Subscription(() => Queue, { topics: JOIN_QUEUE })
-  joinQueueSub(@Root() queue: Queue) {
+
+  @Subscription(() => Queue, {
+    topics: JOIN_QUEUE,
+    filter: ({ payload, args }: { payload: Queue; args: JoinQueueArgs }) =>
+      payload.id === args.id,
+  })
+  joinQueueSub(@Root() queue: Queue, @Arg('id') _: number): Queue {
     return queue;
   }
 }

@@ -1,23 +1,19 @@
-import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Queue } from '../../generated/graphql';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MyColors, MyFonts } from '../../global';
-import { HomeParamList } from '../../types/HomeParamList';
+import { WaitingOnTheQueue } from './WaitingOnTheQueue';
 import { WaitTime } from './WaitTime';
 
-interface SmallQueueProps {
-  data: Queue;
-  navigation: StackNavigationProp<HomeParamList, 'Feed'>;
+interface QueueCardContentProps {
+  data: any;
+  navigation: () => void;
 }
 
-export const SmallQueue: React.FC<SmallQueueProps> = ({ data, navigation }) => {
-  const { name, shortestWaitingTime, longestWaitingTime, id } = data;
-
-  const seeTheQueue = () => {
-    navigation.navigate('QueueDetail', { id });
-  };
+export const QueueCardContent: React.FC<QueueCardContentProps> = ({
+  data,
+  navigation,
+}) => {
+  const { name, shortestWaitingTime, longestWaitingTime, id, waiting } = data;
   return (
     <View
       style={{
@@ -29,7 +25,7 @@ export const SmallQueue: React.FC<SmallQueueProps> = ({ data, navigation }) => {
         maxWidth: 170,
       }}
     >
-      <TouchableOpacity onPress={() => seeTheQueue()}>
+      <TouchableOpacity onPress={navigation}>
         <View style={{ position: 'relative' }}>
           <Image
             style={{ width: 170, height: 150, borderRadius: 15 }}
@@ -37,7 +33,7 @@ export const SmallQueue: React.FC<SmallQueueProps> = ({ data, navigation }) => {
               uri: 'https://via.placeholder.com/300/09f/432.png',
             }}
           />
-
+          <WaitingOnTheQueue waiting={waiting} />
           <WaitTime
             shortestWaitingTime={shortestWaitingTime}
             longestWaitingTime={longestWaitingTime}
