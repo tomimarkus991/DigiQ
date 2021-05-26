@@ -11,6 +11,8 @@ export const MyColors = {
   Text_Gray: '#78787d',
   Text_Light_Gray: '#E2E8F0',
   Text_White: '#FFF',
+  Nice_Blue: '#0082fa',
+  Background_White: '#fff',
 };
 export const MyFonts = {
   Roboto_300Light: 'Roboto_300Light',

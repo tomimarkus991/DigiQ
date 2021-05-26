@@ -1,3 +1,5 @@
+// @ts-ignore
+import { FIREBASE_API_KEY } from '@env';
 import AppLoading from 'expo-app-loading';
 import React from 'react';
 import { Routes } from './src/Navigators/Routes';
@@ -17,8 +19,25 @@ import {
 } from '@apollo/client';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import firebase from 'firebase/app';
+import { LogBox } from 'react-native';
 
 const App: React.FC = () => {
+  const firebaseConfig = {
+    apiKey: FIREBASE_API_KEY,
+    authDomain: 'digiq-854ab.firebaseapp.com',
+    projectId: 'digiq-854ab',
+    storageBucket: 'digiq-854ab.appspot.com',
+    messagingSenderId: '755662745609',
+    appId: '1:755662745609:web:2a167f10a8e690b63708d8',
+    measurementId: 'G-JYSEC4VWBC',
+  };
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  } else {
+    firebase.app(); // if already initialized, use that one
+  }
+  LogBox.ignoreLogs(['Setting a timer']);
   let [fontsLoaded] = useFonts({
     Roboto_300Light,
     Roboto_400Regular,
@@ -51,7 +70,7 @@ const App: React.FC = () => {
     wsLink,
     httpLink,
   );
-  // const networkInterface = createNetworkInterface({ uri: `http://10.0.2.2:8080/graphql` });
+
   const client = new ApolloClient({
     link,
     cache: new InMemoryCache(),

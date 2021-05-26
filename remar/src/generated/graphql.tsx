@@ -16,6 +16,7 @@ export type Scalars = {
 
 export type CreateQueueInput = {
   name: Scalars['String'];
+  imageUri: Scalars['String'];
 };
 
 export type FieldError = {
@@ -27,14 +28,6 @@ export type FieldError = {
 export type JoinQueueInput = {
   queueId: Scalars['Float'];
   value: Scalars['Float'];
-};
-
-export type Joined = {
-  __typename?: 'Joined';
-  userId: Scalars['Float'];
-  user: User;
-  queueId: Scalars['Float'];
-  queue: Queue;
 };
 
 export type LoginUserInput = {
@@ -76,11 +69,13 @@ export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
   user?: Maybe<User>;
-  getMyQueues?: Maybe<Array<Joined>>;
+  getMyQueues?: Maybe<Array<Waiting>>;
   userByEmail?: Maybe<User>;
   queue: Queue;
+  positionInQueue: Scalars['Int'];
   hasUserJoinedThisQueue: Scalars['Boolean'];
   queues: Array<Queue>;
+  search: Array<Queue>;
 };
 
 
@@ -99,8 +94,18 @@ export type QueryQueueArgs = {
 };
 
 
+export type QueryPositionInQueueArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type QueryHasUserJoinedThisQueueArgs = {
   queueId: Scalars['Int'];
+};
+
+
+export type QuerySearchArgs = {
+  searchString: Scalars['String'];
 };
 
 export type Queue = {
@@ -109,9 +114,9 @@ export type Queue = {
   name: Scalars['String'];
   estimatedServingtime: Scalars['Float'];
   creatorId: Scalars['Float'];
+  imageUri: Scalars['String'];
   creator: User;
   onQueue: Array<Waiting>;
-  joined: Array<Joined>;
   waiting: Scalars['Float'];
   shortestWaitingTime: Scalars['Float'];
   longestWaitingTime: Scalars['Float'];
@@ -144,7 +149,6 @@ export type User = {
   email: Scalars['String'];
   onQueue: Array<Waiting>;
   createdQueues: Array<Queue>;
-  joinedQueues: Array<Joined>;
   isCreator: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -195,7 +199,7 @@ export type CreateQueueMutation = (
   { __typename?: 'Mutation' }
   & { createQueue: (
     { __typename?: 'Queue' }
-    & Pick<Queue, 'id' | 'name'>
+    & Pick<Queue, 'id' | 'name' | 'imageUri'>
   ) }
 );
 
@@ -273,10 +277,10 @@ export type GetMyQueuesQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetMyQueuesQuery = (
   { __typename?: 'Query' }
   & { getMyQueues?: Maybe<Array<(
-    { __typename?: 'Joined' }
+    { __typename?: 'Waiting' }
     & { queue: (
       { __typename?: 'Queue' }
-      & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting'>
+      & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting' | 'imageUri'>
     ) }
   )>> }
 );
@@ -310,14 +314,24 @@ export type MeAdvancedQuery = (
   & { me?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'isCreator'>
-    & { joinedQueues: Array<(
-      { __typename?: 'Joined' }
+    & { onQueue: Array<(
+      { __typename?: 'Waiting' }
       & { queue: (
         { __typename?: 'Queue' }
         & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting'>
       ) }
     )> }
   )> }
+);
+
+export type PositionInQueueQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type PositionInQueueQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'positionInQueue'>
 );
 
 export type GetQueueQueryVariables = Exact<{
@@ -329,7 +343,7 @@ export type GetQueueQuery = (
   { __typename?: 'Query' }
   & { queue: (
     { __typename?: 'Queue' }
-    & Pick<Queue, 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting'>
+    & Pick<Queue, 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'imageUri' | 'waiting'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'username'>
@@ -344,7 +358,24 @@ export type QueuesQuery = (
   { __typename?: 'Query' }
   & { queues: Array<(
     { __typename?: 'Queue' }
-    & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'creatorId' | 'waiting' | 'shortestWaitingTime' | 'longestWaitingTime'>
+    & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'imageUri' | 'creatorId' | 'waiting' | 'shortestWaitingTime' | 'longestWaitingTime'>
+    & { creator: (
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    ) }
+  )> }
+);
+
+export type SearchQueuesQueryVariables = Exact<{
+  searchString: Scalars['String'];
+}>;
+
+
+export type SearchQueuesQuery = (
+  { __typename?: 'Query' }
+  & { search: Array<(
+    { __typename?: 'Queue' }
+    & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'creatorId' | 'imageUri' | 'waiting' | 'shortestWaitingTime' | 'longestWaitingTime'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'username'>
@@ -376,7 +407,7 @@ export type JoinQueueSubSubscription = (
   { __typename?: 'Subscription' }
   & { joinQueueSub: (
     { __typename?: 'Queue' }
-    & Pick<Queue, 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting'>
+    & Pick<Queue, 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting' | 'imageUri'>
   ) }
 );
 
@@ -409,6 +440,7 @@ export const CreateQueueDocument = gql`
   createQueue(createQueueInput: $createQueueInput) {
     id
     name
+    imageUri
   }
 }
     `;
@@ -647,6 +679,7 @@ export const GetMyQueuesDocument = gql`
       shortestWaitingTime
       longestWaitingTime
       waiting
+      imageUri
     }
   }
 }
@@ -751,7 +784,7 @@ export const MeAdvancedDocument = gql`
     id
     username
     isCreator
-    joinedQueues {
+    onQueue {
       queue {
         id
         name
@@ -791,6 +824,39 @@ export function useMeAdvancedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type MeAdvancedQueryHookResult = ReturnType<typeof useMeAdvancedQuery>;
 export type MeAdvancedLazyQueryHookResult = ReturnType<typeof useMeAdvancedLazyQuery>;
 export type MeAdvancedQueryResult = Apollo.QueryResult<MeAdvancedQuery, MeAdvancedQueryVariables>;
+export const PositionInQueueDocument = gql`
+    query PositionInQueue($id: Int!) {
+  positionInQueue(id: $id)
+}
+    `;
+
+/**
+ * __usePositionInQueueQuery__
+ *
+ * To run a query within a React component, call `usePositionInQueueQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePositionInQueueQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePositionInQueueQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePositionInQueueQuery(baseOptions: Apollo.QueryHookOptions<PositionInQueueQuery, PositionInQueueQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PositionInQueueQuery, PositionInQueueQueryVariables>(PositionInQueueDocument, options);
+      }
+export function usePositionInQueueLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PositionInQueueQuery, PositionInQueueQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PositionInQueueQuery, PositionInQueueQueryVariables>(PositionInQueueDocument, options);
+        }
+export type PositionInQueueQueryHookResult = ReturnType<typeof usePositionInQueueQuery>;
+export type PositionInQueueLazyQueryHookResult = ReturnType<typeof usePositionInQueueLazyQuery>;
+export type PositionInQueueQueryResult = Apollo.QueryResult<PositionInQueueQuery, PositionInQueueQueryVariables>;
 export const GetQueueDocument = gql`
     query GetQueue($id: Int!) {
   queue(id: $id) {
@@ -798,6 +864,7 @@ export const GetQueueDocument = gql`
     estimatedServingtime
     shortestWaitingTime
     longestWaitingTime
+    imageUri
     waiting
     creator {
       username
@@ -839,6 +906,7 @@ export const QueuesDocument = gql`
     id
     name
     estimatedServingtime
+    imageUri
     creatorId
     creator {
       username
@@ -876,6 +944,51 @@ export function useQueuesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Que
 export type QueuesQueryHookResult = ReturnType<typeof useQueuesQuery>;
 export type QueuesLazyQueryHookResult = ReturnType<typeof useQueuesLazyQuery>;
 export type QueuesQueryResult = Apollo.QueryResult<QueuesQuery, QueuesQueryVariables>;
+export const SearchQueuesDocument = gql`
+    query SearchQueues($searchString: String!) {
+  search(searchString: $searchString) {
+    id
+    name
+    estimatedServingtime
+    creatorId
+    imageUri
+    creator {
+      username
+    }
+    waiting
+    shortestWaitingTime
+    longestWaitingTime
+  }
+}
+    `;
+
+/**
+ * __useSearchQueuesQuery__
+ *
+ * To run a query within a React component, call `useSearchQueuesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchQueuesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchQueuesQuery({
+ *   variables: {
+ *      searchString: // value for 'searchString'
+ *   },
+ * });
+ */
+export function useSearchQueuesQuery(baseOptions: Apollo.QueryHookOptions<SearchQueuesQuery, SearchQueuesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchQueuesQuery, SearchQueuesQueryVariables>(SearchQueuesDocument, options);
+      }
+export function useSearchQueuesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchQueuesQuery, SearchQueuesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchQueuesQuery, SearchQueuesQueryVariables>(SearchQueuesDocument, options);
+        }
+export type SearchQueuesQueryHookResult = ReturnType<typeof useSearchQueuesQuery>;
+export type SearchQueuesLazyQueryHookResult = ReturnType<typeof useSearchQueuesLazyQuery>;
+export type SearchQueuesQueryResult = Apollo.QueryResult<SearchQueuesQuery, SearchQueuesQueryVariables>;
 export const CreateQueueSubDocument = gql`
     subscription CreateQueueSub {
   createQueueSub {
@@ -922,6 +1035,7 @@ export const JoinQueueSubDocument = gql`
     shortestWaitingTime
     longestWaitingTime
     waiting
+    imageUri
   }
 }
     `;

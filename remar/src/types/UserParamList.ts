@@ -3,6 +3,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 export type UserParamList = {
   UserScreen: undefined;
+  SettingsScreen: undefined;
+  CreatorScreen: undefined;
 };
 
 export type UserNavProps<T extends keyof UserParamList> = {

@@ -15,6 +15,7 @@ const Tabs = createBottomTabNavigator<AppParamList>();
 export const AppTabs: React.FC<AppTabsProps> = ({}) => {
   return (
     <Tabs.Navigator
+      initialRouteName="HomeTab"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: any = 'filter';
@@ -28,26 +29,38 @@ export const AppTabs: React.FC<AppTabsProps> = ({}) => {
           } else if (route.name === 'ScanTab') {
             iconName = 'scan1';
           } else if (route.name === 'UserTab') {
-            iconName = 'setting';
+            iconName = 'user';
           }
 
           return <AntDesign name={iconName} size={size} color={color} />;
         },
       })}
     >
-      <Tabs.Screen name="HomeTab" component={HomeStack} options={{ title: 'Home' }} />
+      <Tabs.Screen
+        name="ScanTab"
+        component={ScanScreen}
+        options={{ title: 'Scan' }}
+      />
       <Tabs.Screen
         name="SearchTab"
         component={SearchScreen}
         options={{ title: 'Search' }}
       />
       <Tabs.Screen
+        name="HomeTab"
+        component={HomeStack}
+        options={{ title: 'Home' }}
+      />
+      <Tabs.Screen
         name="MyQueuesTab"
         component={MyQueuesStack}
         options={{ title: 'My Queues' }}
       />
-      <Tabs.Screen name="ScanTab" component={ScanScreen} options={{ title: 'Scan' }} />
-      <Tabs.Screen name="UserTab" component={UserStack} options={{ title: 'User' }} />
+      <Tabs.Screen
+        name="UserTab"
+        component={UserStack}
+        options={{ title: 'User' }}
+      />
     </Tabs.Navigator>
   );
 };

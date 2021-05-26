@@ -29,7 +29,9 @@ const main = async () => {
   try {
     await createConnection({ ...config });
     // let conn = await createConnection({ ...config });
-    // Waiting.delete({}).then(() => Queue.delete({}).then(() => console.log('deleted')));
+    // Waiting.delete({}).then(() =>
+    //   Queue.delete({}).then(() => console.log('deleted')),
+    // );
 
     // User.delete({});
     // await conn.runMigrations();

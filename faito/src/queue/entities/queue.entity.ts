@@ -31,6 +31,10 @@ export class Queue extends BaseEntity {
   @Column()
   creatorId: number;
 
+  @Field()
+  @Column()
+  imageUri: string;
+
   @Field(() => User)
   @ManyToOne(() => User, user => user.createdQueues, {
     lazy: true,

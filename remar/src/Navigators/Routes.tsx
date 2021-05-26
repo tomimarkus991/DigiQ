@@ -10,6 +10,8 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
   const { data } = useMeQuery();
 
   return (
-    <NavigationContainer>{data?.me ? <AppTabs /> : <AuthStack />}</NavigationContainer>
+    <NavigationContainer>
+      {data?.me ? <AppTabs /> : <AuthStack />}
+    </NavigationContainer>
   );
 };

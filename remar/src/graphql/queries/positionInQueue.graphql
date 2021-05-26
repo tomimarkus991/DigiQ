@@ -1,0 +1,3 @@
+query PositionInQueue($id: Int!) {
+  positionInQueue(id: $id)
+}

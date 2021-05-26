@@ -4,50 +4,52 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
   TextInput,
-  View,
 } from 'react-native';
-import { PageHeader } from '../../../components/overall/PageHeader';
-import { MyFonts } from '../../../global';
+import { QueueCard } from '../../../components/homeScreen/QueueCard';
+import {
+  useSearchQueuesLazyQuery,
+  useSearchQueuesQuery,
+} from '../../../generated/graphql';
+import { MyColors, MyFonts } from '../../../global';
+import { HomeNavProps } from '../../../types/HomeParamList';
 
-interface SearchScreenProps {}
+export const SearchScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
+  const [searchQueue, { data }] = useSearchQueuesLazyQuery();
 
-export const SearchScreen: React.FC<SearchScreenProps> = ({}) => {
-  const DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3a324756d53abb28ba',
-      title: 'First Item',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fb65434d91aa97f63',
-      title: 'Second Item',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd966456-145571e29d72',
-      title: 'Third Item',
-    },
-  ];
-  const renderItem = ({ item }: any) => (
-    <View style={{ marginBottom: 3 }}>
-      <Text>{item.title}</Text>
-    </View>
-  );
+  let renderItem = (data: any) => {
+    return (
+      <QueueCard
+        data={data.item}
+        navigation={() =>
+          navigation?.navigate('QueueDetail', { id: data.item.id })
+        }
+      />
+    );
+  };
 
   return (
     <SafeAreaView style={{ ...styles.container }}>
-      <PageHeader title="Search" />
-      <TextInput style={{ ...styles.searchInput }} placeholder="Search" />
-      <Text
-        style={{ fontFamily: MyFonts.Roboto_500Medium, fontSize: 16, marginBottom: 3 }}
-      >
-        Popular Categories
-      </Text>
+      <TextInput
+        style={{ ...styles.searchInput }}
+        placeholder="Search"
+        autoCapitalize="none"
+        onChangeText={text =>
+          text.length >= 2
+            ? searchQueue({ variables: { searchString: text } })
+            : searchQueue({
+                variables: {
+                  searchString: 'das534cxx<zxcvxc534534545fsdfkjls',
+                },
+              })
+        }
+      />
       <FlatList
-        data={DATA}
+        data={data?.search}
         renderItem={renderItem}
+        numColumns={2}
         keyExtractor={(item: any) => item.id}
-      ></FlatList>
+      />
     </SafeAreaView>
   );
 };
@@ -55,7 +57,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
-    marginHorizontal: 16,
+    paddingHorizontal: 16,
+    backgroundColor: MyColors.Background_White,
   },
   searchInput: {
     fontFamily: MyFonts.Roboto_500Medium,
@@ -64,6 +67,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     marginBottom: 2,
+    marginTop: 20,
     borderColor: '#CBD5E0',
     borderWidth: 1,
   },

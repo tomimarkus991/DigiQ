@@ -1,10 +1,10 @@
-query Queues {
-  queues {
+query SearchQueues($searchString: String!) {
+  search(searchString: $searchString) {
     id
     name
     estimatedServingtime
-    imageUri
     creatorId
+    imageUri
     creator {
       username
     }

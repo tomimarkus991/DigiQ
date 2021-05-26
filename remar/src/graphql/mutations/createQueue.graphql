@@ -2,5 +2,6 @@ mutation CreateQueue($createQueueInput: CreateQueueInput!) {
   createQueue(createQueueInput: $createQueueInput) {
     id
     name
+    imageUri
   }
 }

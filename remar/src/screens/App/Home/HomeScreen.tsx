@@ -3,16 +3,9 @@ import React from 'react';
 import { FlatList, StatusBar, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { QueueCard } from '../../../components/homeScreen/QueueCard';
-import {
-  useCreateQueueSubSubscription,
-  useJoinQueueSubSubscription,
-  useMeQuery,
-  useQueuesQuery,
-} from '../../../generated/graphql';
+import { useMeQuery, useQueuesQuery } from '../../../generated/graphql';
 import { MyFonts, MyColors } from '../../../global';
 import { HomeNavProps } from '../../../types/HomeParamList';
-
-interface HomeScreenProps {}
 
 export const HomeScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
   const { data, error, refetch, networkStatus } = useQueuesQuery();
@@ -34,7 +27,9 @@ export const HomeScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
     return (
       <QueueCard
         data={data.item}
-        navigation={() => navigation?.navigate('QueueDetail', { id: data.item.id })}
+        navigation={() =>
+          navigation?.navigate('QueueDetail', { id: data.item.id })
+        }
       />
     );
   };
@@ -43,12 +38,14 @@ export const HomeScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
       style={{
         flex: 1,
         paddingTop: StatusBar.currentHeight,
+        backgroundColor: MyColors.Background_White,
       }}
     >
       <View
         style={{
           flex: 0.08,
           flexDirection: 'row',
+          marginBottom: 10,
         }}
       >
         <Text
@@ -56,7 +53,6 @@ export const HomeScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
             fontFamily: MyFonts.Roboto_500Medium,
             color: MyColors.Text_Header,
             fontSize: 32,
-            marginBottom: 20,
             marginLeft: 20,
             marginRight: 'auto',
           }}
@@ -64,7 +60,9 @@ export const HomeScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
           Home
         </Text>
         {me?.me?.isCreator ? (
-          <TouchableOpacity onPress={() => navigation?.navigate('CreateQueue')}>
+          <TouchableOpacity
+            onPress={() => navigation?.navigate('CreateQueue')}
+          >
             <Ionicons
               style={{ marginRight: 20 }}
               name="add"
@@ -75,7 +73,7 @@ export const HomeScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
         ) : null}
       </View>
       <FlatList
-        style={{ marginLeft: 20, flex: 1 }}
+        style={{ marginLeft: 25, flex: 1 }}
         refreshing={networkStatus === 4}
         onRefresh={() => refetch()}
         data={data?.queues}

@@ -52,7 +52,7 @@ export const DetailScreenContent: React.FC<DetailScreenContentProps> = ({
         <Image
           style={styles.main}
           source={{
-            uri: 'https://via.placeholder.com/300/09f/432.png',
+            uri: data?.imageUri,
           }}
         />
       </View>
@@ -66,7 +66,9 @@ export const DetailScreenContent: React.FC<DetailScreenContentProps> = ({
             flex: 4,
           }}
         >
-          <Text style={[styles.fatText, { marginBottom: 10 }]}>Inimesi järjekorras</Text>
+          <Text style={[styles.fatText, { marginBottom: 10 }]}>
+            Inimesi järjekorras
+          </Text>
           <View style={styles.circle}>
             <Text style={styles.fatText}>{data?.waiting}</Text>
           </View>

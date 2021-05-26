@@ -12,13 +12,18 @@ const Stack = createStackNavigator<HomeParamList>();
 export const HomeStack: React.FC<HomeStackProps> = ({}) => {
   return (
     <Stack.Navigator initialRouteName="Feed">
-      <Stack.Screen name="Feed" component={HomeScreen} options={{ header: () => null }} />
+      <Stack.Screen
+        name="Feed"
+        component={HomeScreen}
+        options={{ header: () => null }}
+      />
       <Stack.Screen
         name="QueueDetail"
         component={QueueDetailScreen}
         options={{
           headerTitle: '',
           headerTransparent: true,
+          headerTintColor: '#fff',
         }}
       />
       <Stack.Screen

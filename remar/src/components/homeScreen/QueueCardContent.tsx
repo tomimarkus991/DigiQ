@@ -1,5 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { MyColors, MyFonts } from '../../global';
 import { WaitingOnTheQueue } from './WaitingOnTheQueue';
 import { WaitTime } from './WaitTime';
@@ -13,7 +19,14 @@ export const QueueCardContent: React.FC<QueueCardContentProps> = ({
   data,
   navigation,
 }) => {
-  const { name, shortestWaitingTime, longestWaitingTime, id, waiting } = data;
+  const {
+    name,
+    shortestWaitingTime,
+    longestWaitingTime,
+    id,
+    waiting,
+    imageUri,
+  } = data;
   return (
     <View
       style={{
@@ -30,7 +43,7 @@ export const QueueCardContent: React.FC<QueueCardContentProps> = ({
           <Image
             style={{ width: 170, height: 150, borderRadius: 15 }}
             source={{
-              uri: 'https://via.placeholder.com/300/09f/432.png',
+              uri: imageUri,
             }}
           />
           <WaitingOnTheQueue waiting={waiting} />
@@ -46,7 +59,8 @@ export const QueueCardContent: React.FC<QueueCardContentProps> = ({
                 fontFamily: MyFonts.Roboto_700Bold,
               }}
             >
-              {name.substring(0, 1).toUpperCase() + name.substring(1, name.length)}
+              {name.substring(0, 1).toUpperCase() +
+                name.substring(1, name.length)}
             </Text>
           </View>
         </View>
@@ -74,10 +88,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 6,
     paddingVertical: 2,
-  },
-  text: {
-    // fontSize: 14,
-    fontFamily: MyFonts.Roboto_700Bold,
-    color: '#1A202C',
   },
 });

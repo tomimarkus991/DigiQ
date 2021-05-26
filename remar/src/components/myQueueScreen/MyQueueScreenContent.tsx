@@ -1,5 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { usePositionInQueueQuery } from '../../generated/graphql';
 import { MyColors, MyFonts } from '../../global';
 import { SwipeButton } from '../homeScreen/SwipeButton';
 import { WaitingOnTheQueue } from '../homeScreen/WaitingOnTheQueue';
@@ -17,13 +24,16 @@ export const MyQueueScreenContent: React.FC<MyQueueScreenContentProps> = ({
   id,
   navigate,
 }) => {
+  const { data: myPositionInQueue } = usePositionInQueueQuery({
+    variables: { id },
+  });
   return (
     <View style={styles.main}>
       <View style={styles.main}>
         <Image
           style={styles.main}
           source={{
-            uri: 'https://via.placeholder.com/300/09f/432.png',
+            uri: data?.imageUri,
           }}
         />
       </View>
@@ -37,15 +47,39 @@ export const MyQueueScreenContent: React.FC<MyQueueScreenContentProps> = ({
             flex: 4,
           }}
         >
-          <Text style={[styles.fatText, { marginBottom: 10 }]}>Inimesi järjekorras</Text>
-          <View style={styles.circle}>
-            <Text style={styles.fatText}>{data?.waiting}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.fatText, { marginBottom: 10 }]}>
+                Järjekorra pikkus
+              </Text>
+              <View style={styles.circle}>
+                <Text style={styles.fatText}>{data?.waiting}</Text>
+              </View>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.fatText, { marginBottom: 10 }]}>
+                Minu koht järjekorras
+              </Text>
+              <View style={styles.circle}>
+                <Text style={styles.fatText}>
+                  {myPositionInQueue?.positionInQueue}
+                </Text>
+              </View>
+            </View>
           </View>
+
           <WaitTimeBig
             shortestWaitingTime={data?.shortestWaitingTime as number}
             longestWaitingTime={data?.longestWaitingTime as number}
             textProps={{ fontSize: 24 }}
           />
+
+          <TouchableOpacity
+            onPress={() => console.log('lahkun järjekorrast')}
+            style={styles.submitButton}
+          >
+            <Text style={styles.submitText}>Lahku järjekorrast</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -90,5 +124,20 @@ const styles = StyleSheet.create({
     flex: 3,
     paddingHorizontal: 20,
     paddingTop: 10,
+  },
+  submitButton: {
+    flex: 0.5,
+    marginBottom: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    backgroundColor: MyColors.Nice_Blue,
+    width: '70%',
+    alignSelf: 'center',
+  },
+  submitText: {
+    fontSize: 24,
+    fontFamily: MyFonts.Roboto_500Medium,
+    color: MyColors.Text_White,
   },
 });

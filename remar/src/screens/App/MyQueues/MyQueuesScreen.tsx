@@ -6,7 +6,9 @@ import { useGetMyQueuesQuery } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { MyQueuesNavProps } from '../../../types/MyQueuesParamList';
 
-export const MyQueuesScreen = ({ navigation }: MyQueuesNavProps<'MyQueues'>) => {
+export const MyQueuesScreen = ({
+  navigation,
+}: MyQueuesNavProps<'MyQueues'>) => {
   const { data, refetch, networkStatus } = useGetMyQueuesQuery();
 
   let renderItem = (data: any) => {
@@ -25,6 +27,7 @@ export const MyQueuesScreen = ({ navigation }: MyQueuesNavProps<'MyQueues'>) => 
       style={{
         flex: 1,
         paddingTop: (StatusBar.currentHeight as number) + 20,
+        backgroundColor: MyColors.Background_White,
       }}
     >
       <Text

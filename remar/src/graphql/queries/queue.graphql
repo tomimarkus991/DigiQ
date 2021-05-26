@@ -4,6 +4,7 @@ query GetQueue($id: Int!) {
     estimatedServingtime
     shortestWaitingTime
     longestWaitingTime
+    imageUri
     waiting
     creator {
       username

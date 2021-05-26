@@ -3,7 +3,7 @@ query MeAdvanced {
     id
     username
     isCreator
-    joinedQueues {
+    onQueue {
       queue {
         id
         name

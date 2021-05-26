@@ -33,6 +33,34 @@ export class QueueResolver {
   }
 
   @Authorized()
+  @Query(() => Int)
+  async positionInQueue(
+    @Arg('id', () => Int) id: number,
+    @Ctx() { req }: MyContext,
+  ) {
+    const data = await Queue.findOneOrFail(id);
+    const onQueue = await data.onQueue;
+    const userId = req.session.userId;
+    let yourPos = 0;
+
+    if (onQueue.length <= 0) {
+      throw new Error('There are no people on this Queue');
+    }
+
+    onQueue.forEach(queue => {
+      if (onQueue.length === 1 && queue.userId === userId) {
+        yourPos++;
+      }
+      if (queue.userId === userId) {
+        return yourPos;
+      }
+      yourPos++;
+      console.log(yourPos);
+    });
+    return yourPos;
+  }
+
+  @Authorized()
   @Query(() => Boolean)
   async hasUserJoinedThisQueue(
     @Arg('queueId', () => Int) queueId: number,
@@ -62,6 +90,18 @@ export class QueueResolver {
     return data;
   }
 
+  @Authorized()
+  @Query(() => [Queue])
+  async search(@Arg('searchString') searchString: string) {
+    const data = await Queue.find({});
+
+    const filteredData = data.filter((queue: Queue) =>
+      queue.name.includes(searchString),
+    );
+
+    return filteredData;
+  }
+
   // Create Queue
   @Authorized(['CREATOR'])
   @Mutation(() => Queue)
@@ -70,9 +110,10 @@ export class QueueResolver {
     @PubSub() pubSub: PubSubEngine,
     @Ctx() { req }: MyContext,
   ): Promise<Queue> {
-    const { name } = createQueueInput;
+    const { name, imageUri } = createQueueInput;
     let queue = (await Queue.create({
       name,
+      imageUri,
       creatorId: req.session.userId,
     }).save()) as any;
 

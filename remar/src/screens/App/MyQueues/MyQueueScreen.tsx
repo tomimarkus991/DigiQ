@@ -5,6 +5,7 @@ import {
   useGetQueueQuery,
   useJoinQueueSubSubscription,
 } from '../../../generated/graphql';
+import { MyColors } from '../../../global';
 import { MyQueuesNavProps } from '../../../types/MyQueuesParamList';
 
 export const MyQueueScreen = ({ route }: MyQueuesNavProps<'MyQueue'>) => {
@@ -13,7 +14,9 @@ export const MyQueueScreen = ({ route }: MyQueuesNavProps<'MyQueue'>) => {
   const { data } = useGetQueueQuery({
     variables: { id },
   });
-  const { data: newData } = useJoinQueueSubSubscription({ variables: { id } });
+  const { data: newData } = useJoinQueueSubSubscription({
+    variables: { id },
+  });
 
   return (
     <View style={styles.main}>
@@ -35,5 +38,6 @@ export const MyQueueScreen = ({ route }: MyQueuesNavProps<'MyQueue'>) => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
+    backgroundColor: MyColors.Background_White,
   },
 });
