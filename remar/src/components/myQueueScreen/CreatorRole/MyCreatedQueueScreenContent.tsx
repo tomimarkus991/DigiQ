@@ -1,5 +1,12 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useDeleteQueueMutation } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { Button } from '../../custom/Button';
@@ -18,7 +25,7 @@ export const MyCreatedQueueScreenContent: React.FC<MyCreatedQueueScreenContentPr
     });
     return (
       <View style={styles.main}>
-        <View style={styles.main}>
+        <View style={{ flex: 1 }}>
           <Image
             style={styles.main}
             source={{
@@ -26,18 +33,21 @@ export const MyCreatedQueueScreenContent: React.FC<MyCreatedQueueScreenContentPr
             }}
           />
         </View>
-        <Button
-          onPress={() =>
-            deleteQueue({
-              variables: { id },
-              update: cache => {
-                cache.evict({ id: 'Queue:' + id });
-              },
-            })
-          }
-          title="delete queue"
-        />
         <View style={styles.secondHalf}>
+          <TouchableOpacity
+            onPress={() =>
+              deleteQueue({
+                variables: { id },
+                update: cache => {
+                  cache.evict({ id: 'Queue:' + id });
+                  cache.gc();
+                },
+              })
+            }
+            style={{ alignSelf: 'flex-end', marginRight: 10 }}
+          >
+            <MaterialIcons name="delete" size={42} color="red" />
+          </TouchableOpacity>
           <Text style={styles.headerText}>
             {(data?.name.substring(0, 1).toUpperCase() as string) +
               data?.name.substring(1, data?.name.length)}
