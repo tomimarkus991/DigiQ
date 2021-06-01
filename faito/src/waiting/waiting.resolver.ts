@@ -11,7 +11,7 @@ import {
   Subscription,
   UseMiddleware,
 } from 'type-graphql';
-import { getConnection, getManager } from 'typeorm';
+import { getConnection } from 'typeorm';
 import { JoinQueueInput } from './dto/join-queue.input';
 import { Queue } from '../queue/entities/queue.entity';
 import { JOIN_QUEUE } from '../constants';
@@ -66,6 +66,9 @@ export class WaitingResolver {
       await Waiting.delete({ queueId, userId });
       // user is not on the queue
     } else if (!waiting) {
+      if (realValue === -1) {
+        throw new Error("You can't leave from a queue you haven't joined");
+      }
       await getConnection().transaction(async tm => {
         await tm.query(
           `insert into waiting ("userId", "queueId", value) values($1, $2, $3);`,
