@@ -1,5 +1,6 @@
 import {
   Arg,
+  Args,
   Ctx,
   Int,
   Mutation,
@@ -19,20 +20,18 @@ import { LoginUserInput } from './dto/login-user.input';
 import { UserResponse } from './dto/user.response';
 import { RegisterUserInput } from './dto/register-user.input';
 import { validateRegister } from './utils/validateRegister';
-import { Waiting } from '../waiting/entities/waiting.entity';
 
 @Resolver(User)
 export class UserResolver {
   // Get current user
   @Query(() => User, { nullable: true })
-  me(@Ctx() { req }: MyContext) {
-    req.session.userId;
+  async me(@Ctx() { req }: MyContext) {
+    const userId = req.session.userId;
     // you are not logged in
-    if (!req.session.userId) {
+    if (!userId) {
       return null;
     }
-    console.log('meUser');
-    return User.findOne(req.session.userId);
+    return await User.findOne(userId);
   }
   // Get one User
   @Query(() => User, { nullable: true })
@@ -40,19 +39,11 @@ export class UserResolver {
     return User.findOne(id);
   }
 
-  // Get users joined queues
-  @Query(() => [Waiting], { nullable: true })
-  async getMyQueues(@Ctx() { req }: MyContext): Promise<Waiting[] | undefined> {
-    const userId = req.session.userId;
-    const user = await User.findOneOrFail(userId);
-    const onQueue = await user.onQueue;
-
-    return onQueue;
-  }
-
   // Get one User
   @Query(() => User, { nullable: true })
-  userByEmail(@Arg('email', () => String) email: string): Promise<User | undefined> {
+  userByEmail(
+    @Arg('email', () => String) email: string,
+  ): Promise<User | undefined> {
     return User.findOneOrFail({ where: { email } });
   }
 
@@ -127,11 +118,15 @@ export class UserResolver {
     @Ctx() { req }: MyContext,
   ): Promise<UserResponse> {
     const { usernameOrEmail, password } = loginUserInput;
+    // finds user
     const user = await User.findOne(
       usernameOrEmail.includes('@')
-        ? { where: { email: usernameOrEmail } }
-        : { where: { username: usernameOrEmail } },
+        ? // finds user based on email
+          { where: { email: usernameOrEmail } }
+        : // finds user based on username
+          { where: { username: usernameOrEmail } },
     );
+    // if user with that username or email doesn't exist
     if (!user) {
       return {
         errors: [
@@ -142,7 +137,11 @@ export class UserResolver {
         ],
       };
     }
+
+    // gets true when hashed password(user.password)
+    // is equal to user entered password(password)
     const valid = await argon2.verify(user.password, password);
+    // if its wrong, return error
     if (!valid) {
       return {
         errors: [
@@ -153,7 +152,12 @@ export class UserResolver {
         ],
       };
     }
+
+    // store user id session
+    // this will set a cookie on the user
+    // keep them logged in
     req.session.userId = user.id;
+
     return { user };
   }
   //Log out

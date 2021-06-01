@@ -33,6 +33,7 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
+  // todo use this instead of antoher resolver
   @Authorized()
   @Field(() => [Waiting])
   @OneToMany(() => Waiting, userOnQueue => userOnQueue.user, {

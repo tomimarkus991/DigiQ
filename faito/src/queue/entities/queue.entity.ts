@@ -24,8 +24,8 @@ export class Queue extends BaseEntity {
   name!: string;
 
   @Field()
-  @Column({ type: 'int' })
-  estimatedServingtime: number = 4;
+  @Column({ type: 'int', default: 4 })
+  estimatedServingtime: number;
 
   @Field()
   @Column()
@@ -49,17 +49,16 @@ export class Queue extends BaseEntity {
   onQueue: Waiting[];
 
   @Field()
-  @Column({ type: 'int' })
-  waiting: number = 0;
+  @Column({ type: 'int', default: 0 })
+  waiting: number;
 
   @Field()
   @Column()
-  shortestWaitingTime: number = this.estimatedServingtime * this.waiting;
+  shortestWaitingTime: number;
 
   @Field()
   @Column()
-  longestWaitingTime: number =
-    this.estimatedServingtime * this.waiting + this.estimatedServingtime;
+  longestWaitingTime: number;
 
   @Field(() => String)
   @CreateDateColumn()

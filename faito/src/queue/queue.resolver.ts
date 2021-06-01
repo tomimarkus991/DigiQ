@@ -16,6 +16,8 @@ import { Queue } from './entities/queue.entity';
 import { CreateQueueInput } from './dto/create-queue.input';
 import { CREATE_QUEUE } from '../constants';
 import { User } from '../user/entities/user.entity';
+import { Waiting } from '../waiting/entities/waiting.entity';
+import { getConnection } from 'typeorm';
 
 // @InputType()
 // export class CategoryInput {
@@ -89,6 +91,13 @@ export class QueueResolver {
     const data = await Queue.find({ order: { createdAt: 'ASC' } });
     return data;
   }
+  @Authorized()
+  @Query(() => [Waiting])
+  async waiting() {
+    // const data = await Queue.find({ where: { category } });
+    const data = await Waiting.find();
+    return data;
+  }
 
   @Authorized()
   @Query(() => [Queue])
@@ -110,16 +119,35 @@ export class QueueResolver {
     @PubSub() pubSub: PubSubEngine,
     @Ctx() { req }: MyContext,
   ): Promise<Queue> {
-    const { name, imageUri } = createQueueInput;
+    const { name, estimatedServingtime, imageUri } = createQueueInput;
     let queue = (await Queue.create({
       name,
       imageUri,
+      estimatedServingtime,
+      shortestWaitingTime: estimatedServingtime,
+      longestWaitingTime: estimatedServingtime * 2,
       creatorId: req.session.userId,
     }).save()) as any;
 
     pubSub.publish(CREATE_QUEUE, queue);
 
     return queue;
+  }
+
+  @Mutation(() => String)
+  async deleteQueue(@Arg('id') id: number, @Ctx() { req }: MyContext) {
+    const userId = req.session.userId;
+    const queue = await Queue.findOneOrFail(id);
+
+    if (queue.creatorId !== req.session.userId) {
+      throw new Error('Not authorized');
+    }
+
+    await Waiting.delete({ queueId: id });
+
+    await Queue.delete({ id, creatorId: userId });
+
+    return 'Queue deleted';
   }
 
   @Subscription(() => Queue, { topics: CREATE_QUEUE })

@@ -5,5 +5,7 @@ export class CreateQueueInput {
   @Field()
   name: string;
   @Field()
+  estimatedServingtime: number;
+  @Field()
   imageUri: string;
 }
