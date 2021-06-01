@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MyQueueScreenContent } from '../../../components/myQueueScreen/UserRole/MyQueueScreenContent';
 import {
@@ -10,29 +10,34 @@ import { MyQueuesNavProps } from '../../../types/MyQueuesParamList';
 
 export const MyQueueDetailScreen = ({
   route,
+  navigation,
 }: MyQueuesNavProps<'MyQueue'>) => {
   const id = route.params.id;
-  const hyperData = route.params.newData;
+  const [queueData, setQueueData] = useState<any>();
   const { data } = useGetQueueQuery({
     variables: { id },
+    onCompleted: () => {
+      setQueueData(data?.queue);
+    },
+    fetchPolicy: 'network-only',
+
+    onError: err => console.log(err),
   });
-  const { data: newData } = useJoinQueueSubSubscription({
+
+  const { data: subscriptionData } = useJoinQueueSubSubscription({
     variables: { id },
+    onSubscriptionData: () => {
+      setQueueData(subscriptionData?.joinQueueSub);
+    },
   });
 
   return (
     <View style={styles.main}>
-      {newData?.joinQueueSub ? (
-        <MyQueueScreenContent data={newData?.joinQueueSub} id={id} />
-      ) : (
-        <>
-          {hyperData?.joinQueueSub ? (
-            <MyQueueScreenContent data={hyperData?.joinQueueSub} id={id} />
-          ) : (
-            <MyQueueScreenContent data={data?.queue} id={id} />
-          )}
-        </>
-      )}
+      <MyQueueScreenContent
+        data={queueData}
+        id={id}
+        navigateBack={() => navigation.navigate('MyQueues')}
+      />
     </View>
   );
 };
