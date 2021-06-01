@@ -38,6 +38,7 @@ const App: React.FC = () => {
     firebase.app(); // if already initialized, use that one
   }
   LogBox.ignoreLogs(['Setting a timer']);
+  LogBox.ignoreLogs(['Error: Access denied!']);
   let [fontsLoaded] = useFonts({
     Roboto_300Light,
     Roboto_400Regular,
