@@ -17,7 +17,6 @@ import { CreateQueueInput } from './dto/create-queue.input';
 import { CREATE_QUEUE } from '../constants';
 import { User } from '../user/entities/user.entity';
 import { Waiting } from '../waiting/entities/waiting.entity';
-import { getConnection } from 'typeorm';
 
 // @InputType()
 // export class CategoryInput {
@@ -37,10 +36,10 @@ export class QueueResolver {
   @Authorized()
   @Query(() => Int)
   async positionInQueue(
-    @Arg('id', () => Int) id: number,
+    @Arg('queueId', () => Int) queueId: number,
     @Ctx() { req }: MyContext,
   ) {
-    const data = await Queue.findOneOrFail(id);
+    const data = await Queue.findOneOrFail(queueId);
     const onQueue = await data.onQueue;
     const userId = req.session.userId;
     let yourPos = 0;
@@ -50,14 +49,25 @@ export class QueueResolver {
     }
 
     onQueue.forEach(queue => {
-      if (onQueue.length === 1 && queue.userId === userId) {
-        yourPos++;
+      // if there is only one person on Queue
+      // and you are the first person
+      yourPos++;
+      if (onQueue.length === 1) {
+        if (queue.userId === userId) {
+          // update position
+          yourPos = 1;
+          return yourPos;
+        }
+
+        if (queue.userId !== userId) {
+          throw new Error('You are not on this Queue');
+        }
       }
+
       if (queue.userId === userId) {
         return yourPos;
       }
-      yourPos++;
-      console.log(yourPos);
+      return;
     });
     return yourPos;
   }
