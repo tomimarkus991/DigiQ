@@ -19,8 +19,6 @@ export const CreatorAppTabs: React.FC = ({}) => {
 
           if (route.name === 'HomeTab') {
             iconName = 'home';
-          } else if (route.name === 'SearchTab') {
-            iconName = 'search1';
           } else if (route.name === 'MyCreatedQueuesTab') {
             iconName = 'calendar';
           } else if (route.name === 'UserTab') {
@@ -32,24 +30,19 @@ export const CreatorAppTabs: React.FC = ({}) => {
       })}
     >
       <Tabs.Screen
-        name="SearchTab"
-        component={SearchScreen}
-        options={{ title: 'Search' }}
-      />
-      <Tabs.Screen
         name="HomeTab"
         component={HomeStack}
-        options={{ title: 'Home' }}
+        options={{ title: 'Kodu' }}
       />
       <Tabs.Screen
         name="MyCreatedQueuesTab"
         component={MyCreatedQueuesStack}
-        options={{ title: 'My Created Queues' }}
+        options={{ title: 'Minu loodud järjekorrad' }}
       />
       <Tabs.Screen
         name="UserTab"
         component={UserStack}
-        options={{ title: 'User' }}
+        options={{ title: 'Kasutaja' }}
       />
     </Tabs.Navigator>
   );
