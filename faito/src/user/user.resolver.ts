@@ -1,6 +1,5 @@
 import {
   Arg,
-  Args,
   Ctx,
   Int,
   Mutation,
