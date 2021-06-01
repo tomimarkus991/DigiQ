@@ -6,22 +6,46 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { usePositionInQueueQuery } from '../../../generated/graphql';
+import {
+  useJoinQueueMutation,
+  usePositionInQueueQuery,
+} from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { WaitTimeBig } from '../../homeScreen/WaitTimeBig';
 
 interface MyQueueScreenContentProps {
   data: any;
   id: number;
+  navigateBack: () => void;
 }
 
 export const MyQueueScreenContent: React.FC<MyQueueScreenContentProps> = ({
   data,
   id,
+  navigateBack,
 }) => {
   const { data: myPositionInQueue } = usePositionInQueueQuery({
-    variables: { id },
+    variables: { queueId: id },
   });
+  const [joinQueue] = useJoinQueueMutation({
+    onCompleted: () => {
+      navigateBack();
+    },
+    onError: err => {
+      console.log(err);
+    },
+  });
+
+  const joinTheQueue = async () => {
+    await joinQueue({
+      variables: { joinQueueInput: { queueId: id, value: -1 } },
+      update: cache => {
+        cache.evict({ id: 'Queue:' + id });
+        cache.gc();
+      },
+    });
+  };
+
   return (
     <View style={styles.main}>
       <View style={styles.main}>
@@ -70,7 +94,7 @@ export const MyQueueScreenContent: React.FC<MyQueueScreenContentProps> = ({
           />
 
           <TouchableOpacity
-            onPress={() => console.log('lahkun järjekorrast')}
+            onPress={() => joinTheQueue()}
             style={styles.submitButton}
           >
             <Text style={styles.submitText}>Lahku järjekorrast</Text>
