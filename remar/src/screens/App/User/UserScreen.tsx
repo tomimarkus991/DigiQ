@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import {
@@ -8,14 +7,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Button } from '../../../components/custom/Button';
-import {
-  useLogoutMutation,
-  useMakeUserCreatorMutation,
-  useMeAdvancedQuery,
-} from '../../../generated/graphql';
+import { useMeAdvancedQuery } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
-import { UserNavProps, UserParamList } from '../../../types/UserParamList';
+import { UserNavProps } from '../../../types/UserParamList';
 
 export const UserScreen = ({ navigation }: UserNavProps<'UserScreen'>) => {
   const { data } = useMeAdvancedQuery();
