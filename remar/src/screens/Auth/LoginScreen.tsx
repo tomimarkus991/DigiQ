@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import React from 'react';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { AuthFooter } from '../../components/authScreens/AuthFooter';
 import { AuthHeader } from '../../components/authScreens/AuthHeader';
 import { FormButton } from '../../components/authScreens/FormButton';
@@ -10,7 +10,6 @@ import {
   MeQuery,
   useLoginMutation,
 } from '../../generated/graphql';
-import { MyColors, MyFonts } from '../../global';
 import { AuthNavProps } from '../../types/AuthParamList';
 import { toErrorMap } from '../../utils/toErrorMap';
 
@@ -77,12 +76,3 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    fontSize: 18,
-    color: MyColors.Text_Input,
-    fontFamily: MyFonts.Roboto_700Bold,
-    // color: '#445AE3',
-  },
-});
