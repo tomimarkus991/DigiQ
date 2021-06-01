@@ -12,7 +12,7 @@ export const AuthStack: React.FC<AuthStackProps> = ({}) => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ header: () => null, animationTypeForReplace: 'pop' }}
+        options={{ header: () => null }}
       />
       <Stack.Screen
         name="Register"
