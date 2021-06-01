@@ -344,6 +344,24 @@ export type MeAdvancedQuery = (
         { __typename?: 'Queue' }
         & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting' | 'imageUri'>
       ) }
+    )> }
+  )> }
+);
+
+export type MeCreatorQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeCreatorQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'isCreator'>
+    & { onQueue: Array<(
+      { __typename?: 'Waiting' }
+      & { queue: (
+        { __typename?: 'Queue' }
+        & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting' | 'imageUri'>
+      ) }
     )>, createdQueues: Array<(
       { __typename?: 'Queue' }
       & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting' | 'imageUri'>
@@ -862,15 +880,6 @@ export const MeAdvancedDocument = gql`
         imageUri
       }
     }
-    createdQueues {
-      id
-      name
-      estimatedServingtime
-      shortestWaitingTime
-      longestWaitingTime
-      waiting
-      imageUri
-    }
   }
 }
     `;
@@ -901,6 +910,62 @@ export function useMeAdvancedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type MeAdvancedQueryHookResult = ReturnType<typeof useMeAdvancedQuery>;
 export type MeAdvancedLazyQueryHookResult = ReturnType<typeof useMeAdvancedLazyQuery>;
 export type MeAdvancedQueryResult = Apollo.QueryResult<MeAdvancedQuery, MeAdvancedQueryVariables>;
+export const MeCreatorDocument = gql`
+    query MeCreator {
+  me {
+    id
+    username
+    isCreator
+    onQueue {
+      queue {
+        id
+        name
+        estimatedServingtime
+        shortestWaitingTime
+        longestWaitingTime
+        waiting
+        imageUri
+      }
+    }
+    createdQueues {
+      id
+      name
+      estimatedServingtime
+      shortestWaitingTime
+      longestWaitingTime
+      waiting
+      imageUri
+    }
+  }
+}
+    `;
+
+/**
+ * __useMeCreatorQuery__
+ *
+ * To run a query within a React component, call `useMeCreatorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeCreatorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeCreatorQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeCreatorQuery(baseOptions?: Apollo.QueryHookOptions<MeCreatorQuery, MeCreatorQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeCreatorQuery, MeCreatorQueryVariables>(MeCreatorDocument, options);
+      }
+export function useMeCreatorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeCreatorQuery, MeCreatorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeCreatorQuery, MeCreatorQueryVariables>(MeCreatorDocument, options);
+        }
+export type MeCreatorQueryHookResult = ReturnType<typeof useMeCreatorQuery>;
+export type MeCreatorLazyQueryHookResult = ReturnType<typeof useMeCreatorLazyQuery>;
+export type MeCreatorQueryResult = Apollo.QueryResult<MeCreatorQuery, MeCreatorQueryVariables>;
 export const GetPeopleOnTheQueueDocument = gql`
     query GetPeopleOnTheQueue($id: Int!) {
   queue(id: $id) {

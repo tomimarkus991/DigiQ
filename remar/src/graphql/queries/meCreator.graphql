@@ -1,4 +1,4 @@
-query MeAdvanced {
+query MeCreator {
   me {
     id
     username
@@ -13,6 +13,15 @@ query MeAdvanced {
         waiting
         imageUri
       }
+    }
+    createdQueues {
+      id
+      name
+      estimatedServingtime
+      shortestWaitingTime
+      longestWaitingTime
+      waiting
+      imageUri
     }
   }
 }
