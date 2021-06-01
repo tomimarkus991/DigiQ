@@ -1,6 +1,18 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
-import { FlatList, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { useGetPeopleOnTheQueueQuery } from '../../../generated/graphql';
+import {
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {
+  GetPeopleOnTheQueueDocument,
+  useGetPeopleOnTheQueueQuery,
+  useRemoveUserFromQueueMutation,
+} from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { MyCreatedQueuesNavProps } from '../../../types/MyCreatedQueuesParamList';
 
@@ -12,17 +24,58 @@ export const PeopleOnTheQueueScreen = ({
   const { data, refetch, networkStatus } = useGetPeopleOnTheQueueQuery({
     variables: { id },
   });
+  const [removeUserFromQueue] = useRemoveUserFromQueueMutation({
+    refetchQueries: [
+      {
+        query: GetPeopleOnTheQueueDocument,
+        variables: {
+          id,
+        },
+      },
+    ],
+  });
 
   let renderItem = (data: any) => {
     return (
       <View style={{ flexDirection: 'row' }}>
-        <Text>{data.item.user.username}</Text>
+        <Text
+          style={{
+            fontFamily: MyFonts.Roboto_500Medium,
+            fontSize: 18,
+            color: MyColors.Text_Regular,
+          }}
+        >
+          {data.item.user.username}
+        </Text>
+        <TouchableOpacity
+          onPress={
+            () =>
+              removeUserFromQueue({
+                variables: {
+                  removeUserFromQueueInput: {
+                    queueId: id,
+                    userId: data.item.user.id,
+                  },
+                },
+              })
+            // deleteQueue({
+            //   variables: { id },
+            // update: cache => {
+            //   cache.evict({ id: 'Queue:' + id });
+            //   cache.gc();
+            // },
+            // })
+          }
+          style={{ alignSelf: 'flex-end', marginRight: 10 }}
+        >
+          <MaterialIcons name="delete" size={42} color="red" />
+        </TouchableOpacity>
       </View>
     );
   };
   return (
     <View style={styles.main}>
-      <View style={{ flex: 0.5 }}>
+      <View style={{ flex: 0.7 }}>
         <Text
           style={{
             fontFamily: MyFonts.Roboto_500Medium,
@@ -46,9 +99,8 @@ export const PeopleOnTheQueueScreen = ({
             refreshing={networkStatus === 4}
             onRefresh={() => refetch()}
             data={data?.queue.onQueue}
-            showsHorizontalScrollIndicator={false}
             horizontal={false}
-            numColumns={2}
+            numColumns={1}
             renderItem={renderItem}
             keyExtractor={index => index.user.id.toString()}
           />
