@@ -115,7 +115,7 @@ export class QueueResolver {
     const data = await Queue.find({});
 
     const filteredData = data.filter((queue: Queue) =>
-      queue.name.includes(searchString),
+      queue.name.toLowerCase().includes(searchString),
     );
 
     return filteredData;
