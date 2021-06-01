@@ -1,5 +1,6 @@
 import { useApolloClient } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import {
   StatusBar,
@@ -12,12 +13,13 @@ import { useLogoutMutation } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { UserNavProps } from '../../../types/UserParamList';
 
-export const SettingsScreen = ({
-  navigation,
-}: UserNavProps<'SettingsScreen'>) => {
+export const SettingsScreen = ({}: UserNavProps<'SettingsScreen'>) => {
   const apolloClient = useApolloClient();
-  const [logout] = useLogoutMutation();
-
+  const [logout] = useLogoutMutation({
+    errorPolicy: 'ignore',
+    fetchPolicy: 'no-cache',
+  });
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -56,8 +58,11 @@ export const SettingsScreen = ({
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => {
-            logout().then(() => apolloClient.resetStore());
+          onPress={async () => {
+            await logout();
+            await apolloClient.resetStore();
+            // navigation.navigate('Login');
+            // apolloClient.resetStore();
           }}
           style={{ ...styles.submitButton }}
         >
