@@ -5,7 +5,11 @@ export type HomeParamList = {
   Feed: undefined;
   QueueDetail: { id: number };
   CreateQueue: undefined;
-  MyQueuesTab: { screen: string; params: { id: number; newData: any }; initial: boolean };
+  MyQueuesTab: {
+    screen: string;
+    params: { id: number };
+    initial: boolean;
+  };
 };
 
 export type HomeNavProps<T extends keyof HomeParamList> = {
