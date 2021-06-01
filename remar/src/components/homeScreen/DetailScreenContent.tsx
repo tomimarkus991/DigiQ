@@ -1,17 +1,12 @@
-import { useFocusEffect } from '@react-navigation/core';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import {
-  useHasUserJoinedThisQueueLazyQuery,
   useHasUserJoinedThisQueueQuery,
   useJoinQueueMutation,
-  useMeQuery,
 } from '../../generated/graphql';
 import { MyColors, MyFonts } from '../../global';
 import { Button } from '../custom/Button';
 import { SwipeButton } from './SwipeButton';
-import { WaitingOnTheQueue } from './WaitingOnTheQueue';
-import { WaitTime } from './WaitTime';
 import { WaitTimeBig } from './WaitTimeBig';
 
 interface DetailScreenContentProps {
@@ -32,9 +27,6 @@ export const DetailScreenContent: React.FC<DetailScreenContentProps> = ({
     onCompleted: () => {
       navigate();
     },
-    // refetchQueries: [
-    //   { query: useHasUserJoinedThisQueueQuery({ variables: { queueId: id } }) },
-    // ],
     onError: err => {
       console.log(err);
     },
