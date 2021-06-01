@@ -45,6 +45,7 @@ export type Mutation = {
   createQueue: Queue;
   deleteQueue: Scalars['String'];
   joinQueue: Queue;
+  removeUserFromQueue: Scalars['String'];
 };
 
 
@@ -70,6 +71,11 @@ export type MutationDeleteQueueArgs = {
 
 export type MutationJoinQueueArgs = {
   joinQueueInput: JoinQueueInput;
+};
+
+
+export type MutationRemoveUserFromQueueArgs = {
+  removeUserFromQueueInput: RemoveUserFromQueueInput;
 };
 
 export type Query = {
@@ -102,7 +108,7 @@ export type QueryQueueArgs = {
 
 
 export type QueryPositionInQueueArgs = {
-  id: Scalars['Int'];
+  queueId: Scalars['Int'];
 };
 
 
@@ -135,6 +141,11 @@ export type RegisterUserInput = {
   username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type RemoveUserFromQueueInput = {
+  queueId: Scalars['Float'];
+  userId: Scalars['Float'];
 };
 
 export type Subscription = {
@@ -275,6 +286,16 @@ export type RegisterMutation = (
   ) }
 );
 
+export type RemoveUserFromQueueMutationVariables = Exact<{
+  removeUserFromQueueInput: RemoveUserFromQueueInput;
+}>;
+
+
+export type RemoveUserFromQueueMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeUserFromQueue'>
+);
+
 export type CheckIfQueueExistsQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -351,7 +372,7 @@ export type GetPeopleOnTheQueueQuery = (
 );
 
 export type PositionInQueueQueryVariables = Exact<{
-  id: Scalars['Int'];
+  queueId: Scalars['Int'];
 }>;
 
 
@@ -690,6 +711,37 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const RemoveUserFromQueueDocument = gql`
+    mutation RemoveUserFromQueue($removeUserFromQueueInput: RemoveUserFromQueueInput!) {
+  removeUserFromQueue(removeUserFromQueueInput: $removeUserFromQueueInput)
+}
+    `;
+export type RemoveUserFromQueueMutationFn = Apollo.MutationFunction<RemoveUserFromQueueMutation, RemoveUserFromQueueMutationVariables>;
+
+/**
+ * __useRemoveUserFromQueueMutation__
+ *
+ * To run a mutation, you first call `useRemoveUserFromQueueMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveUserFromQueueMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeUserFromQueueMutation, { data, loading, error }] = useRemoveUserFromQueueMutation({
+ *   variables: {
+ *      removeUserFromQueueInput: // value for 'removeUserFromQueueInput'
+ *   },
+ * });
+ */
+export function useRemoveUserFromQueueMutation(baseOptions?: Apollo.MutationHookOptions<RemoveUserFromQueueMutation, RemoveUserFromQueueMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveUserFromQueueMutation, RemoveUserFromQueueMutationVariables>(RemoveUserFromQueueDocument, options);
+      }
+export type RemoveUserFromQueueMutationHookResult = ReturnType<typeof useRemoveUserFromQueueMutation>;
+export type RemoveUserFromQueueMutationResult = Apollo.MutationResult<RemoveUserFromQueueMutation>;
+export type RemoveUserFromQueueMutationOptions = Apollo.BaseMutationOptions<RemoveUserFromQueueMutation, RemoveUserFromQueueMutationVariables>;
 export const CheckIfQueueExistsDocument = gql`
     query CheckIfQueueExists($id: Int!) {
   queue(id: $id) {
@@ -891,8 +943,8 @@ export type GetPeopleOnTheQueueQueryHookResult = ReturnType<typeof useGetPeopleO
 export type GetPeopleOnTheQueueLazyQueryHookResult = ReturnType<typeof useGetPeopleOnTheQueueLazyQuery>;
 export type GetPeopleOnTheQueueQueryResult = Apollo.QueryResult<GetPeopleOnTheQueueQuery, GetPeopleOnTheQueueQueryVariables>;
 export const PositionInQueueDocument = gql`
-    query PositionInQueue($id: Int!) {
-  positionInQueue(id: $id)
+    query PositionInQueue($queueId: Int!) {
+  positionInQueue(queueId: $queueId)
 }
     `;
 
@@ -908,7 +960,7 @@ export const PositionInQueueDocument = gql`
  * @example
  * const { data, loading, error } = usePositionInQueueQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      queueId: // value for 'queueId'
  *   },
  * });
  */
