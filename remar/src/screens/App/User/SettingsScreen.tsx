@@ -22,7 +22,6 @@ export const SettingsScreen = ({
     <View
       style={{
         flex: 1,
-
         backgroundColor: MyColors.Background_White,
       }}
     >
@@ -57,9 +56,8 @@ export const SettingsScreen = ({
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={async () => {
-            await logout();
-            apolloClient.resetStore();
+          onPress={() => {
+            logout().then(() => apolloClient.resetStore());
           }}
           style={{ ...styles.submitButton }}
         >

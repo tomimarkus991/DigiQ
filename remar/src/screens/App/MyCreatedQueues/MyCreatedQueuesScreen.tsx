@@ -1,24 +1,23 @@
-import { useFocusEffect } from '@react-navigation/core';
 import React from 'react';
 import { FlatList, StatusBar, Text, View } from 'react-native';
 import { QueueCard } from '../../../components/homeScreen/QueueCard';
 import { useMeAdvancedQuery } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
-import { MyQueuesNavProps } from '../../../types/MyQueuesParamList';
+import { MyCreatedQueuesNavProps } from '../../../types/MyCreatedQueuesParamList';
 
-export const MyQueuesScreen = ({
+export const MyCreatedQueuesScreen = ({
   navigation,
-}: MyQueuesNavProps<'MyQueues'>) => {
+}: MyCreatedQueuesNavProps<'MyCreatedQueues'>) => {
   const { data, refetch, networkStatus } = useMeAdvancedQuery();
 
   let renderItem = (queueData: any) => {
     return (
       <View>
         <QueueCard
-          data={queueData.item.queue}
+          data={queueData.item}
           navigation={() =>
-            navigation.navigate('MyQueue', {
-              id: queueData.item.queue.id,
+            navigation.navigate('MyCreatedQueue', {
+              id: queueData.item.id,
             })
           }
         />
@@ -42,11 +41,11 @@ export const MyQueuesScreen = ({
           marginLeft: 20,
         }}
       >
-        Minu järjekorrad
+        Minu loodud järjekorrad
       </Text>
       <FlatList
         style={{ marginLeft: 20 }}
-        data={data?.me?.onQueue}
+        data={data?.me?.createdQueues}
         refreshing={networkStatus === 4}
         onRefresh={() => refetch()}
         showsHorizontalScrollIndicator={false}

@@ -1,18 +1,18 @@
 import { AntDesign } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { ScanScreen } from '../screens/App/Scan/ScanScreen';
-import { SearchScreen } from '../screens/App/Search/SearchScreen';
-import { AppParamList } from '../types/AppParamList';
-import { HomeStack } from './HomeStack';
+import { ScanScreen } from '../../screens/App/Scan/ScanScreen';
+import { SearchScreen } from '../../screens/App/Search/SearchScreen';
+import { AppParamList } from '../../types/UserRole/AppParamList';
+import { HomeStack } from '../AllRoles/HomeStack';
 import { MyQueuesStack } from './MyQueuesStack';
-import { UserStack } from './UserStack';
+import { UserStack } from '../AllRoles/UserStack';
 
 interface AppTabsProps {}
 
 const Tabs = createBottomTabNavigator<AppParamList>();
 
-export const AppTabs: React.FC<AppTabsProps> = ({}) => {
+export const UserAppTabs: React.FC<AppTabsProps> = ({}) => {
   return (
     <Tabs.Navigator
       initialRouteName="HomeTab"

@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import {
@@ -16,6 +17,7 @@ import { MyColors, MyFonts } from '../../../global';
 export const CreatorScreen: React.FC = ({}) => {
   const [makeUserCreator] = useMakeUserCreatorMutation();
   const { data } = useMeAdvancedQuery();
+  const apolloClient = useApolloClient();
 
   return (
     <View
@@ -68,6 +70,7 @@ export const CreatorScreen: React.FC = ({}) => {
           <TouchableOpacity
             onPress={async () => {
               await makeUserCreator();
+              await apolloClient.resetStore();
             }}
             style={{ ...styles.submitButton }}
           >

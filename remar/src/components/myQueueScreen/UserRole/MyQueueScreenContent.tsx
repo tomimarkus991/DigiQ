@@ -6,23 +6,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { usePositionInQueueQuery } from '../../generated/graphql';
-import { MyColors, MyFonts } from '../../global';
-import { SwipeButton } from '../homeScreen/SwipeButton';
-import { WaitingOnTheQueue } from '../homeScreen/WaitingOnTheQueue';
-import { WaitTime } from '../homeScreen/WaitTime';
-import { WaitTimeBig } from '../homeScreen/WaitTimeBig';
+import { usePositionInQueueQuery } from '../../../generated/graphql';
+import { MyColors, MyFonts } from '../../../global';
+import { WaitTimeBig } from '../../homeScreen/WaitTimeBig';
 
 interface MyQueueScreenContentProps {
   data: any;
   id: number;
-  navigate?: () => void;
 }
 
 export const MyQueueScreenContent: React.FC<MyQueueScreenContentProps> = ({
   data,
   id,
-  navigate,
 }) => {
   const { data: myPositionInQueue } = usePositionInQueueQuery({
     variables: { id },

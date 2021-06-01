@@ -1,8 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { LoginScreen } from '../screens/Auth/LoginScreen';
-import { RegisterScreen } from '../screens/Auth/RegisterScreen';
-import { AuthParamList } from '../types/AuthParamList';
+import { LoginScreen } from '../../screens/Auth/LoginScreen';
+import { RegisterScreen } from '../../screens/Auth/RegisterScreen';
+import { AuthParamList } from '../../types/AuthParamList';
 
 interface AuthStackProps {}
 const Stack = createStackNavigator<AuthParamList>();
@@ -12,7 +12,7 @@ export const AuthStack: React.FC<AuthStackProps> = ({}) => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ header: () => null }}
+        options={{ header: () => null, animationTypeForReplace: 'pop' }}
       />
       <Stack.Screen
         name="Register"

@@ -1,8 +1,11 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { MyQueueScreen } from '../screens/App/MyQueues/MyQueueScreen';
-import { MyQueuesScreen } from '../screens/App/MyQueues/MyQueuesScreen';
-import { MyQueuesNavProps, MyQueuesParamList } from '../types/MyQueuesParamList';
+import { MyQueueDetailScreen } from '../../screens/App/MyQueues/MyQueueDetailScreen';
+import { MyQueuesScreen } from '../../screens/App/MyQueues/MyQueuesScreen';
+import {
+  MyQueuesNavProps,
+  MyQueuesParamList,
+} from '../../types/MyQueuesParamList';
 
 const Stack = createStackNavigator<MyQueuesParamList>();
 
@@ -16,7 +19,7 @@ export const MyQueuesStack = ({}: MyQueuesNavProps<'MyQueues'>) => {
       />
       <Stack.Screen
         name="MyQueue"
-        component={MyQueueScreen}
+        component={MyQueueDetailScreen}
         options={{
           headerTitle: '',
           headerTransparent: true,

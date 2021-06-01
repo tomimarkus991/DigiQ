@@ -9,10 +9,11 @@ type InputFieldProps = {
   mb: number;
   value: string;
   handleChange: (e: string | ChangeEvent<any>) => void;
+  isNumber?: boolean;
 };
 
 export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
-  const { name, placeholder, mb, value, handleChange } = props;
+  const { name, placeholder, mb, value, handleChange, isNumber } = props;
   const [_, { error }] = useField(props);
 
   return (
@@ -51,26 +52,53 @@ export const InputField: React.FC<InputFieldProps> = ({ ...props }) => {
           />
         </View>
       ) : (
-        <View>
-          <TextInput
-            placeholder={placeholder}
-            placeholderTextColor={MyColors.Text_Placeholder}
-            autoCapitalize="none"
-            nativeID={name}
-            value={value}
-            onChangeText={handleChange}
-            style={styles.input}
-            autoCompleteType="off"
-          />
-          <View
-            style={{
-              marginTop: 8,
-              marginBottom: mb,
-              borderBottomColor: MyColors.Line,
-              borderBottomWidth: 1,
-            }}
-          />
-        </View>
+        <>
+          {isNumber ? (
+            <View>
+              <TextInput
+                placeholder={placeholder}
+                placeholderTextColor={MyColors.Text_Placeholder}
+                autoCapitalize="none"
+                nativeID={name}
+                value={value}
+                onChangeText={handleChange}
+                style={styles.input}
+                autoCompleteType="off"
+                textContentType="telephoneNumber"
+                keyboardType="decimal-pad"
+              />
+              <View
+                style={{
+                  marginTop: 8,
+                  marginBottom: mb,
+                  borderBottomColor: MyColors.Line,
+                  borderBottomWidth: 1,
+                }}
+              />
+            </View>
+          ) : (
+            <View>
+              <TextInput
+                placeholder={placeholder}
+                placeholderTextColor={MyColors.Text_Placeholder}
+                autoCapitalize="none"
+                nativeID={name}
+                value={value}
+                onChangeText={handleChange}
+                style={styles.input}
+                autoCompleteType="off"
+              />
+              <View
+                style={{
+                  marginTop: 8,
+                  marginBottom: mb,
+                  borderBottomColor: MyColors.Line,
+                  borderBottomWidth: 1,
+                }}
+              />
+            </View>
+          )}
+        </>
       )}
     </View>
   );

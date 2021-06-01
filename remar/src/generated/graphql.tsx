@@ -16,6 +16,7 @@ export type Scalars = {
 
 export type CreateQueueInput = {
   name: Scalars['String'];
+  estimatedServingtime: Scalars['Float'];
   imageUri: Scalars['String'];
 };
 
@@ -42,6 +43,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   makeUserCreator: Scalars['Boolean'];
   createQueue: Queue;
+  deleteQueue: Scalars['String'];
   joinQueue: Queue;
 };
 
@@ -61,6 +63,11 @@ export type MutationCreateQueueArgs = {
 };
 
 
+export type MutationDeleteQueueArgs = {
+  id: Scalars['Float'];
+};
+
+
 export type MutationJoinQueueArgs = {
   joinQueueInput: JoinQueueInput;
 };
@@ -69,12 +76,12 @@ export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
   user?: Maybe<User>;
-  getMyQueues?: Maybe<Array<Waiting>>;
   userByEmail?: Maybe<User>;
   queue: Queue;
   positionInQueue: Scalars['Int'];
   hasUserJoinedThisQueue: Scalars['Boolean'];
   queues: Array<Queue>;
+  waiting: Array<Waiting>;
   search: Array<Queue>;
 };
 
@@ -203,6 +210,16 @@ export type CreateQueueMutation = (
   ) }
 );
 
+export type DeleteQueueMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteQueueMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteQueue'>
+);
+
 export type JoinQueueMutationVariables = Exact<{
   joinQueueInput: JoinQueueInput;
 }>;
@@ -271,20 +288,6 @@ export type CheckIfQueueExistsQuery = (
   ) }
 );
 
-export type GetMyQueuesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetMyQueuesQuery = (
-  { __typename?: 'Query' }
-  & { getMyQueues?: Maybe<Array<(
-    { __typename?: 'Waiting' }
-    & { queue: (
-      { __typename?: 'Queue' }
-      & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting' | 'imageUri'>
-    ) }
-  )>> }
-);
-
 export type HasUserJoinedThisQueueQueryVariables = Exact<{
   queueId: Scalars['Int'];
 }>;
@@ -318,10 +321,33 @@ export type MeAdvancedQuery = (
       { __typename?: 'Waiting' }
       & { queue: (
         { __typename?: 'Queue' }
-        & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting'>
+        & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting' | 'imageUri'>
       ) }
+    )>, createdQueues: Array<(
+      { __typename?: 'Queue' }
+      & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'waiting' | 'imageUri'>
     )> }
   )> }
+);
+
+export type GetPeopleOnTheQueueQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetPeopleOnTheQueueQuery = (
+  { __typename?: 'Query' }
+  & { queue: (
+    { __typename?: 'Queue' }
+    & Pick<Queue, 'name'>
+    & { onQueue: Array<(
+      { __typename?: 'Waiting' }
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username'>
+      ) }
+    )> }
+  ) }
 );
 
 export type PositionInQueueQueryVariables = Exact<{
@@ -470,6 +496,37 @@ export function useCreateQueueMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreateQueueMutationHookResult = ReturnType<typeof useCreateQueueMutation>;
 export type CreateQueueMutationResult = Apollo.MutationResult<CreateQueueMutation>;
 export type CreateQueueMutationOptions = Apollo.BaseMutationOptions<CreateQueueMutation, CreateQueueMutationVariables>;
+export const DeleteQueueDocument = gql`
+    mutation DeleteQueue($id: Float!) {
+  deleteQueue(id: $id)
+}
+    `;
+export type DeleteQueueMutationFn = Apollo.MutationFunction<DeleteQueueMutation, DeleteQueueMutationVariables>;
+
+/**
+ * __useDeleteQueueMutation__
+ *
+ * To run a mutation, you first call `useDeleteQueueMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteQueueMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteQueueMutation, { data, loading, error }] = useDeleteQueueMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteQueueMutation(baseOptions?: Apollo.MutationHookOptions<DeleteQueueMutation, DeleteQueueMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteQueueMutation, DeleteQueueMutationVariables>(DeleteQueueDocument, options);
+      }
+export type DeleteQueueMutationHookResult = ReturnType<typeof useDeleteQueueMutation>;
+export type DeleteQueueMutationResult = Apollo.MutationResult<DeleteQueueMutation>;
+export type DeleteQueueMutationOptions = Apollo.BaseMutationOptions<DeleteQueueMutation, DeleteQueueMutationVariables>;
 export const JoinQueueDocument = gql`
     mutation joinQueue($joinQueueInput: JoinQueueInput!) {
   joinQueue(joinQueueInput: $joinQueueInput) {
@@ -669,48 +726,6 @@ export function useCheckIfQueueExistsLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type CheckIfQueueExistsQueryHookResult = ReturnType<typeof useCheckIfQueueExistsQuery>;
 export type CheckIfQueueExistsLazyQueryHookResult = ReturnType<typeof useCheckIfQueueExistsLazyQuery>;
 export type CheckIfQueueExistsQueryResult = Apollo.QueryResult<CheckIfQueueExistsQuery, CheckIfQueueExistsQueryVariables>;
-export const GetMyQueuesDocument = gql`
-    query GetMyQueues {
-  getMyQueues {
-    queue {
-      id
-      name
-      estimatedServingtime
-      shortestWaitingTime
-      longestWaitingTime
-      waiting
-      imageUri
-    }
-  }
-}
-    `;
-
-/**
- * __useGetMyQueuesQuery__
- *
- * To run a query within a React component, call `useGetMyQueuesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMyQueuesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetMyQueuesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetMyQueuesQuery(baseOptions?: Apollo.QueryHookOptions<GetMyQueuesQuery, GetMyQueuesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetMyQueuesQuery, GetMyQueuesQueryVariables>(GetMyQueuesDocument, options);
-      }
-export function useGetMyQueuesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyQueuesQuery, GetMyQueuesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetMyQueuesQuery, GetMyQueuesQueryVariables>(GetMyQueuesDocument, options);
-        }
-export type GetMyQueuesQueryHookResult = ReturnType<typeof useGetMyQueuesQuery>;
-export type GetMyQueuesLazyQueryHookResult = ReturnType<typeof useGetMyQueuesLazyQuery>;
-export type GetMyQueuesQueryResult = Apollo.QueryResult<GetMyQueuesQuery, GetMyQueuesQueryVariables>;
 export const HasUserJoinedThisQueueDocument = gql`
     query HasUserJoinedThisQueue($queueId: Int!) {
   hasUserJoinedThisQueue(queueId: $queueId)
@@ -792,7 +807,17 @@ export const MeAdvancedDocument = gql`
         shortestWaitingTime
         longestWaitingTime
         waiting
+        imageUri
       }
+    }
+    createdQueues {
+      id
+      name
+      estimatedServingtime
+      shortestWaitingTime
+      longestWaitingTime
+      waiting
+      imageUri
     }
   }
 }
@@ -824,6 +849,47 @@ export function useMeAdvancedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type MeAdvancedQueryHookResult = ReturnType<typeof useMeAdvancedQuery>;
 export type MeAdvancedLazyQueryHookResult = ReturnType<typeof useMeAdvancedLazyQuery>;
 export type MeAdvancedQueryResult = Apollo.QueryResult<MeAdvancedQuery, MeAdvancedQueryVariables>;
+export const GetPeopleOnTheQueueDocument = gql`
+    query GetPeopleOnTheQueue($id: Int!) {
+  queue(id: $id) {
+    name
+    onQueue {
+      user {
+        id
+        username
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPeopleOnTheQueueQuery__
+ *
+ * To run a query within a React component, call `useGetPeopleOnTheQueueQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPeopleOnTheQueueQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPeopleOnTheQueueQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetPeopleOnTheQueueQuery(baseOptions: Apollo.QueryHookOptions<GetPeopleOnTheQueueQuery, GetPeopleOnTheQueueQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPeopleOnTheQueueQuery, GetPeopleOnTheQueueQueryVariables>(GetPeopleOnTheQueueDocument, options);
+      }
+export function useGetPeopleOnTheQueueLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPeopleOnTheQueueQuery, GetPeopleOnTheQueueQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPeopleOnTheQueueQuery, GetPeopleOnTheQueueQueryVariables>(GetPeopleOnTheQueueDocument, options);
+        }
+export type GetPeopleOnTheQueueQueryHookResult = ReturnType<typeof useGetPeopleOnTheQueueQuery>;
+export type GetPeopleOnTheQueueLazyQueryHookResult = ReturnType<typeof useGetPeopleOnTheQueueLazyQuery>;
+export type GetPeopleOnTheQueueQueryResult = Apollo.QueryResult<GetPeopleOnTheQueueQuery, GetPeopleOnTheQueueQueryVariables>;
 export const PositionInQueueDocument = gql`
     query PositionInQueue($id: Int!) {
   positionInQueue(id: $id)

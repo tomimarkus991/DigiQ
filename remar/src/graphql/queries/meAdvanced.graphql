@@ -11,7 +11,17 @@ query MeAdvanced {
         shortestWaitingTime
         longestWaitingTime
         waiting
+        imageUri
       }
+    }
+    createdQueues {
+      id
+      name
+      estimatedServingtime
+      shortestWaitingTime
+      longestWaitingTime
+      waiting
+      imageUri
     }
   }
 }

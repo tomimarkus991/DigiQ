@@ -1,9 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { CreatorScreen } from '../screens/App/User/CreatorScreen';
-import { SettingsScreen } from '../screens/App/User/SettingsScreen';
-import { UserScreen } from '../screens/App/User/UserScreen';
-import { UserNavProps, UserParamList } from '../types/UserParamList';
+import { CreatorScreen } from '../../screens/App/User/CreatorScreen';
+import { SettingsScreen } from '../../screens/App/User/SettingsScreen';
+import { UserScreen } from '../../screens/App/User/UserScreen';
+import { UserNavProps, UserParamList } from '../../types/UserParamList';
 
 const Stack = createStackNavigator<UserParamList>();
 

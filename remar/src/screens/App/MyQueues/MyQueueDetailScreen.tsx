@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { MyQueueScreenContent } from '../../../components/myQueueScreen/MyQueueScreenContent';
+import { MyQueueScreenContent } from '../../../components/myQueueScreen/UserRole/MyQueueScreenContent';
 import {
   useGetQueueQuery,
   useJoinQueueSubSubscription,
@@ -8,7 +8,9 @@ import {
 import { MyColors } from '../../../global';
 import { MyQueuesNavProps } from '../../../types/MyQueuesParamList';
 
-export const MyQueueScreen = ({ route }: MyQueuesNavProps<'MyQueue'>) => {
+export const MyQueueDetailScreen = ({
+  route,
+}: MyQueuesNavProps<'MyQueue'>) => {
   const id = route.params.id;
   const hyperData = route.params.newData;
   const { data } = useGetQueueQuery({

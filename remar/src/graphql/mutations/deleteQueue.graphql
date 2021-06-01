@@ -1,0 +1,3 @@
+mutation DeleteQueue($id: Float!) {
+  deleteQueue(id: $id)
+}

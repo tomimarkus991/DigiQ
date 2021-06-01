@@ -1,0 +1,11 @@
+query GetPeopleOnTheQueue($id: Int!) {
+  queue(id: $id) {
+    name
+    onQueue {
+      user {
+        id
+        username
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 import { FIREBASE_API_KEY } from '@env';
 import AppLoading from 'expo-app-loading';
 import React from 'react';
-import { Routes } from './src/Navigators/Routes';
+import { Routes } from './src/Navigators/AllRoles/Routes';
 import {
   Roboto_300Light,
   Roboto_400Regular,

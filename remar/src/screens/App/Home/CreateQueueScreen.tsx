@@ -11,13 +11,12 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
-import { FormButton } from '../../../components/authScreens/FormButton';
 import { InputField } from '../../../components/authScreens/InputField';
-import { Button } from '../../../components/custom/Button';
 import { useCreateQueueMutation } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { HomeNavProps } from '../../../types/HomeParamList';
@@ -108,17 +107,26 @@ export const CreateQueueScreen = ({
         flex: 1,
         paddingHorizontal: 30,
         minHeight: windowHeight,
+        paddingTop: 30,
       }}
     >
       <View style={{ flex: 0.5 }}>
         <Text style={styles.heading}>Create Queue</Text>
       </View>
       <Formik
-        initialValues={{ name: '', imageUri }}
+        initialValues={{ name: '', estimatedServingtime: '', imageUri }}
         onSubmit={async values => {
           values.imageUri = imageUri;
           await createQueue({
-            variables: { createQueueInput: values },
+            variables: {
+              createQueueInput: {
+                name: values.name,
+                estimatedServingtime: parseInt(
+                  values.estimatedServingtime,
+                ),
+                imageUri,
+              },
+            },
             update: cache => {
               cache.evict({});
             },
@@ -126,10 +134,10 @@ export const CreateQueueScreen = ({
         }}
       >
         {({ handleChange, handleSubmit, values }) => (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1.2 }}>
             <View
               style={{
-                flex: 4,
+                flex: 4.5,
               }}
             >
               <InputField
@@ -138,6 +146,14 @@ export const CreateQueueScreen = ({
                 placeholder="Queue Name"
                 value={values.name}
                 handleChange={handleChange('name')}
+              />
+              <InputField
+                mb={20}
+                name="estimatedServingtime"
+                placeholder="Ühe kliendi teenindusaeg"
+                value={values.estimatedServingtime}
+                handleChange={handleChange('estimatedServingtime')}
+                isNumber={true}
               />
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -218,7 +234,7 @@ const styles = StyleSheet.create({
   },
   image: { width: '100%', height: 200 },
   submitButton: {
-    flex: 0.3,
+    flex: 0.4,
     marginTop: 30,
     marginBottom: 10,
     alignItems: 'center',
@@ -226,6 +242,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: MyColors.Nice_Blue,
     width: '50%',
+    maxHeight: 50,
     alignSelf: 'center',
   },
   submitText: {

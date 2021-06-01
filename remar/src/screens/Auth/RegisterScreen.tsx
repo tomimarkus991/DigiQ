@@ -2,18 +2,26 @@ import { Formik } from 'formik';
 import React from 'react';
 import { AuthNavProps } from '../../types/AuthParamList';
 import { useWindowDimensions, View } from 'react-native';
-import { MeDocument, MeQuery, useRegisterMutation } from '../../generated/graphql';
+import {
+  MeDocument,
+  MeQuery,
+  useRegisterMutation,
+} from '../../generated/graphql';
 import { toErrorMap } from '../../utils/toErrorMap';
 import { AuthFooter } from '../../components/authScreens/AuthFooter';
 import { AuthHeader } from '../../components/authScreens/AuthHeader';
 import { InputField } from '../../components/authScreens/InputField';
 import { FormButton } from '../../components/authScreens/FormButton';
 
-export const RegisterScreen = ({ navigation }: AuthNavProps<'Register'>) => {
+export const RegisterScreen = ({
+  navigation,
+}: AuthNavProps<'Register'>) => {
   const [register] = useRegisterMutation();
   const windowHeight = useWindowDimensions().height;
   return (
-    <View style={{ flex: 1, paddingHorizontal: 30, minHeight: windowHeight }}>
+    <View
+      style={{ flex: 1, paddingHorizontal: 30, minHeight: windowHeight }}
+    >
       <Formik
         initialValues={{ username: '', email: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {

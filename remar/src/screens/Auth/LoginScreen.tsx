@@ -1,30 +1,27 @@
 import { Formik } from 'formik';
 import React from 'react';
-import { AuthNavProps } from '../../types/AuthParamList';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-import { MyColors, MyFonts } from '../../global';
-import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
-import { toErrorMap } from '../../utils/toErrorMap';
-import { FormButton } from '../../components/authScreens/FormButton';
-import { AuthHeader } from '../../components/authScreens/AuthHeader';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { AuthFooter } from '../../components/authScreens/AuthFooter';
+import { AuthHeader } from '../../components/authScreens/AuthHeader';
+import { FormButton } from '../../components/authScreens/FormButton';
 import { InputField } from '../../components/authScreens/InputField';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+  MeDocument,
+  MeQuery,
+  useLoginMutation,
+} from '../../generated/graphql';
+import { MyColors, MyFonts } from '../../global';
+import { AuthNavProps } from '../../types/AuthParamList';
+import { toErrorMap } from '../../utils/toErrorMap';
 
 export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
   const [login] = useLoginMutation();
+
   const windowHeight = useWindowDimensions().height;
   return (
-    <View style={{ flex: 1, paddingHorizontal: 30, minHeight: windowHeight }}>
+    <View
+      style={{ flex: 1, paddingHorizontal: 30, minHeight: windowHeight }}
+    >
       <Formik
         initialValues={{ usernameOrEmail: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
