@@ -1,7 +1,7 @@
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase/app';
 import 'firebase/storage';
-import 'react-native-get-random-values';
-import { v4 as uuid } from 'uuid';
 import { Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import {
@@ -11,17 +11,16 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
+import 'react-native-get-random-values';
+import { v4 as uuid } from 'uuid';
 import { InputField } from '../../../components/authScreens/InputField';
 import { useCreateQueueMutation } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { HomeNavProps } from '../../../types/HomeParamList';
-import * as ImagePicker from 'expo-image-picker';
-import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
 export const CreateQueueScreen = ({
   navigation,

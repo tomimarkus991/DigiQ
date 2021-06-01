@@ -1,5 +1,4 @@
-import { useFocusEffect } from '@react-navigation/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { DetailScreenContent } from '../../../components/homeScreen/DetailScreenContent';
 import {
@@ -9,26 +8,42 @@ import {
 import { MyColors, MyFonts } from '../../../global';
 import { HomeNavProps } from '../../../types/HomeParamList';
 
-export const QueueDetailScreen = ({ route, navigation }: HomeNavProps<'QueueDetail'>) => {
+export const QueueDetailScreen = ({
+  route,
+  navigation,
+}: HomeNavProps<'QueueDetail'>) => {
   const id = route.params.id;
+  const [queueData, setQueueData] = useState<any>();
+  const { data } = useGetQueueQuery({
+    variables: { id },
+    onCompleted: () => {
+      setQueueData(data?.queue);
+    },
+    fetchPolicy: 'network-only',
+  });
 
-  const { data } = useGetQueueQuery({ variables: { id } });
-  const { data: newData } = useJoinQueueSubSubscription({ variables: { id } });
+  const { data: subscriptionData } = useJoinQueueSubSubscription({
+    variables: { id },
+    onSubscriptionComplete: () => {
+      setQueueData(subscriptionData?.joinQueueSub);
+    },
+  });
   let navigate = () => {
     navigation.navigate('MyQueuesTab', {
       screen: 'MyQueue',
-      params: { id, newData },
+      params: { id },
       initial: false,
     });
+    setTimeout(() => {
+      navigation.reset({
+        routes: [{ name: 'Feed' }],
+      });
+    }, 2000);
   };
 
   return (
     <View style={styles.main}>
-      {newData?.joinQueueSub ? (
-        <DetailScreenContent data={newData?.joinQueueSub} id={id} navigate={navigate} />
-      ) : (
-        <DetailScreenContent data={data?.queue} id={id} navigate={navigate} />
-      )}
+      <DetailScreenContent data={queueData} id={id} navigate={navigate} />
     </View>
   );
 };
