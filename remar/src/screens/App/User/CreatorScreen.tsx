@@ -1,5 +1,6 @@
 import { useApolloClient } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import {
   StatusBar,
@@ -18,6 +19,8 @@ export const CreatorScreen: React.FC = ({}) => {
   const [makeUserCreator] = useMakeUserCreatorMutation();
   const { data } = useMeAdvancedQuery();
   const apolloClient = useApolloClient();
+
+  const navigation = useNavigation();
 
   return (
     <View
@@ -71,6 +74,7 @@ export const CreatorScreen: React.FC = ({}) => {
             onPress={async () => {
               await makeUserCreator();
               await apolloClient.resetStore();
+              navigation.navigate('HomeTab', { screen: 'Home' });
             }}
             style={{ ...styles.submitButton }}
           >
