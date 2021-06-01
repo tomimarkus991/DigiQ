@@ -1,5 +1,9 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  TransitionSpecs,
+} from '@react-navigation/stack';
 import React from 'react';
+import { Easing } from 'react-native';
 import { MyQueueDetailScreen } from '../../screens/App/MyQueues/MyQueueDetailScreen';
 import { MyQueuesScreen } from '../../screens/App/MyQueues/MyQueuesScreen';
 import {
@@ -23,6 +27,32 @@ export const MyQueuesStack = ({}: MyQueuesNavProps<'MyQueues'>) => {
         options={{
           headerTitle: '',
           headerTransparent: true,
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+          transitionSpec: {
+            open: TransitionSpecs.RevealFromBottomAndroidSpec,
+            close: TransitionSpecs.RevealFromBottomAndroidSpec,
+          },
+          // transitionSpec: {
+          //   open: {
+          //     animation: 'spring',
+          //     config: {
+          //       stiffness: 1000,
+          //       damping: 50,
+          //       mass: 3,
+          //       overshootClamping: false,
+          //       restDisplacementThreshold: 0.01,
+          //       restSpeedThreshold: 0.01,
+          //     },
+          //   },
+          //   close: {
+          //     animation: 'timing',
+          //     config: {
+          //       duration: 500,
+          //       easing: Easing.linear,
+          //     },
+          //   },
+          // },
         }}
       />
     </Stack.Navigator>
