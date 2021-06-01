@@ -1,14 +1,17 @@
 import React from 'react';
 import { FlatList, StatusBar, Text, View } from 'react-native';
 import { QueueCard } from '../../../components/homeScreen/QueueCard';
-import { useMeAdvancedQuery } from '../../../generated/graphql';
+import {
+  useMeAdvancedQuery,
+  useMeCreatorQuery,
+} from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { MyCreatedQueuesNavProps } from '../../../types/MyCreatedQueuesParamList';
 
 export const MyCreatedQueuesScreen = ({
   navigation,
 }: MyCreatedQueuesNavProps<'MyCreatedQueues'>) => {
-  const { data, refetch, networkStatus } = useMeAdvancedQuery();
+  const { data, refetch, networkStatus } = useMeCreatorQuery();
 
   let renderItem = (queueData: any) => {
     return (
