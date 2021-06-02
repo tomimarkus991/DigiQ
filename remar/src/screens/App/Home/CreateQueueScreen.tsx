@@ -21,12 +21,14 @@ import { InputField } from '../../../components/authScreens/InputField';
 import { useCreateQueueMutation } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { HomeNavProps } from '../../../types/HomeParamList';
+import { MyCreatedQueuesNavProps } from '../../../types/MyCreatedQueuesParamList';
 
 export const CreateQueueScreen = ({
   navigation,
-}: HomeNavProps<'Feed'>) => {
+}: MyCreatedQueuesNavProps<'MyCreatedQueues'>) => {
+  // @todo make sure this works MyCreatedQueues navigation
   const [createQueue] = useCreateQueueMutation({
-    onCompleted: () => navigation.navigate('Feed'),
+    onCompleted: () => navigation.navigate('MyCreatedQueues'),
   });
   const windowHeight = useWindowDimensions().height;
   const uri =
@@ -63,7 +65,7 @@ export const CreateQueueScreen = ({
         })
         .catch(error => {
           console.log(error);
-          Alert.alert('Something went wrong');
+          Alert.alert('Midagi läks valesti');
         });
     }
   };
@@ -82,7 +84,7 @@ export const CreateQueueScreen = ({
         })
         .catch(error => {
           console.log(error);
-          Alert.alert('Something went wrong');
+          Alert.alert('Midagi läks valesti');
         });
     }
   };
@@ -109,8 +111,9 @@ export const CreateQueueScreen = ({
         paddingTop: 30,
       }}
     >
+      {/* @todo maybe replace this with header in Stack component */}
       <View style={{ flex: 0.5 }}>
-        <Text style={styles.heading}>Create Queue</Text>
+        <Text style={styles.heading}>Loo järjekord</Text>
       </View>
       <Formik
         initialValues={{ name: '', estimatedServingtime: '', imageUri }}
@@ -142,14 +145,14 @@ export const CreateQueueScreen = ({
               <InputField
                 mb={20}
                 name="name"
-                placeholder="Queue Name"
+                placeholder="Järjekorra nimi"
                 value={values.name}
                 handleChange={handleChange('name')}
               />
               <InputField
                 mb={20}
                 name="estimatedServingtime"
-                placeholder="Ühe kliendi teenindusaeg"
+                placeholder="Ühe kliendi teenindusaeg minutis"
                 value={values.estimatedServingtime}
                 handleChange={handleChange('estimatedServingtime')}
                 isNumber={true}
@@ -164,7 +167,7 @@ export const CreateQueueScreen = ({
                     size={24}
                     style={styles.icon}
                   />
-                  <Text style={styles.text}>Choose Image</Text>
+                  <Text style={styles.text}>Vali pilt</Text>
                 </TouchableOpacity>
                 <View
                   style={{
@@ -181,7 +184,7 @@ export const CreateQueueScreen = ({
                     size={24}
                     style={styles.icon}
                   />
-                  <Text style={styles.text}>Take Photo</Text>
+                  <Text style={styles.text}>Tee pilt</Text>
                 </TouchableOpacity>
               </View>
 
@@ -190,11 +193,11 @@ export const CreateQueueScreen = ({
                 onPress={() =>
                   isReady
                     ? handleSubmit()
-                    : Alert.alert('Choose an Image first')
+                    : Alert.alert('Sa pead ennem pildi valima')
                 }
                 style={styles.submitButton}
               >
-                <Text style={styles.submitText}>Create</Text>
+                <Text style={styles.submitText}>Loo</Text>
               </TouchableOpacity>
             </View>
           </View>
