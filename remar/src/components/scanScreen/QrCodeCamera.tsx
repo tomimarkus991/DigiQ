@@ -33,7 +33,7 @@ const QrCodeCamera: React.FC<QrCodeCameraProps> = ({ navigation }) => {
       onMountError={event => console.log(event.message)}
     >
       <View style={styles.textContainer}>
-        <Text style={styles.text}>Scan your QR code</Text>
+        <Text style={styles.text}>Skänni QR kood</Text>
         <QrScannerSvg
           style={styles.svg}
           height={350}
