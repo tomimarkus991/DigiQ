@@ -10,6 +10,7 @@ import {
   MeQuery,
   useLoginMutation,
 } from '../../generated/graphql';
+import { MyColors } from '../../global';
 import { AuthNavProps } from '../../types/AuthParamList';
 import { toErrorMap } from '../../utils/toErrorMap';
 
@@ -19,7 +20,12 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
   const windowHeight = useWindowDimensions().height;
   return (
     <View
-      style={{ flex: 1, paddingHorizontal: 30, minHeight: windowHeight }}
+      style={{
+        flex: 1,
+        paddingHorizontal: 30,
+        minHeight: windowHeight,
+        backgroundColor: MyColors.Background_White,
+      }}
     >
       <Formik
         initialValues={{ usernameOrEmail: '', password: '' }}
@@ -52,22 +58,22 @@ export const LoginScreen = ({ navigation }: AuthNavProps<'Login'>) => {
               <InputField
                 mb={20}
                 name="usernameOrEmail"
-                placeholder="Username or Email"
+                placeholder="Kasutajanimi või meil"
                 value={values.usernameOrEmail}
                 handleChange={handleChange('usernameOrEmail')}
               />
               <InputField
                 mb={30}
                 name="password"
-                placeholder="Password"
+                placeholder="Salasõna"
                 value={values.password}
                 handleChange={handleChange('password')}
               />
-              <FormButton title="Login" handleSubmit={handleSubmit} />
+              <FormButton title="Logi sisse" handleSubmit={handleSubmit} />
               <AuthFooter
-                text="Don't have an account?&nbsp;"
+                text="Kas sul pole kasutajat?&nbsp;"
                 whereTo={() => navigation.navigate('Register')}
-                buttonTitle="Create"
+                buttonTitle="Registreeri"
               />
             </View>
           </View>
