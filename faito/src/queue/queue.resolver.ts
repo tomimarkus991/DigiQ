@@ -48,10 +48,9 @@ export class QueueResolver {
       throw new Error('There are no people on this Queue');
     }
 
-    onQueue.forEach(queue => {
+    onQueue.some(queue => {
       // if there is only one person on Queue
       // and you are the first person
-      yourPos++;
       if (onQueue.length === 1) {
         if (queue.userId === userId) {
           // update position
@@ -63,7 +62,7 @@ export class QueueResolver {
           throw new Error('You are not on this Queue');
         }
       }
-
+      yourPos++;
       if (queue.userId === userId) {
         return yourPos;
       }
@@ -98,7 +97,7 @@ export class QueueResolver {
   // @Arg("category", () => String) category: string
   async queues() {
     // const data = await Queue.find({ where: { category } });
-    const data = await Queue.find({ order: { createdAt: 'ASC' } });
+    const data = await Queue.find({});
     return data;
   }
   @Authorized()
@@ -130,16 +129,17 @@ export class QueueResolver {
     @Ctx() { req }: MyContext,
   ): Promise<Queue> {
     const { name, estimatedServingtime, imageUri } = createQueueInput;
+
     let queue = (await Queue.create({
       name,
       imageUri,
       estimatedServingtime,
-      shortestWaitingTime: estimatedServingtime,
-      longestWaitingTime: estimatedServingtime * 2,
+      shortestWaitingTime: 0,
+      longestWaitingTime: estimatedServingtime,
       creatorId: req.session.userId,
     }).save()) as any;
 
-    pubSub.publish(CREATE_QUEUE, queue);
+    // pubSub.publish(CREATE_QUEUE, queue);
 
     return queue;
   }
