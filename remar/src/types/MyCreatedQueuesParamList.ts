@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 export type MyCreatedQueuesParamList = {
   MyCreatedQueues: undefined;
   MyCreatedQueue: { id: any; newData?: any };
-  PeopleOnTheQueue: { id: number };
+  CreateQueue: undefined;
 };
 
 export type MyCreatedQueuesNavProps<

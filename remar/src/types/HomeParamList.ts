@@ -4,7 +4,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 export type HomeParamList = {
   Feed: undefined;
   QueueDetail: { id: number };
-  CreateQueue: undefined;
   MyQueuesTab: {
     screen: string;
     params: { id: number };
