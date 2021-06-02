@@ -12,6 +12,7 @@ import { AuthFooter } from '../../components/authScreens/AuthFooter';
 import { AuthHeader } from '../../components/authScreens/AuthHeader';
 import { InputField } from '../../components/authScreens/InputField';
 import { FormButton } from '../../components/authScreens/FormButton';
+import { MyColors } from '../../global';
 
 export const RegisterScreen = ({
   navigation,
@@ -20,7 +21,12 @@ export const RegisterScreen = ({
   const windowHeight = useWindowDimensions().height;
   return (
     <View
-      style={{ flex: 1, paddingHorizontal: 30, minHeight: windowHeight }}
+      style={{
+        flex: 1,
+        paddingHorizontal: 30,
+        minHeight: windowHeight,
+        backgroundColor: MyColors.Background_White,
+      }}
     >
       <Formik
         initialValues={{ username: '', email: '', password: '' }}
@@ -53,29 +59,32 @@ export const RegisterScreen = ({
               <InputField
                 mb={20}
                 name="username"
-                placeholder="Username"
+                placeholder="Kasutajanimi"
                 value={values.username}
                 handleChange={handleChange('username')}
               />
               <InputField
                 mb={20}
                 name="email"
-                placeholder="Email"
+                placeholder="Meil"
                 value={values.email}
                 handleChange={handleChange('email')}
               />
               <InputField
                 mb={30}
                 name="password"
-                placeholder="Password"
+                placeholder="Salasõna"
                 value={values.password}
                 handleChange={handleChange('password')}
               />
-              <FormButton title="Register" handleSubmit={handleSubmit} />
+              <FormButton
+                title="Registreeri"
+                handleSubmit={handleSubmit}
+              />
               <AuthFooter
-                text="Already have an account?&nbsp;"
+                text="Sul juba on kasutaja?&nbsp;"
                 whereTo={() => navigation.navigate('Login')}
-                buttonTitle="Login"
+                buttonTitle="Logi sisse"
               />
             </View>
           </View>
