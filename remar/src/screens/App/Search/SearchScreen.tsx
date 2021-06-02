@@ -32,14 +32,15 @@ export const SearchScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
     <SafeAreaView style={{ ...styles.container }}>
       <TextInput
         style={{ ...styles.searchInput }}
-        placeholder="Search"
+        placeholder="Otsi"
         autoCapitalize="none"
         onChangeText={text =>
           text.length >= 2
             ? searchQueue({ variables: { searchString: text } })
             : searchQueue({
                 variables: {
-                  searchString: 'das534cxx<zxcvxc534534545fsdfkjls',
+                  searchString:
+                    'das534cxx<zxcvxc534534553453453245fsdfkjls',
                 },
               })
         }
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 2,
     marginTop: 20,
-    borderColor: '#CBD5E0',
+    borderColor: MyColors.Text_Gray,
     borderWidth: 1,
   },
 });
