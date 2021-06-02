@@ -2,6 +2,8 @@ export const MyColors = {
   Line: '#b6b6b8',
   Button_Blue: '#445AE3',
   Button_Purple: '#882bc2',
+  Button_Red: '#e8053a',
+  Button_Green: '#06d614',
   Text_Placeholder: '#68686b',
   Text_Header: '#47474a',
   Text_Dark: '#2f2f33',
