@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 50,
   },
   estimatedTime: {
     flex: 1,
@@ -39,12 +38,12 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   regularText: {
-    fontSize: 36,
+    fontSize: 26,
     fontFamily: MyFonts.Roboto_700Bold,
     color: MyColors.Text_Regular,
   },
   text: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: MyFonts.Roboto_700Bold,
     color: MyColors.Text_Regular,
   },
