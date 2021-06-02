@@ -42,6 +42,7 @@ export class WaitingResolver {
     const waiting = await Waiting.findOne({
       where: { queueId, userId },
     });
+    const peopleOnTheQueue = await Queue.findOneOrFail(queueId);
 
     // the user has voted on the post before
     // and they are changing their vote
@@ -53,14 +54,37 @@ export class WaitingResolver {
            where "queueId" = $2 and "userId" = $3`,
           [realValue, queueId, userId],
         );
-        await tm.query(
-          `      update queue
-        set waiting = waiting + $1,
-        "shortestWaitingTime" = "estimatedServingtime" * waiting,
-        "longestWaitingTime" = "estimatedServingtime" * waiting + "estimatedServingtime"
-        where id= $2`,
-          [realValue, queueId],
-        );
+
+        if (realValue === -1) {
+          if (peopleOnTheQueue.waiting === 1) {
+            await tm.query(
+              `update queue
+    set waiting = waiting + $1,
+    "shortestWaitingTime" = "estimatedServingtime" * (waiting - 1),
+    "longestWaitingTime" = "estimatedServingtime" * (waiting - 1) + "estimatedServingtime"
+    where id= $2`,
+              [realValue, queueId],
+            );
+          } else {
+            await tm.query(
+              `update queue
+    set waiting = waiting + $1,
+    "shortestWaitingTime" = "estimatedServingtime" * (waiting - 2),
+    "longestWaitingTime" = "estimatedServingtime" * (waiting - 2) + "estimatedServingtime"
+    where id= $2`,
+              [realValue, queueId],
+            );
+          }
+        } else {
+          await tm.query(
+            `update queue
+  set waiting = waiting + $1,
+  "shortestWaitingTime" = "estimatedServingtime" * waiting,
+  "longestWaitingTime" = "estimatedServingtime" * waiting + "estimatedServingtime"
+  where id= $2`,
+            [realValue, queueId],
+          );
+        }
       });
 
       await Waiting.delete({ queueId, userId });
@@ -109,8 +133,8 @@ export class WaitingResolver {
       `
       update queue
       set waiting = waiting + ${value},
-      "shortestWaitingTime" = "estimatedServingtime" * waiting,
-      "longestWaitingTime" = "estimatedServingtime" * waiting + "estimatedServingtime"
+      "shortestWaitingTime" = "estimatedServingtime" * (waiting - 1),
+      "longestWaitingTime" = "estimatedServingtime" * (waiting - 1) + "estimatedServingtime"
       where id= ${queueId};
       `,
     );

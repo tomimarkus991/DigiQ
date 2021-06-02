@@ -74,7 +74,17 @@ const App: React.FC = () => {
 
   const client = new ApolloClient({
     link,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            project: {
+              merge: true,
+            },
+          },
+        },
+      },
+    }),
   });
 
   return (
