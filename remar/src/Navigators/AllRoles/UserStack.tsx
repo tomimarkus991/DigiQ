@@ -1,5 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
+import { MyColors, MyFonts } from '../../global';
 import { CreatorScreen } from '../../screens/App/User/CreatorScreen';
 import { SettingsScreen } from '../../screens/App/User/SettingsScreen';
 import { UserScreen } from '../../screens/App/User/UserScreen';
@@ -19,7 +20,12 @@ export const UserStack = ({ navigation }: UserNavProps<'UserScreen'>) => {
         name="SettingsScreen"
         component={SettingsScreen}
         options={{
-          headerTitle: '',
+          headerTitle: 'Seaded',
+          headerTitleStyle: {
+            fontFamily: MyFonts.Roboto_500Medium,
+            color: MyColors.Text_Regular,
+            fontSize: 32,
+          },
           headerTransparent: true,
         }}
       />
@@ -27,7 +33,12 @@ export const UserStack = ({ navigation }: UserNavProps<'UserScreen'>) => {
         name="CreatorScreen"
         component={CreatorScreen}
         options={{
-          headerTitle: '',
+          headerTitle: 'Looja Seaded',
+          headerTitleStyle: {
+            fontFamily: MyFonts.Roboto_500Medium,
+            color: MyColors.Text_Regular,
+            fontSize: 32,
+          },
           headerTransparent: true,
         }}
       />
