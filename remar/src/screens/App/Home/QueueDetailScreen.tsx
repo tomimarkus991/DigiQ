@@ -1,49 +1,152 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { DetailScreenContent } from '../../../components/homeScreen/DetailScreenContent';
+import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { Button } from '../../../components/custom/Button';
+import { SwipeButton } from '../../../components/homeScreen/SwipeButton';
+import { WaitTimeBig } from '../../../components/homeScreen/WaitTimeBig';
 import {
   useGetQueueQuery,
-  useJoinQueueSubSubscription,
+  useHasUserJoinedThisQueueQuery,
+  useJoinQueueMutation,
+  useMeQuery,
 } from '../../../generated/graphql';
 import { MyColors, MyFonts } from '../../../global';
 import { HomeNavProps } from '../../../types/HomeParamList';
 
+// @todo maybe make this components style as good as MyQueueDetailScreen
 export const QueueDetailScreen = ({
   route,
   navigation,
 }: HomeNavProps<'QueueDetail'>) => {
   const id = route.params.id;
-  const [queueData, setQueueData] = useState<any>();
+
   const { data } = useGetQueueQuery({
     variables: { id },
-    onCompleted: () => {
-      setQueueData(data?.queue);
-    },
+    pollInterval: 500,
     fetchPolicy: 'network-only',
   });
 
-  const { data: subscriptionData } = useJoinQueueSubSubscription({
-    variables: { id },
-    onSubscriptionComplete: () => {
-      setQueueData(subscriptionData?.joinQueueSub);
-    },
+  const { data: hasUserJoined } = useHasUserJoinedThisQueueQuery({
+    variables: { queueId: id },
+    fetchPolicy: 'network-only',
   });
-  let navigate = () => {
-    navigation.navigate('MyQueuesTab', {
-      screen: 'MyQueue',
-      params: { id },
-      initial: false,
-    });
-    setTimeout(() => {
-      navigation.reset({
-        routes: [{ name: 'Feed' }],
+  const { data: me } = useMeQuery();
+
+  const [joinQueue, { error }] = useJoinQueueMutation({
+    onCompleted: () => {
+      navigation.navigate('MyQueuesTab', {
+        screen: 'MyQueue',
+        params: { id },
+        initial: false,
       });
-    }, 2000);
+      setTimeout(() => {
+        navigation.reset({
+          routes: [{ name: 'Feed' }],
+        });
+      }, 2000);
+    },
+    errorPolicy: 'ignore',
+  });
+
+  const joinTheQueue = async () => {
+    await joinQueue({
+      variables: { joinQueueInput: { queueId: id, value: 1 } },
+    });
   };
+
+  // const { data: subscriptionData } = useJoinQueueSubSubscription({
+  //   variables: { id },
+  //   onSubscriptionComplete: () => {
+  //     setQueueData(subscriptionData?.joinQueueSub);
+  //   },
+  // });
 
   return (
     <View style={styles.main}>
-      <DetailScreenContent data={queueData} id={id} navigate={navigate} />
+      <View style={styles.main}>
+        <Image
+          style={styles.main}
+          source={{
+            uri: data?.queue.imageUri,
+          }}
+        />
+      </View>
+      {/* @todo make this better a new component maybe */}
+      {me?.me?.isCreator ? (
+        <View style={styles.secondHalf}>
+          <Text style={styles.headerText}>
+            {(data?.queue.name.substring(0, 1).toUpperCase() as string) +
+              data?.queue.name.substring(1, data?.queue.name.length)}
+          </Text>
+          <View
+            style={{
+              flex: 4,
+            }}
+          >
+            <Text style={[styles.fatText, { marginBottom: 10 }]}>
+              Inimesi järjekorras
+            </Text>
+            <View style={styles.circle}>
+              <Text style={styles.fatText}>{data?.queue.waiting}</Text>
+            </View>
+            <WaitTimeBig
+              shortestWaitingTime={
+                data?.queue.shortestWaitingTime as number
+              }
+              longestWaitingTime={data?.queue.longestWaitingTime as number}
+            />
+          </View>
+        </View>
+      ) : (
+        <View style={styles.secondHalf}>
+          <Text style={styles.headerText}>
+            {(data?.queue.name.substring(0, 1).toUpperCase() as string) +
+              data?.queue.name.substring(1, data?.queue.name.length)}
+          </Text>
+          <View
+            style={{
+              flex: 4,
+            }}
+          >
+            <Text style={[styles.fatText, { marginBottom: 10 }]}>
+              Inimesi järjekorras
+            </Text>
+            <View style={styles.circle}>
+              <Text style={styles.fatText}>{data?.queue.waiting}</Text>
+            </View>
+            <WaitTimeBig
+              shortestWaitingTime={
+                data?.queue.shortestWaitingTime as number
+              }
+              longestWaitingTime={data?.queue.longestWaitingTime as number}
+            />
+          </View>
+          {hasUserJoined?.hasUserJoinedThisQueue ? (
+            <View style={{ flex: 2 }}>
+              <Text style={styles.errorText}>{error?.message}</Text>
+              <Button
+                title="Vaata seda"
+                onPress={() => {
+                  navigation.navigate('MyQueuesTab', {
+                    screen: 'MyQueue',
+                    params: { id },
+                    initial: false,
+                  });
+                  setTimeout(() => {
+                    navigation.reset({
+                      routes: [{ name: 'Feed' }],
+                    });
+                  }, 2000);
+                }}
+              />
+            </View>
+          ) : (
+            <View style={{ flex: 2 }}>
+              <Text style={styles.errorText}>{error?.message}</Text>
+              <SwipeButton title="Ühine" handleSwipe={joinTheQueue} />
+            </View>
+          )}
+        </View>
+      )}
     </View>
   );
 };
@@ -51,6 +154,7 @@ export const QueueDetailScreen = ({
 const styles = StyleSheet.create({
   main: {
     flex: 1,
+    backgroundColor: MyColors.Background_White,
   },
   circle: {
     alignSelf: 'center',
