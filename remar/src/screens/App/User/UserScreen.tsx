@@ -41,15 +41,15 @@ export const UserScreen = ({ navigation }: UserNavProps<'UserScreen'>) => {
           onPress={() => navigation.navigate('SettingsScreen')}
         >
           <AntDesign name="setting" style={styles.icon} />
-          <Text>Settings</Text>
+          <Text>Seaded</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.item}>
           <AntDesign name="infocirlceo" style={styles.icon} />
-          <Text>About</Text>
+          <Text>Info</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.item}>
           <AntDesign name="questioncircleo" style={styles.icon} />
-          <Text>Help</Text>
+          <Text>Abi</Text>
         </TouchableOpacity>
       </View>
     </View>
