@@ -29,25 +29,13 @@ export const CreatorScreen: React.FC = ({}) => {
         backgroundColor: MyColors.Background_White,
       }}
     >
-      <View style={{ flex: 0.5 }}>
-        <Text
-          style={{
-            fontFamily: MyFonts.Roboto_500Medium,
-            color: MyColors.Text_Header,
-            fontSize: 32,
-            marginLeft: 60,
-            paddingTop: (StatusBar.currentHeight as number) + 8,
-          }}
-        >
-          Creator Settings
-        </Text>
-      </View>
+      <View style={{ flex: 0.5 }}></View>
       <View style={{ flex: 0.2 }}>
         {data?.me?.isCreator ? (
           <Text
             style={{
               fontFamily: MyFonts.Roboto_500Medium,
-              color: MyColors.Text_Header,
+              color: MyColors.Text_Regular,
               fontSize: 32,
               textAlign: 'center',
             }}
@@ -58,7 +46,7 @@ export const CreatorScreen: React.FC = ({}) => {
           <Text
             style={{
               fontFamily: MyFonts.Roboto_500Medium,
-              color: MyColors.Text_Header,
+              color: MyColors.Text_Regular,
               fontSize: 32,
               textAlign: 'center',
             }}

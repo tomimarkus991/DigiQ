@@ -27,20 +27,6 @@ export const SettingsScreen = ({}: UserNavProps<'SettingsScreen'>) => {
         backgroundColor: MyColors.Background_White,
       }}
     >
-      <View style={{ flex: 0.5 }}>
-        <Text
-          style={{
-            fontFamily: MyFonts.Roboto_500Medium,
-            color: MyColors.Text_Header,
-            fontSize: 32,
-            marginLeft: 60,
-            paddingTop: (StatusBar.currentHeight as number) + 8,
-          }}
-        >
-          Settings
-        </Text>
-      </View>
-
       <View style={{ flex: 1, justifyContent: 'flex-end' }}>
         <TouchableOpacity
           onPress={() => navigation.navigate('CreatorScreen')}
