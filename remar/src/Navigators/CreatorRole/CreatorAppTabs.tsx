@@ -12,14 +12,12 @@ const Tabs = createBottomTabNavigator<AppCreatorParamList>();
 export const CreatorAppTabs: React.FC = ({}) => {
   return (
     <Tabs.Navigator
-      initialRouteName="HomeTab"
+      initialRouteName="MyCreatedQueuesTab"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: any = 'filter';
 
-          if (route.name === 'HomeTab') {
-            iconName = 'home';
-          } else if (route.name === 'MyCreatedQueuesTab') {
+          if (route.name === 'MyCreatedQueuesTab') {
             iconName = 'calendar';
           } else if (route.name === 'UserTab') {
             iconName = 'user';
@@ -30,14 +28,9 @@ export const CreatorAppTabs: React.FC = ({}) => {
       })}
     >
       <Tabs.Screen
-        name="HomeTab"
-        component={HomeStack}
-        options={{ title: 'Kodu' }}
-      />
-      <Tabs.Screen
         name="MyCreatedQueuesTab"
         component={MyCreatedQueuesStack}
-        options={{ title: 'Minu loodud järjekorrad' }}
+        options={{ title: 'Minu järjekorrad' }}
       />
       <Tabs.Screen
         name="UserTab"
