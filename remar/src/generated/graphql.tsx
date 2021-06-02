@@ -378,7 +378,7 @@ export type GetPeopleOnTheQueueQuery = (
   { __typename?: 'Query' }
   & { queue: (
     { __typename?: 'Queue' }
-    & Pick<Queue, 'name'>
+    & Pick<Queue, 'id' | 'name'>
     & { onQueue: Array<(
       { __typename?: 'Waiting' }
       & { user: (
@@ -408,7 +408,7 @@ export type GetQueueQuery = (
   { __typename?: 'Query' }
   & { queue: (
     { __typename?: 'Queue' }
-    & Pick<Queue, 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'imageUri' | 'waiting'>
+    & Pick<Queue, 'id' | 'name' | 'estimatedServingtime' | 'shortestWaitingTime' | 'longestWaitingTime' | 'imageUri' | 'waiting'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'username'>
@@ -969,6 +969,7 @@ export type MeCreatorQueryResult = Apollo.QueryResult<MeCreatorQuery, MeCreatorQ
 export const GetPeopleOnTheQueueDocument = gql`
     query GetPeopleOnTheQueue($id: Int!) {
   queue(id: $id) {
+    id
     name
     onQueue {
       user {
@@ -1043,6 +1044,7 @@ export type PositionInQueueQueryResult = Apollo.QueryResult<PositionInQueueQuery
 export const GetQueueDocument = gql`
     query GetQueue($id: Int!) {
   queue(id: $id) {
+    id
     name
     estimatedServingtime
     shortestWaitingTime
