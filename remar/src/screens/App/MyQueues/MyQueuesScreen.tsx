@@ -9,7 +9,10 @@ import { MyQueuesNavProps } from '../../../types/MyQueuesParamList';
 export const MyQueuesScreen = ({
   navigation,
 }: MyQueuesNavProps<'MyQueues'>) => {
-  const { data, refetch, networkStatus } = useMeAdvancedQuery();
+  const { data, refetch, networkStatus } = useMeAdvancedQuery({
+    fetchPolicy: 'network-only',
+    pollInterval: 500,
+  });
 
   let renderItem = (queueData: any) => {
     return (
