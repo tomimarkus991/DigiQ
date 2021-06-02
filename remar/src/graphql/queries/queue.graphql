@@ -1,5 +1,6 @@
 query GetQueue($id: Int!) {
   queue(id: $id) {
+    id
     name
     estimatedServingtime
     shortestWaitingTime
