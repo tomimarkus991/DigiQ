@@ -8,8 +8,10 @@ import { MyFonts, MyColors } from '../../../global';
 import { HomeNavProps } from '../../../types/HomeParamList';
 
 export const HomeScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
-  const { data, error, refetch, networkStatus } = useQueuesQuery();
-  const { data: me } = useMeQuery();
+  const { data, error, refetch, networkStatus } = useQueuesQuery({
+    fetchPolicy: 'network-only',
+    pollInterval: 500,
+  });
 
   if (error) {
     return (
@@ -57,20 +59,8 @@ export const HomeScreen = ({ navigation }: HomeNavProps<'Feed'>) => {
             marginRight: 'auto',
           }}
         >
-          Home
+          Kodu
         </Text>
-        {me?.me?.isCreator ? (
-          <TouchableOpacity
-            onPress={() => navigation?.navigate('CreateQueue')}
-          >
-            <Ionicons
-              style={{ marginRight: 20 }}
-              name="add"
-              size={46}
-              color={MyColors.Text_Header}
-            />
-          </TouchableOpacity>
-        ) : null}
       </View>
       <FlatList
         style={{ marginLeft: 25, flex: 1 }}
